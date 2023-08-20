@@ -1,14 +1,11 @@
-import MainLayout from "./layout/MainLayout/MainLayout.tsx";
-import {css} from "@emotion/react";
+import Dashboard from "./layout/Dashboard/Dashboard.tsx";
+import FacturasPage from "./pages/FacturasPage/FacturasPage.tsx";
 
 function App() {
   return (
-      <MainLayout>
-        // body
-        <div css={css`height: 1200px; `}>
-           this is body 2
-        </div>
-      </MainLayout>
+      <Dashboard>
+        <FacturasPage />
+      </Dashboard>
   )
 }
 

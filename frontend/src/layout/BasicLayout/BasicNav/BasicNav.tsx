@@ -5,7 +5,7 @@ import Link from "@mui/material/Link";
 import Button from "@mui/material/Button";
 import Toolbar from "@mui/material/Toolbar";
 
-const GlobalNav: React.FC = () => {
+const BasicNav: React.FC = () => {
     return (
       <AppBar
         position="static"
@@ -51,4 +51,4 @@ const GlobalNav: React.FC = () => {
     )
 };
 
-export default GlobalNav;
+export default BasicNav;

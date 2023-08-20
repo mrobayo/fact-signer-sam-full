@@ -1,22 +1,22 @@
 import React from "react";
 import GlobalStyles from "@mui/material/GlobalStyles";
 import CssBaseline from "@mui/material/CssBaseline";
-import GlobalNav from "../GlobalNav/GlobalNav.tsx";
+import BasicNav from "./BasicNav/BasicNav.tsx";
 import {createTheme, ThemeProvider} from "@mui/material/styles";
 import Container from "@mui/material/Container";
 
-import GlobalFooter from "../GlobalFooter/GlobalFooter.tsx";
+import GlobalFooter from "./BasicFooter/BasicFooter.tsx";
 
 const defaultTheme = createTheme();
 
-const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const BasicLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     return (
         <ThemeProvider theme={defaultTheme}>
           <GlobalStyles
               styles={{ ul: { margin: 0, padding: 0, listStyle: 'none' } }}
           />
           <CssBaseline />
-          <GlobalNav />
+          <BasicNav />
           {/* Hero unit */}
           <Container disableGutters maxWidth="sm" component="main" sx={{ pt: 8, pb: 6 }}>
               {children}
@@ -36,4 +36,4 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     );
 }
 
-export default MainLayout;
+export default BasicLayout;
