@@ -12,6 +12,7 @@ module.exports = {
   rules: {
     'prefer-spread': 'off',
     'no-prototype-builtins': 'warn',
+    '@typescript-eslint/ban-types': 'warn',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-unused-vars': ['warn', { 'argsIgnorePattern': '^_' }],
     'react-refresh/only-export-components': [
