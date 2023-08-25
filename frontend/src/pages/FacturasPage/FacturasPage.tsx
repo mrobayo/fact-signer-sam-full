@@ -7,7 +7,9 @@ import Button from "@mui/material/Button";
 import TopToolbar from "../../components/ui/TopToolbar/TopToolbar.tsx";
 
 const FacturasPage: React.FC = () => {
+
   const handleOpenNew = () => {
+    //OpenEdit Factura
 
   };
 
@@ -24,8 +26,12 @@ const FacturasPage: React.FC = () => {
 
   return (
     <Box data-test-id="FacturasPage" sx={{ width: '100%' }}>
-      <PageTitle pageTitle="Facturas" actionLabel={"Nueva"} actionIcon={<AddIcon />} onActionClick={handleOpenNew} />
-
+      <PageTitle
+        pageTitle="Facturas"
+        actionLabel={"Nueva"}
+        actionIcon={<AddIcon />}
+        onActionClick={handleOpenNew}
+      />
         <TopToolbar>
           <Button
             variant="contained"

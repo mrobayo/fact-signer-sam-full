@@ -6,20 +6,45 @@ import Toolbar from '@mui/material/Toolbar';
 
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
+import {red, grey} from "@mui/material/colors";
 
 import Copyright from "../../components/ui/Copyright/Copyright.tsx";
 
 import MainBar from "../../components/ui/MainBar/MainBar.tsx";
 import SideMenu from "../../components/ui/SideMenu/SideMenu.tsx";
+import {useAuth} from "../../services/auth/useAuth.ts";
+import {useEffect} from "react";
 
 // TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
+const defaultTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#3368b7',
+    },
+    secondary: {
+       main: grey["900"],
+    },
+    error: {
+      main: red.A400,
+    },
+  },
+});
 
-const Dashboard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [open, setOpen] = React.useState(true);
+const Dashboard: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
+  const auth = useAuth();
+  const [open, setOpen] = React.useState(false);
   const toggleDrawer = () => {
     setOpen(!open);
   };
+
+  useEffect(() => {
+    if (!open && auth.user) {
+      toggleDrawer();
+    }
+    if (open && !auth.user) {
+      toggleDrawer();
+    }
+  }, [auth.user]);
 
   return (
     <ThemeProvider theme={defaultTheme}>
