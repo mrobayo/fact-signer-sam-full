@@ -11,16 +11,16 @@ const FacturasPage: React.FC = () => {
 
   };
 
-  const LikeButton = () => {
-    const record = useRecordContext();
-    const like = { postId: record.id };
-    const [create, { isLoading, error }] = useCreate();
-    const handleClick = () => {
-        create('likes', { data: like })
-    }
-    if (error) { return <p>ERROR</p>; }
-    return <button disabled={isLoading} onClick={handleClick}>Like</button>;
-};
+//   const LikeButton = () => {
+//     const record = useRecordContext();
+//     const like = { postId: record.id };
+//     const [create, { isLoading, error }] = useCreate();
+//     const handleClick = () => {
+//         create('likes', { data: like })
+//     }
+//     if (error) { return <p>ERROR</p>; }
+//     return <button disabled={isLoading} onClick={handleClick}>Like</button>;
+// };
 
   return (
     <Box data-test-id="FacturasPage" sx={{ width: '100%' }}>
