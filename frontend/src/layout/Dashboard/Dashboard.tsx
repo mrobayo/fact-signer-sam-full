@@ -66,7 +66,12 @@ const Dashboard: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
         >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Grid container spacing={3}>
+            <Grid
+              container
+              sx={{ flexDirection: 'column' }}
+              spacing={3}
+              data-test-id="dashboard-body"
+            >
 
                 {children}
               {/*<Grid item xs={12} md={8} lg={9}>*/}
