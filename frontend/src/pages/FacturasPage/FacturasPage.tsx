@@ -5,24 +5,15 @@ import PageTitle from "../../components/ui/PageTitle/PageTitle.tsx";
 import {css} from "@emotion/react";
 import Button from "@mui/material/Button";
 import TopToolbar from "../../components/ui/TopToolbar/TopToolbar.tsx";
+import {useNavigate} from "react-router-dom";
+import withAuth from "../../services/auth/withAuth.tsx";
 
 const FacturasPage: React.FC = () => {
+  const navigate = useNavigate();
 
   const handleOpenNew = () => {
-    //OpenEdit Factura
-
+    navigate("/facturas/new");
   };
-
-//   const LikeButton = () => {
-//     const record = useRecordContext();
-//     const like = { postId: record.id };
-//     const [create, { isLoading, error }] = useCreate();
-//     const handleClick = () => {
-//         create('likes', { data: like })
-//     }
-//     if (error) { return <p>ERROR</p>; }
-//     return <button disabled={isLoading} onClick={handleClick}>Like</button>;
-// };
 
   return (
     <Box data-test-id="FacturasPage" sx={{ width: '100%' }}>
@@ -48,4 +39,4 @@ const FacturasPage: React.FC = () => {
   );
 };
 
-export default FacturasPage;
+export default withAuth(FacturasPage);

@@ -20,7 +20,13 @@ const SideMenu: React.FC<{
 
   const mainListItems = <>
         <SideMenuButton primary="Facturas" icon={<DashboardIcon />} onClick={() => {
-          navigate("/protected");
+          navigate("/facturas");
+        }} />
+        <SideMenuButton primary="Notas Credito" icon={<DashboardIcon />} onClick={() => {
+          navigate("/notas-credito");
+        }} />
+      <SideMenuButton primary="Notas Debito" icon={<DashboardIcon />} onClick={() => {
+          navigate("/notas-debito");
         }} />
         {/*<SideMenuButton primary="Orders" icon={<ShoppingCartIcon />} />*/}
         {/*<SideMenuButton primary="Customers" icon={<PeopleIcon />} />*/}
