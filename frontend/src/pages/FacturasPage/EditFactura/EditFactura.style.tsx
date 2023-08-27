@@ -1,4 +1,5 @@
 import {styled} from "@mui/material/styles";
+import Table from "@mui/material/Table";
 import TableCell from "@mui/material/TableCell";
 
 export const editFacturaCss = {
@@ -12,5 +13,14 @@ export const editFacturaCss = {
 };
 
 export const DetailCell = styled(TableCell)({
-  padding: '4px',
+  padding: '12px',
 });
+
+export const DetailTable = styled(Table)({
+   '& .MuiTextField-root': {
+       marginTop: 0,
+       marginBottom: 0,
+   }
+});
+
+//export const DetailCell = TableCell;

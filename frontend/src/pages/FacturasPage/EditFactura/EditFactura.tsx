@@ -7,7 +7,6 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Paper from '@mui/material/Paper';
 
-import Table from "@mui/material/Table";
 import TableRow from "@mui/material/TableRow";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -16,10 +15,13 @@ import Checkbox from "@mui/material/Checkbox";
 import TableContainer from "@mui/material/TableContainer";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 
-import {DetailCell, editFacturaCss} from "./EditFactura.style.tsx";
+import {DetailCell, DetailTable, editFacturaCss} from "./EditFactura.style.tsx";
 import InfoFacturaEdit from "../../../components/InfoFacturaEdit.tsx";
 import TextField from "@mui/material/TextField";
 import DetalleToolbar from "./DetalleToolbar.tsx";
+import {TableFooter} from "@mui/material";
+import InformationIcon from "../../../components/icons/InformationIcon.tsx";
+import Tooltip from "@mui/material/Tooltip";
 
 const ColDefinition: {
   label: string;
@@ -32,7 +34,7 @@ const ColDefinition: {
   { label: 'Precio', align: 'left', style: {width: '180px'} },
   { label: 'Subtotal', align: 'left', style: {width: '180px'} },
   //{ label: 'Descuento', align: 'left', style: {width: '200px'} },
-  //{ label: '', align: 'left', style: {width: '100px'} },
+  { label: '', align: 'left', style: {width: '1px'} },
 ];
 
 
@@ -126,10 +128,9 @@ const EditFactura: React.FC<{
 
           {/*<Typography component="h1" variant="h5">Detalle</Typography>*/}
           <TableContainer sx={{ maxHeight: 440 }}>
-            <Table
-
-              size="small"
-              sx={{ minWidth: 650, spacing: 1 }}
+            <DetailTable
+              // size="medium"
+              sx={{ minWidth: 650 }}
               stickyHeader
               aria-label="Factura Detalle">
               <TableHead>
@@ -206,17 +207,22 @@ const EditFactura: React.FC<{
                           {...register(`detalles.${index}.precioTotalSinImpuesto`, { required: true })}
                         />
                       </DetailCell>
-                      {/*<DetailCell align="right">*/}
-                      {/*  <button type="button" onClick={() => remove(index)}>*/}
-                      {/*    -IVA- */}
-                      {/*  </button>*/}
-                      {/*</DetailCell>*/}
+                      <DetailCell align="center">
+                        <Tooltip title="Impuestos: IVA">
+                          <InformationIcon sx={{ fontSize: 12 }} />
+                        </Tooltip>
+                      </DetailCell>
                    </TableRow>
                 );
               })
             }
               </TableBody>
-            </Table>
+              <TableFooter>
+                <TableRow>
+                  <TableCell>*** summary ***</TableCell>
+                </TableRow>
+              </TableFooter>
+            </DetailTable>
           </TableContainer>
 
           <Button
