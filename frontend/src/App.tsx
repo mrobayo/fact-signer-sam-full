@@ -5,6 +5,7 @@ import LoginPage from "./layout/LoginPage/LoginPage.tsx";
 import PublicPage from "./layout/PublicPage/PublicPage.tsx";
 import FacturasPage from "./pages/FacturasPage/FacturasPage.tsx";
 import NoMatch from "./components/ui/NoMatch/NoMatch.tsx";
+import EditFactura from "./pages/FacturasPage/EditFactura/EditFactura.tsx";
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
           <Route path="/facturas" element={<FacturasPage />} />
           <Route
               path="/facturas/new"
-              element={<div>Factura New</div>}
+              element={<EditFactura isNew />}
             />
           <Route
             path="/facturas/edit/:id"
