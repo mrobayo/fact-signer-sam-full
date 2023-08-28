@@ -1,14 +1,14 @@
+export type DetAdicionalType = {
+  nombre: string,
+  valor: string
+};
+
 export type ImpuestoType = {
   codigo: number,
   codigoPorcentaje: number,
   tarifa: number,
   baseImponible: number,
   valor: number,
-};
-
-export type DetAdicionalType = {
-  nombre: string,
-  valor: string
 };
 
 export type DetalleFacturaType = {
@@ -24,23 +24,9 @@ export type DetalleFacturaType = {
   impuestos: ImpuestoType[]
 };
 
-export type InfoTributariaType = {
-  ambiente: number,
-  tipoEmision: number,
-  razonSocial: string,
-  nombreComercial: string,
-  ruc: string,
-  claveAcceso: string,
-  codDoc: string,
-  estab: string,
-  ptoEmi: string,
-  secuencial: string,
-  dirMatriz: string,
-};
-
 export type TotalImpuestoType = {
-  codigo: string,
-  codigoPorcentaje: string,
+  codigo?: number,
+  codigoPorcentaje?: number,
   baseImponible: number,
   descuentoAdicional?: number,
   valor: number
@@ -77,6 +63,20 @@ export type InfoFacturaType = {
 export type CampoAdicional = {
   nombre: string,
   valor: string,
+};
+
+export type InfoTributariaType = {
+  ambiente: number,
+  tipoEmision: number,
+  razonSocial: string,
+  nombreComercial: string,
+  ruc: string,
+  claveAcceso: string,
+  codDoc: string,
+  estab: string,
+  ptoEmi: string,
+  secuencial: string,
+  dirMatriz: string,
 };
 
 export type FacturaType = {

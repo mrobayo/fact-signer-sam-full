@@ -1,6 +1,6 @@
-import React, {useRef} from 'react';
-import {useFieldArray, useForm} from "react-hook-form";
-import { type FacturaType} from "../factura";
+import React, {useEffect, useRef} from 'react';
+import {Controller, useFieldArray, useForm} from "react-hook-form";
+import {type FacturaType} from "../factura";
 
 import Box from '@mui/material/Box';
 import Typography from "@mui/material/Typography";
@@ -19,9 +19,10 @@ import {DetailCell, DetailTable, editFacturaCss} from "./EditFactura.style.tsx";
 import InfoFacturaEdit from "../../../components/InfoFacturaEdit.tsx";
 import TextField from "@mui/material/TextField";
 import DetalleToolbar from "./DetalleToolbar.tsx";
-import {TableFooter} from "@mui/material";
+
 import InformationIcon from "../../../components/icons/InformationIcon.tsx";
 import Tooltip from "@mui/material/Tooltip";
+import TableFacturaSummary from "./TableFacturaSummary.tsx";
 
 const ColDefinition: {
   label: string;
@@ -47,10 +48,32 @@ const EditFactura: React.FC<{
     control,
     getValues,
     register,
+    watch,
     //reset,
     handleSubmit,
     formState: { errors }
-  } = useForm<FacturaType>();
+  } = useForm<FacturaType>({
+    defaultValues: {
+      infoFactura: {
+
+      },
+      infoTributaria: {
+
+      },
+      detalles: [{
+        detalleId: 1,
+        codigoPrincipal: '',
+        codigoAuxiliar: '',
+        descripcion: '',
+        cantidad: 1,
+        precioUnitario: 0,
+        descuento: 0,
+        precioTotalSinImpuesto: 0,
+        detallesAdicionales: [],
+        impuestos: []
+      }]
+    }
+  });
   const {
     fields,
     append,
@@ -60,6 +83,13 @@ const EditFactura: React.FC<{
     name: "detalles"
   });
   const formRef = useRef<HTMLFormElement>(null);
+  const watchDetalle = watch("detalles");
+
+  useEffect(() => {
+    // watchDetalle((value, { name, type }) => console.log(value, name, type));
+    console.log('watchDetalle', watchDetalle);
+  }, [watchDetalle]);
+
 
   const handleAppendRow = () => {
     const detalleId = 1 + getValues("detalles").reduce(
@@ -126,7 +156,6 @@ const EditFactura: React.FC<{
 
           <DetalleToolbar numSelected={selected.length} appendNew={handleAppendRow} removeSelected={handleRemove} />
 
-          {/*<Typography component="h1" variant="h5">Detalle</Typography>*/}
           <TableContainer sx={{ maxHeight: 440 }}>
             <DetailTable
               // size="medium"
@@ -198,14 +227,25 @@ const EditFactura: React.FC<{
                         />
                       </DetailCell>
                       <DetailCell align="right">
-                        <TextField
-                          margin="normal"
-                          fullWidth
-                          id={`detalles.${index}.precioTotalSinImpuesto`}
-                          label=""
-                          type="number"
-                          {...register(`detalles.${index}.precioTotalSinImpuesto`, { required: true })}
+                        <Controller
+                          render={({ field }) =>
+                            <input
+                              id={`detalles.${index}.precioTotalSinImpuesto`}
+                              type="number"
+                              {...field}
+                            />
+                          }                 //<input {...field} />}
+                          name={`detalles.${index}.precioTotalSinImpuesto`}
+                          control={control}
                         />
+                        {/*<TextField*/}
+                        {/*  margin="normal"*/}
+                        {/*  fullWidth*/}
+                        {/*  id={`detalles.${index}.precioTotalSinImpuesto`}*/}
+                        {/*  label=""*/}
+                        {/*  type="number"*/}
+                        {/*  {...register(`detalles.${index}.precioTotalSinImpuesto`, { required: true })}*/}
+                        {/*/>*/}
                       </DetailCell>
                       <DetailCell align="center">
                         <Tooltip title="Impuestos: IVA">
@@ -217,11 +257,7 @@ const EditFactura: React.FC<{
               })
             }
               </TableBody>
-              <TableFooter>
-                <TableRow>
-                  <TableCell>*** summary ***</TableCell>
-                </TableRow>
-              </TableFooter>
+              <TableFacturaSummary detalles={getValues("detalles")} />
             </DetailTable>
           </TableContainer>
 

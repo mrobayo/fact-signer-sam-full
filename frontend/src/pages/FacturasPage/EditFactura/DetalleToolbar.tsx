@@ -31,7 +31,7 @@ function DetalleToolbar(props: EnhancedTableToolbarProps) {
         }),
       }}
     >
-      {numSelected > 0 && (
+      {numSelected > 0 ? (
         <Typography
           sx={{ flex: '1 1 100%' }}
           color="inherit"
@@ -41,16 +41,16 @@ function DetalleToolbar(props: EnhancedTableToolbarProps) {
           {numSelected} fila seleccionada(s)
         </Typography>
       )
-      //   : (
-      //   <Typography
-      //     sx={{ flex: '1 1 100%' }}
-      //     variant="h6"
-      //     id="tableTitle"
-      //     component="div"
-      //   >
-      //     Detalle
-      //   </Typography>
-      // )
+        : (
+        <Typography
+          sx={{ flex: '1 1 100%' }}
+          variant="h6"
+          id="tableTitle"
+          component="div"
+        >
+          Detalle de Venta
+        </Typography>
+      )
       }
       {numSelected > 0 && (
         <Tooltip title="Delete">
