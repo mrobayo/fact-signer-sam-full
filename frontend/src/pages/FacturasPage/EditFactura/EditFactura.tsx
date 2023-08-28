@@ -1,7 +1,7 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {Controller, useFieldArray, useForm} from "react-hook-form";
 import { isEmpty } from "lodash";
-import {type FacturaType} from "../factura";
+import {type FacturaType, type ImpuestoType} from "../factura";
 
 import Box from '@mui/material/Box';
 import Typography from "@mui/material/Typography";
@@ -18,6 +18,7 @@ import Checkbox from "@mui/material/Checkbox";
 import TableContainer from "@mui/material/TableContainer";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import EditIcon from '@mui/icons-material/Edit';
+import NotInterestedIcon from '@mui/icons-material/NotInterested';
 
 import {DetailCell, DetailTable, DetailToolCell, editFacturaCss} from "./EditFactura.style.tsx";
 import InfoFacturaEdit from "../../../components/InfoFacturaEdit.tsx";
@@ -29,6 +30,7 @@ import Tooltip from "@mui/material/Tooltip";
 import TableFacturaSummary from "./TableFacturaSummary.tsx";
 import {formatCurrency} from "../../../util";
 import {formatAmount} from "../../../util";
+import EditImpuestos from "./EditImpuestos.tsx";
 
 const ColDefinition: {
   label: string;
@@ -53,6 +55,7 @@ const EditFactura: React.FC<{
    //const [_ignore, forceUpdate] = React.useReducer(x => x + 1, 0);
   const [selected, setSelected] = React.useState<readonly number[]>([]);
   const [editDetalleId, setEditDetalleId] = useState<number>();
+  const [isEditImpuesto, setEditImpuesto] = useState(false);
 
   const {
     control,
@@ -117,6 +120,9 @@ const EditFactura: React.FC<{
     console.log('watchDetalle', watchDetalle);
   }, [watchDetalle]);
 
+  const handleImpuestos = () => {
+    setEditImpuesto(true);
+  }
 
   const handleAppendRow = () => {
     const detalles = getValues("detalles");
@@ -222,7 +228,6 @@ const EditFactura: React.FC<{
       if (!detalles[detallesLen-1].descripcion) {
         remove(detallesLen-1);
       }
-      // handleAppendRow();
     }
     return isRowValid;
   };
@@ -247,6 +252,25 @@ const EditFactura: React.FC<{
       }
     }
   };
+
+  const handleUpdateImpuestos = (data: ImpuestoType) => {
+    const detalles = getValues("detalles");
+    const detalleIndex = detalles.findIndex(({detalleId}) => detalleId === editDetalleId);
+
+    if (detalleIndex !== -1) {
+      console.log(`index: ${detalleIndex}`, [data]);
+      setValue(`detalles.${detalleIndex}.impuestos`, [data]);
+    }
+
+    setEditImpuesto(false);
+  };
+
+  const [_detalleIndex, detalle] = useMemo(() => {
+    const detalles = watchDetalle;
+    const detalleIndex = detalles.findIndex(({detalleId}) => detalleId === editDetalleId);
+    const detalle = detalleIndex !== -1 ? detalles[detalleIndex] : null;
+    return [detalleIndex, detalle];
+  }, [watchDetalle, editDetalleId]);
 
   return (
     <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
@@ -363,8 +387,16 @@ const EditFactura: React.FC<{
                         {errors?.detalles?.[index]?.precioTotalSinImpuesto && <FormHelperText error>{errors?.detalles?.[index]?.precioTotalSinImpuesto?.message}</FormHelperText>}
                       </DetailCell>
                       <DetailCell align="center">
-                        <Tooltip title="Impuestos: IVA">
-                          <InformationIcon sx={{ fontSize: 12 }} />
+                        <Tooltip
+                          title={isEditMode ? "Actualizar Tarifa del IVA" : `Impuestos IVA ${item?.impuestos?.[0]?.tarifa}%`}
+                        >
+                          <span><IconButton
+                            disabled={!isEditMode}
+                            color="info"
+                            size="small"
+                            onClick={() => handleImpuestos()}>
+                            {item?.impuestos?.[0]?.tarifa == 0 ? <NotInterestedIcon sx={{ fontSize: 12 }} /> : <InformationIcon sx={{ fontSize: 12 }} />}
+                          </IconButton></span>
                         </Tooltip>
                       </DetailCell>
                       <DetailToolCell align="center">
@@ -403,6 +435,12 @@ const EditFactura: React.FC<{
 
         </Box>
       </Box>
+      <EditImpuestos
+        impuesto={detalle?.impuestos?.[0]}
+        onUpdate={handleUpdateImpuestos}
+        isVisible={isEditImpuesto}
+        setVisible={setEditImpuesto}
+      />
     </Paper>
   );
 };
