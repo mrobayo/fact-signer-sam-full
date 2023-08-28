@@ -33,9 +33,9 @@ const ColDefinition: {
 }[] = [
   { label: '', align: 'right', style: {width: '10px'} },
   { label: 'Descripcion', align: 'left', style: { } },
-  { label: 'Cantidad', align: 'left', style: {width: '120px'} },
-  { label: 'Precio', align: 'left', style: {width: '180px'} },
-  { label: 'Subtotal', align: 'left', style: {width: '180px'} },
+  { label: 'Cantidad', align: 'right', style: {width: '120px'} },
+  { label: 'Precio', align: 'right', style: {width: '180px'} },
+  { label: 'Subtotal', align: 'right', style: {width: '180px'} },
   //{ label: 'Descuento', align: 'left', style: {width: '200px'} },
   { label: '', align: 'left', style: {width: '1px'} },
   { label: '', align: 'center', style: {width: '1px'} },
@@ -46,11 +46,13 @@ const ColDefinition: {
 const EditFactura: React.FC<{
   isNew: boolean;
 }> = ({ isNew }) => {
+   const [_ignore, forceUpdate] = React.useReducer(x => x + 1, 0);
   const [selected, setSelected] = React.useState<readonly number[]>([]);
   const [editRow, setEditRow] = useState<number>(0);
   const {
     control,
     getValues,
+    setValue,
     register,
     watch,
     //reset,
@@ -144,6 +146,41 @@ const EditFactura: React.FC<{
     remove(indexList);
   }
 
+  const computePrecioSinImpuestos = () => {
+    const detalles = getValues("detalles");
+    if (editRow >= detalles.length) {
+      return;
+    }
+    const detalle = detalles[editRow];
+    const valor = (+detalle.precioUnitario) * (+detalle.cantidad);
+    setValue(`detalles.${editRow}.precioTotalSinImpuesto`, +valor.toFixed(2));
+    console.log('valor', valor);
+    if (editRow < detalles.length - 1 ) {
+      setEditRow(editRow + 1);
+    } else {
+      handleAppendRow();
+    }
+  };
+
+  const checkKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== "Enter") {
+      return;
+    }
+    event.preventDefault();
+    const target= event.target as HTMLInputElement;
+    if (target.id.endsWith('precioUnitario')) {
+      computePrecioSinImpuestos();
+    }
+    if (target.id.startsWith('detalles')) {
+      const form = target.form;
+      if (form) {
+        const index = [...form].indexOf(event.target as Element);
+        const nextElement = form[index + 2] as HTMLFormElement;
+        nextElement && nextElement.focus();
+      }
+    }
+  };
+
   return (
     <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
       <Typography component="h1" variant="h4" >
@@ -157,6 +194,7 @@ const EditFactura: React.FC<{
           noValidate
           sx={{ mt: 1 }}
           data-test-id="factura-form"
+          onKeyDown={(e) => checkKeyDown(e)}
         >
           <InfoFacturaEdit register={register} errors={errors} />
           <DetalleToolbar numSelected={selected.length} appendNew={handleAppendRow} removeSelected={handleRemove} />
@@ -215,7 +253,7 @@ const EditFactura: React.FC<{
                       }
                       {!isEditMode && item.descripcion}
                     </DetailCell>
-                      <DetailCell align="right">
+                    <DetailCell align="right">
                         {isEditMode &&
                           <TextField
                             margin="normal"
