@@ -1,10 +1,11 @@
 import { useMemo } from 'react';
 import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
+
 import {TableFooter} from "@mui/material";
 import React from "react";
 import {DetalleFacturaType} from "../factura";
 import {computeFacturaSummary} from "../facturaUtil.ts";
+import {DetailSummaryCell} from "./EditFactura.style.tsx";
 
 const TableFacturaSummary: React.FC<{
   detalles: DetalleFacturaType[]
@@ -17,35 +18,35 @@ const TableFacturaSummary: React.FC<{
   return (
     <TableFooter>
         <TableRow>
-          <TableCell></TableCell>
-          <TableCell align="center">{detalles?.length} items</TableCell>
-          <TableCell colSpan={2} align="right"> Subtotal </TableCell>
-          <TableCell align="right">$ {summary?.totalSinImpuestos?.toFixed(2)}</TableCell>
-          <TableCell></TableCell>
+          <DetailSummaryCell></DetailSummaryCell>
+          <DetailSummaryCell align="center">{detalles?.length} items</DetailSummaryCell>
+          <DetailSummaryCell colSpan={2} align="right"> Subtotal </DetailSummaryCell>
+          <DetailSummaryCell align="right">$ {summary?.totalSinImpuestos?.toFixed(2)}</DetailSummaryCell>
+          <DetailSummaryCell></DetailSummaryCell>
         </TableRow>
         {summary.totalConImpuestos.map(total => (
           <TableRow key={`totalImpuesto.${total.codigo}.${total.codigoPorcentaje}`}>
-          <TableCell></TableCell>
-          <TableCell></TableCell>
-          <TableCell colSpan={2} align="right">Subtotal {total.codigo}.{total.codigoPorcentaje} </TableCell>
-          <TableCell align="right">$ {total.baseImponible}</TableCell>
-          <TableCell></TableCell>
+          <DetailSummaryCell></DetailSummaryCell>
+          <DetailSummaryCell></DetailSummaryCell>
+          <DetailSummaryCell colSpan={2} align="right">Subtotal {total.codigo}.{total.codigoPorcentaje} </DetailSummaryCell>
+          <DetailSummaryCell align="right">$ {total.baseImponible}</DetailSummaryCell>
+          <DetailSummaryCell></DetailSummaryCell>
         </TableRow>
         ))}
 
       <TableRow>
-          <TableCell></TableCell>
-          <TableCell></TableCell>
-          <TableCell colSpan={2} align="right"> Total Descuento </TableCell>
-          <TableCell align="right">$ {summary.totalDescuento}</TableCell>
-          <TableCell></TableCell>
+          <DetailSummaryCell></DetailSummaryCell>
+          <DetailSummaryCell></DetailSummaryCell>
+          <DetailSummaryCell colSpan={2} align="right"> Total Descuento </DetailSummaryCell>
+          <DetailSummaryCell align="right">$ {summary.totalDescuento}</DetailSummaryCell>
+          <DetailSummaryCell></DetailSummaryCell>
         </TableRow>
         <TableRow>
-          <TableCell></TableCell>
-          <TableCell></TableCell>
-          <TableCell colSpan={2} align="right"> Total </TableCell>
-          <TableCell align="right">$ {summary.importeTotal?.toFixed(2)}</TableCell>
-          <TableCell></TableCell>
+          <DetailSummaryCell></DetailSummaryCell>
+          <DetailSummaryCell></DetailSummaryCell>
+          <DetailSummaryCell colSpan={2} align="right"> Total </DetailSummaryCell>
+          <DetailSummaryCell align="right">$ {summary.importeTotal?.toFixed(2)}</DetailSummaryCell>
+          <DetailSummaryCell></DetailSummaryCell>
         </TableRow>
       </TableFooter>
   );

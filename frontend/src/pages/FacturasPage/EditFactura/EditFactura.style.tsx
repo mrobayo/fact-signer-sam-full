@@ -21,6 +21,10 @@ export const DetailToolCell = styled(TableCell)({
   border: 'none',
 });
 
+export const DetailSummaryCell = styled(TableCell)({
+  fontSize: 'large'
+});
+
 export const DetailTable = styled(Table)({
    '& .MuiTextField-root': {
        marginTop: 0,
