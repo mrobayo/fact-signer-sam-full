@@ -8,17 +8,17 @@ import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import Button from "@mui/material/Button";
-// import {UseFieldArrayAppend} from "react-hook-form";
-// import {FacturaType} from "../factura";
+import FormHelperText from "@mui/material/FormHelperText";
 
 interface EnhancedTableToolbarProps {
   numSelected: number;
   appendNew: () => void;
   removeSelected: () => void;
+  error?: string;
 }
 
 function DetalleToolbar(props: EnhancedTableToolbarProps) {
-  const { numSelected, appendNew, removeSelected } = props;
+  const { numSelected, appendNew, removeSelected, error } = props;
 
   return (
     <Toolbar
@@ -49,6 +49,9 @@ function DetalleToolbar(props: EnhancedTableToolbarProps) {
           component="div"
         >
           Detalle de Venta
+          <FormHelperText error>
+            {error}
+          </FormHelperText>
         </Typography>
       )
       }

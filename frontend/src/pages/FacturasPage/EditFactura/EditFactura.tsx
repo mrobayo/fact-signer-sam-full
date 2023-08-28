@@ -50,6 +50,7 @@ const EditFactura: React.FC<{
 }> = ({ isNew }) => {
    //const [_ignore, forceUpdate] = React.useReducer(x => x + 1, 0);
   const [selected, setSelected] = React.useState<readonly number[]>([]);
+  const [editDetalleId, setEditDetalleId] = useState<number>();
   const [editRow, setEditRow] = useState<number>(0);
   const {
     control,
@@ -91,7 +92,13 @@ const EditFactura: React.FC<{
     remove,
   } = useFieldArray({
     control,
-    name: "detalles"
+    name: "detalles",
+    rules: { validate: (data) => {
+      if (data.length === 0) {
+        return "requerido";
+      }
+      return true;
+    }}
   });
   const formRef = useRef<HTMLFormElement>(null);
   const watchDetalle = watch("detalles");
@@ -104,23 +111,31 @@ const EditFactura: React.FC<{
 
   const handleAppendRow = () => {
     const detalles = getValues("detalles");
-    const detalleId = 1 + detalles.reduce(
-                (acc, { detalleId }) => detalleId && detalleId > acc ? detalleId: acc, 0);
-    setEditRow(detalles.length);
-    append({
-      detalleId,
-      codigoPrincipal: "",
-      descripcion: "",
-      cantidad: 1,
-      precioUnitario: 0,
-      descuento: 0,
-      precioTotalSinImpuesto: 0,
-      impuestos: []
-    });
+    const inconsistentEditRow = detalles.length === 0 || detalles.length-1 < editRow;
+    if (inconsistentEditRow || editRow < 0 || computePrecioSinImpuestos()) {
+      const detalleId = 1 + detalles.reduce(
+      (acc, { detalleId }) => detalleId && detalleId > acc ? detalleId: acc, 0);
+      setEditRow(detalles.length);
+      setEditDetalleId(detalleId);
+      append({
+        detalleId,
+        codigoPrincipal: "",
+        descripcion: "",
+        cantidad: 1,
+        precioUnitario: 0,
+        descuento: 0,
+        precioTotalSinImpuesto: 0,
+        impuestos: []
+      });
+      setSelected([]);
+    }
   }
 
   const onFormSubmit = handleSubmit((data) => {
-    console.log('submit...', data)
+    //const detalles = getValues("detalles");
+
+      console.log('submit...', data)
+
   })
 
   const handleSelected = (detalleId: number) => {
@@ -147,19 +162,40 @@ const EditFactura: React.FC<{
       .filter(index => index !== null) as number[];
 
     setSelected([]);
+    if (indexList.includes(editRow)) {
+      setEditRow(-1);
+      setEditDetalleId(undefined);
+    }
     remove(indexList);
   }
 
-  const computePrecioSinImpuestos = () => {
+  const handleEditRow = (index: number) => {
+    const detalles = getValues("detalles");
+    setEditDetalleId(detalles[index].detalleId);
+    setEditRow(index);
+    //}
+  }
+
+  useEffect(() => {
+    if (editDetalleId) {
+      const detalles = getValues("detalles");
+      const detalleIndex = detalles.findIndex(({detalleId}) => detalleId === editDetalleId);
+
+      const descripcionInput = document.getElementById(`detalles.${detalleIndex}.descripcion`) as HTMLInputElement;
+      //const descripcionInput = formRef.current?.querySelector(`#detalles.${editDetalleId}.descripcion`) as HTMLInputElement;
+      descripcionInput && descripcionInput.focus();
+    }
+  }, [editDetalleId]);
+
+  const computePrecioSinImpuestos = (): boolean => {
     const detalles = getValues("detalles");
     const detallesLen = detalles.length;
-    if (editRow >= detallesLen) {
-      return;
-    }
+    const detalleIndex = detalles.findIndex(({detalleId}) => detalleId === editDetalleId);
+    if (detalleIndex === -1) return false;
+    const detalle = detalles[detalleIndex];
 
-    const detalle = detalles[editRow];
     const valor = (+detalle.precioUnitario) * (+detalle.cantidad);
-    setValue(`detalles.${editRow}.precioTotalSinImpuesto`, +valor.toFixed(2),
+    setValue(`detalles.${detalleIndex}.precioTotalSinImpuesto`, +valor.toFixed(2),
       //{shouldDirty: true, shouldTouch: true, shouldValidate: true}
     );
 
@@ -167,21 +203,22 @@ const EditFactura: React.FC<{
     // VALIDATE ROW
     if (valor === 0) {
       isRowValid = false;
-      setError(`detalles.${editRow}.precioTotalSinImpuesto`,
+      setError(`detalles.${detalleIndex}.precioTotalSinImpuesto`,
         { type: 'manual', message:'Subtotal Sin Impuesto debe ser mayor a cero' }
       );
     }
     if (isEmpty(detalle.descripcion)) {
       isRowValid = false;
-      trigger(`detalles.${editRow}.descripcion`);
+      trigger(`detalles.${detalleIndex}.descripcion`);
     }
     if (isRowValid) {
-      clearErrors(`detalles.${editRow}.precioTotalSinImpuesto`);
+      clearErrors(`detalles.${detalleIndex}.precioTotalSinImpuesto`);
       if (!detalles[detallesLen-1].descripcion) {
         remove(detallesLen-1);
       }
-      handleAppendRow();
+      // handleAppendRow();
     }
+    return isRowValid;
   };
 
   const checkKeyDown = (event: React.KeyboardEvent<HTMLFormElement>) => {
@@ -191,7 +228,9 @@ const EditFactura: React.FC<{
     event.preventDefault();
     const target= event.target as HTMLFormElement;
     if (target.id.endsWith('precioUnitario')) {
-      computePrecioSinImpuestos();
+      if (computePrecioSinImpuestos()) {
+        handleAppendRow();
+      }
     }
     if (target.id.startsWith('detalles')) {
       const form = target.form;
@@ -202,6 +241,8 @@ const EditFactura: React.FC<{
       }
     }
   };
+
+  console.log('errors', errors);
 
   return (
     <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
@@ -219,7 +260,7 @@ const EditFactura: React.FC<{
           onKeyDown={(e) => checkKeyDown(e)}
         >
           <InfoFacturaEdit register={register} errors={errors} />
-          <DetalleToolbar numSelected={selected.length} appendNew={handleAppendRow} removeSelected={handleRemove} />
+          <DetalleToolbar error={errors?.detalles?.root?.message} numSelected={selected.length} appendNew={handleAppendRow} removeSelected={handleRemove} />
 
           <TableContainer sx={{ maxHeight: 440 }}>
             <DetailTable
@@ -237,7 +278,7 @@ const EditFactura: React.FC<{
               <TableBody>
 
             {fields.map((item, index) => {
-                const isEditMode = editRow === index;
+                const isEditMode = editDetalleId === item.detalleId;
                 const isItemSelected = selected.indexOf(item.detalleId) !== -1;
                 const labelId = `detcell.${index}.descripcion`;
                 return (
@@ -326,7 +367,7 @@ const EditFactura: React.FC<{
                         <IconButton
                           disabled={isEditMode}
                           color="primary"
-                          onClick={() => setEditRow(index)}>
+                          onClick={() => handleEditRow(index)}>
                           <EditIcon />
                         </IconButton>
                       </DetailCell>
