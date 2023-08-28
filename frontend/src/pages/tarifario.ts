@@ -39,3 +39,14 @@ export const TotalesConImpuesto = [
   { label: 'Propina', required: true},
   { label: 'Valor Total', required: true},
 ];
+
+export const FORMAS_PAGO = [
+  { codigo: "01", label: "SIN UTILIZACION DEL SISTEMA FINANCIERO"},
+  { codigo: "15", label: "COMPENSACION DE DEUDAS"},
+  { codigo: "16", label: "TARJETA DE DEBITO"},
+  { codigo: "17", label: "DINERO ELECTRONICO"},
+  { codigo: "18", label: "TARJETA PREPAGO"},
+  { codigo: "19", label: "TARJETA DE CREDITO"},
+  { codigo: "20", label: "OTROS CON UTILIZACION DEL SISTEMA FINANCIERO"},
+  { codigo: "21", label: "ENDOSO DE TITULOS"}
+];
