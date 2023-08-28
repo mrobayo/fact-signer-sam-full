@@ -1,10 +1,11 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Controller, useFieldArray, useForm} from "react-hook-form";
 import {type FacturaType} from "../factura";
 
 import Box from '@mui/material/Box';
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
 
 import TableRow from "@mui/material/TableRow";
@@ -14,6 +15,7 @@ import TableHead from "@mui/material/TableHead";
 import Checkbox from "@mui/material/Checkbox";
 import TableContainer from "@mui/material/TableContainer";
 import AddBoxIcon from '@mui/icons-material/AddBox';
+import EditIcon from '@mui/icons-material/Edit';
 
 import {DetailCell, DetailTable, editFacturaCss} from "./EditFactura.style.tsx";
 import InfoFacturaEdit from "../../../components/InfoFacturaEdit.tsx";
@@ -36,6 +38,7 @@ const ColDefinition: {
   { label: 'Subtotal', align: 'left', style: {width: '180px'} },
   //{ label: 'Descuento', align: 'left', style: {width: '200px'} },
   { label: '', align: 'left', style: {width: '1px'} },
+  { label: '', align: 'center', style: {width: '1px'} },
 ];
 
 
@@ -44,6 +47,7 @@ const EditFactura: React.FC<{
   isNew: boolean;
 }> = ({ isNew }) => {
   const [selected, setSelected] = React.useState<readonly number[]>([]);
+  const [editRow, setEditRow] = useState<number>(0);
   const {
     control,
     getValues,
@@ -92,8 +96,10 @@ const EditFactura: React.FC<{
 
 
   const handleAppendRow = () => {
-    const detalleId = 1 + getValues("detalles").reduce(
+    const detalles = getValues("detalles");
+    const detalleId = 1 + detalles.reduce(
                 (acc, { detalleId }) => detalleId && detalleId > acc ? detalleId: acc, 0);
+    setEditRow(detalles.length);
     append({
       detalleId,
       codigoPrincipal: "",
@@ -153,7 +159,6 @@ const EditFactura: React.FC<{
           data-test-id="factura-form"
         >
           <InfoFacturaEdit register={register} errors={errors} />
-
           <DetalleToolbar numSelected={selected.length} appendNew={handleAppendRow} removeSelected={handleRemove} />
 
           <TableContainer sx={{ maxHeight: 440 }}>
@@ -172,6 +177,7 @@ const EditFactura: React.FC<{
               <TableBody>
 
             {fields.map((item, index) => {
+                const isEditMode = editRow === index;
                 const isItemSelected = selected.indexOf(item.detalleId) !== -1;
                 const labelId = `detcell.${index}.descripcion`;
                 return (
@@ -198,6 +204,7 @@ const EditFactura: React.FC<{
                       />
                     </DetailCell>
                     <DetailCell align="left" id={labelId}>
+                      {isEditMode &&
                         <TextField
                           margin="normal"
                           fullWidth
@@ -205,39 +212,45 @@ const EditFactura: React.FC<{
                           label=""
                           {...register(`detalles.${index}.descripcion`, { required: true })}
                         />
+                      }
+                      {!isEditMode && item.descripcion}
                     </DetailCell>
                       <DetailCell align="right">
-                        <TextField
-                          margin="normal"
-                          fullWidth
-                          id={`detalles.${index}.cantidad`}
-                          label=""
-                          type="number"
-                          {...register(`detalles.${index}.cantidad`, { required: true })}
-                        />
+                        {isEditMode &&
+                          <TextField
+                            margin="normal"
+                            fullWidth
+                            id={`detalles.${index}.cantidad`}
+                            label=""
+                            type="number"
+                            {...register(`detalles.${index}.cantidad`, { required: true })}
+                          />
+                        }
+                        {!isEditMode && item.cantidad}
                       </DetailCell>
                       <DetailCell align="right">
-                        <TextField
-                          margin="normal"
-                          fullWidth
-                          id={`detalles.${index}.precioUnitario`}
-                          label=""
-                          type="number"
-                          {...register(`detalles.${index}.precioUnitario`, { required: true })}
-                        />
+                        {isEditMode &&
+                          <Controller
+                            render={({ field }) =>
+                              <TextField
+                                margin="normal"
+                                fullWidth
+                                id={`detalles.${index}.precioUnitario`}
+                                label=""
+                                type="number"
+                                {...field}
+                              />
+                            }
+                            name={`detalles.${index}.precioUnitario`}
+                            control={control}
+                          />
+
+                        }
+                        {!isEditMode && item.precioUnitario}
                       </DetailCell>
                       <DetailCell align="right">
-                        <Controller
-                          render={({ field }) =>
-                            <input
-                              id={`detalles.${index}.precioTotalSinImpuesto`}
-                              type="number"
-                              {...field}
-                            />
-                          }                 //<input {...field} />}
-                          name={`detalles.${index}.precioTotalSinImpuesto`}
-                          control={control}
-                        />
+                        {item.precioTotalSinImpuesto}
+
                         {/*<TextField*/}
                         {/*  margin="normal"*/}
                         {/*  fullWidth*/}
@@ -251,6 +264,14 @@ const EditFactura: React.FC<{
                         <Tooltip title="Impuestos: IVA">
                           <InformationIcon sx={{ fontSize: 12 }} />
                         </Tooltip>
+                      </DetailCell>
+                      <DetailCell align="center">
+                        <IconButton
+                          disabled={isEditMode}
+                          color="primary"
+                          onClick={() => setEditRow(index)}>
+                          <EditIcon />
+                        </IconButton>
                       </DetailCell>
                    </TableRow>
                 );
