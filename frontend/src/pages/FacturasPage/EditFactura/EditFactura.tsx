@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Controller, useFieldArray, useForm} from "react-hook-form";
 import {type FacturaType} from "../factura";
 
@@ -23,6 +23,9 @@ import DetalleToolbar from "./DetalleToolbar.tsx";
 import InformationIcon from "../../../components/icons/InformationIcon.tsx";
 import Tooltip from "@mui/material/Tooltip";
 import TableFacturaSummary from "./TableFacturaSummary.tsx";
+import {computeFacturaSummary, FacturaSummaryType} from "../facturaUtil.ts";
+
+const NumDecimals = import.meta.env.VITE_APP_NUM_DECIMALS;
 
 const ColDefinition: {
   label: string;
@@ -44,9 +47,11 @@ const EditFactura: React.FC<{
   isNew: boolean;
 }> = ({ isNew }) => {
   const [selected, setSelected] = React.useState<readonly number[]>([]);
+  //const [summary, setSummary] = useState<FacturaSummaryType>();
   const {
     control,
     getValues,
+    setValue,
     register,
     watch,
     //reset,
@@ -85,10 +90,24 @@ const EditFactura: React.FC<{
   const formRef = useRef<HTMLFormElement>(null);
   const watchDetalle = watch("detalles");
 
+  // const summary = React.useMemo(() => {
+  //   const summ = computeFacturaSummary(getValues("detalles"));
+  //   //console.log('summary', summ);
+  //   return summ;
+  // }, [watchDetalle]);
+
   useEffect(() => {
-    // watchDetalle((value, { name, type }) => console.log(value, name, type));
-    console.log('watchDetalle', watchDetalle);
+    watchDetalle.forEach((detalle, index) => {
+      if (detalle.cantidad && detalle.precioUnitario) {
+        const valor = ((+detalle.cantidad) * (+detalle.precioUnitario)).toFixed(NumDecimals);
+        if (valor != `${detalle.precioTotalSinImpuesto}`) {
+          setValue(`detalles.${index}.precioTotalSinImpuesto`, +valor);
+        }
+      }
+    });
   }, [watchDetalle]);
+
+
 
 
   const handleAppendRow = () => {
@@ -207,45 +226,54 @@ const EditFactura: React.FC<{
                         />
                     </DetailCell>
                       <DetailCell align="right">
-                        <TextField
-                          margin="normal"
-                          fullWidth
-                          id={`detalles.${index}.cantidad`}
-                          label=""
-                          type="number"
-                          {...register(`detalles.${index}.cantidad`, { required: true })}
-                        />
-                      </DetailCell>
-                      <DetailCell align="right">
-                        <TextField
-                          margin="normal"
-                          fullWidth
-                          id={`detalles.${index}.precioUnitario`}
-                          label=""
-                          type="number"
-                          {...register(`detalles.${index}.precioUnitario`, { required: true })}
+                        <Controller
+                          render={({ field }) =>
+                            <TextField
+                              margin="normal"
+                              fullWidth
+                              id={`detalles.${index}.cantidad`}
+                              label=""
+                              type="number"
+                              {...field}
+                            />
+                        }
+                          name={`detalles.${index}.cantidad`}
+                          control={control}
                         />
                       </DetailCell>
                       <DetailCell align="right">
                         <Controller
                           render={({ field }) =>
-                            <input
-                              id={`detalles.${index}.precioTotalSinImpuesto`}
+                            <TextField
+                              margin="normal"
+                              fullWidth
+                              id={`detalles.${index}.precioUnitario`}
+                              label=""
                               type="number"
                               {...field}
                             />
-                          }                 //<input {...field} />}
-                          name={`detalles.${index}.precioTotalSinImpuesto`}
+                        }
+                          name={`detalles.${index}.precioUnitario`}
                           control={control}
                         />
-                        {/*<TextField*/}
-                        {/*  margin="normal"*/}
-                        {/*  fullWidth*/}
-                        {/*  id={`detalles.${index}.precioTotalSinImpuesto`}*/}
-                        {/*  label=""*/}
-                        {/*  type="number"*/}
-                        {/*  {...register(`detalles.${index}.precioTotalSinImpuesto`, { required: true })}*/}
+                      </DetailCell>
+                      <DetailCell align="right">
+                        {item.precioTotalSinImpuesto}
+                        {/*<Controller*/}
+                        {/*  render={({ field }) =>*/}
+                        {/*    <TextField*/}
+                        {/*      margin="normal"*/}
+                        {/*      fullWidth*/}
+                        {/*      id={`detalles.${index}.precioTotalSinImpuesto`}*/}
+                        {/*      label=""*/}
+                        {/*      type="number"*/}
+                        {/*      {...field}*/}
+                        {/*    />*/}
+                        {/*}*/}
+                        {/*  name={`detalles.${index}.precioTotalSinImpuesto`}*/}
+                        {/*  control={control}*/}
                         {/*/>*/}
+
                       </DetailCell>
                       <DetailCell align="center">
                         <Tooltip title="Impuestos: IVA">
@@ -257,7 +285,7 @@ const EditFactura: React.FC<{
               })
             }
               </TableBody>
-              <TableFacturaSummary detalles={getValues("detalles")} />
+              <TableFacturaSummary detalles={watchDetalle} />
             </DetailTable>
           </TableContainer>
 

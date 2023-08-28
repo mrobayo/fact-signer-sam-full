@@ -24,7 +24,7 @@ export const computeFacturaSummary = (detalles: DetalleFacturaType[]): FacturaSu
 
   //
   const impuestosMap = detalles
-    .flatMap(detalle => detalle.impuestos)
+    .flatMap(detalle => detalle?.impuestos ?? [])
     .reduce((acc, impuesto) => {
       const grupo = `impuesto${impuesto.codigo}-porcentaje${impuesto.codigoPorcentaje}`;
       if (acc.has(grupo)) acc.get(grupo)?.push(impuesto); else acc.set(grupo, [impuesto]);
@@ -45,6 +45,6 @@ export const computeFacturaSummary = (detalles: DetalleFacturaType[]): FacturaSu
     summary.totalConImpuestos.push(totalImpuesto);
   });
 
-  console.log('compute*', summary);
+  //console.log(detalles, summary);
   return summary;
 }
