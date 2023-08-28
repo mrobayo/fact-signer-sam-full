@@ -1,5 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Controller, useFieldArray, useForm} from "react-hook-form";
+import { isEmpty } from "lodash";
 import {type FacturaType} from "../factura";
 
 import Box from '@mui/material/Box';
@@ -7,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
+import FormHelperText from '@mui/material/FormHelperText';
 
 import TableRow from "@mui/material/TableRow";
 import TableBody from "@mui/material/TableBody";
@@ -46,7 +48,7 @@ const ColDefinition: {
 const EditFactura: React.FC<{
   isNew: boolean;
 }> = ({ isNew }) => {
-   const [_ignore, forceUpdate] = React.useReducer(x => x + 1, 0);
+   //const [_ignore, forceUpdate] = React.useReducer(x => x + 1, 0);
   const [selected, setSelected] = React.useState<readonly number[]>([]);
   const [editRow, setEditRow] = useState<number>(0);
   const {
@@ -55,7 +57,10 @@ const EditFactura: React.FC<{
     setValue,
     register,
     watch,
+    clearErrors,
+    setError,
     //reset,
+    trigger,
     handleSubmit,
     formState: { errors }
   } = useForm<FacturaType>({
@@ -140,42 +145,59 @@ const EditFactura: React.FC<{
     const indexList = getValues('detalles')
       .map(({ detalleId }, index) => selected.includes(detalleId) ? index : null)
       .filter(index => index !== null) as number[];
-    console.log(selected);
-    console.log('handleRemove', indexList);
+
     setSelected([]);
     remove(indexList);
   }
 
   const computePrecioSinImpuestos = () => {
     const detalles = getValues("detalles");
-    if (editRow >= detalles.length) {
+    const detallesLen = detalles.length;
+    if (editRow >= detallesLen) {
       return;
     }
+
     const detalle = detalles[editRow];
     const valor = (+detalle.precioUnitario) * (+detalle.cantidad);
-    setValue(`detalles.${editRow}.precioTotalSinImpuesto`, +valor.toFixed(2));
-    console.log('valor', valor);
-    if (editRow < detalles.length - 1 ) {
-      setEditRow(editRow + 1);
-    } else {
+    setValue(`detalles.${editRow}.precioTotalSinImpuesto`, +valor.toFixed(2),
+      //{shouldDirty: true, shouldTouch: true, shouldValidate: true}
+    );
+
+    let isRowValid = true;
+    // VALIDATE ROW
+    if (valor === 0) {
+      isRowValid = false;
+      setError(`detalles.${editRow}.precioTotalSinImpuesto`,
+        { type: 'manual', message:'Subtotal Sin Impuesto debe ser mayor a cero' }
+      );
+    }
+    if (isEmpty(detalle.descripcion)) {
+      isRowValid = false;
+      trigger(`detalles.${editRow}.descripcion`);
+    }
+    if (isRowValid) {
+      clearErrors(`detalles.${editRow}.precioTotalSinImpuesto`);
+      if (!detalles[detallesLen-1].descripcion) {
+        remove(detallesLen-1);
+      }
       handleAppendRow();
     }
   };
 
-  const checkKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const checkKeyDown = (event: React.KeyboardEvent<HTMLFormElement>) => {
     if (event.key !== "Enter") {
       return;
     }
     event.preventDefault();
-    const target= event.target as HTMLInputElement;
+    const target= event.target as HTMLFormElement;
     if (target.id.endsWith('precioUnitario')) {
       computePrecioSinImpuestos();
     }
     if (target.id.startsWith('detalles')) {
       const form = target.form;
       if (form) {
-        const index = [...form].indexOf(event.target as Element);
-        const nextElement = form[index + 2] as HTMLFormElement;
+        const index = [...form].indexOf(event.target);
+        const nextElement = form[index + 2];
         nextElement && nextElement.focus();
       }
     }
@@ -248,7 +270,10 @@ const EditFactura: React.FC<{
                           fullWidth
                           id={`detalles.${index}.descripcion`}
                           label=""
-                          {...register(`detalles.${index}.descripcion`, { required: true })}
+                          error={errors?.detalles?.[index]?.descripcion !== undefined}
+                          helperText={errors?.detalles?.[index]?.descripcion?.message}
+                          {...register(`detalles.${index}.descripcion`,
+                            { required: true })}
                         />
                       }
                       {!isEditMode && item.descripcion}
@@ -261,7 +286,9 @@ const EditFactura: React.FC<{
                             id={`detalles.${index}.cantidad`}
                             label=""
                             type="number"
-                            {...register(`detalles.${index}.cantidad`, { required: true })}
+                            error={errors?.detalles?.[index]?.cantidad !== undefined}
+                            helperText={errors?.detalles?.[index]?.cantidad?.message}
+                            {...register(`detalles.${index}.cantidad`, { required: true, min: 0.0001 })}
                           />
                         }
                         {!isEditMode && item.cantidad}
@@ -279,24 +306,16 @@ const EditFactura: React.FC<{
                                 {...field}
                               />
                             }
+                            defaultValue={0}
                             name={`detalles.${index}.precioUnitario`}
                             control={control}
                           />
-
                         }
                         {!isEditMode && item.precioUnitario}
                       </DetailCell>
                       <DetailCell align="right">
                         {item.precioTotalSinImpuesto}
-
-                        {/*<TextField*/}
-                        {/*  margin="normal"*/}
-                        {/*  fullWidth*/}
-                        {/*  id={`detalles.${index}.precioTotalSinImpuesto`}*/}
-                        {/*  label=""*/}
-                        {/*  type="number"*/}
-                        {/*  {...register(`detalles.${index}.precioTotalSinImpuesto`, { required: true })}*/}
-                        {/*/>*/}
+                        {errors?.detalles?.[index]?.precioTotalSinImpuesto && <FormHelperText error>{errors?.detalles?.[index]?.precioTotalSinImpuesto?.message}</FormHelperText>}
                       </DetailCell>
                       <DetailCell align="center">
                         <Tooltip title="Impuestos: IVA">
