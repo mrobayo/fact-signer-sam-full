@@ -51,7 +51,7 @@ const EditFactura: React.FC<{
    //const [_ignore, forceUpdate] = React.useReducer(x => x + 1, 0);
   const [selected, setSelected] = React.useState<readonly number[]>([]);
   const [editDetalleId, setEditDetalleId] = useState<number>();
-  const [editRow, setEditRow] = useState<number>(0);
+
   const {
     control,
     getValues,
@@ -104,6 +104,13 @@ const EditFactura: React.FC<{
   const watchDetalle = watch("detalles");
 
   useEffect(() => {
+    const detalles = getValues("detalles");
+    if (detalles.length === 1) {
+      setEditDetalleId(detalles[0].detalleId);
+    }
+  }, []);
+
+  useEffect(() => {
     // watchDetalle((value, { name, type }) => console.log(value, name, type));
     console.log('watchDetalle', watchDetalle);
   }, [watchDetalle]);
@@ -111,11 +118,11 @@ const EditFactura: React.FC<{
 
   const handleAppendRow = () => {
     const detalles = getValues("detalles");
-    const inconsistentEditRow = detalles.length === 0 || detalles.length-1 < editRow;
-    if (inconsistentEditRow || editRow < 0 || computePrecioSinImpuestos()) {
+    //const inconsistentEditRow = detalles.length === 0 || detalles.length-1 < editRow;
+    //if (inconsistentEditRow || editRow < 0 || computePrecioSinImpuestos()) {
       const detalleId = 1 + detalles.reduce(
       (acc, { detalleId }) => detalleId && detalleId > acc ? detalleId: acc, 0);
-      setEditRow(detalles.length);
+
       setEditDetalleId(detalleId);
       append({
         detalleId,
@@ -128,7 +135,7 @@ const EditFactura: React.FC<{
         impuestos: []
       });
       setSelected([]);
-    }
+    //}
   }
 
   const onFormSubmit = handleSubmit((data) => {
@@ -161,19 +168,16 @@ const EditFactura: React.FC<{
       .map(({ detalleId }, index) => selected.includes(detalleId) ? index : null)
       .filter(index => index !== null) as number[];
 
-    setSelected([]);
-    if (indexList.includes(editRow)) {
-      setEditRow(-1);
+    if (editDetalleId && selected.includes(editDetalleId)) {
       setEditDetalleId(undefined);
     }
+    setSelected([]);
     remove(indexList);
   }
 
   const handleEditRow = (index: number) => {
     const detalles = getValues("detalles");
     setEditDetalleId(detalles[index].detalleId);
-    setEditRow(index);
-    //}
   }
 
   useEffect(() => {
