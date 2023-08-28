@@ -16,6 +16,11 @@ export const DetailCell = styled(TableCell)({
   padding: '12px',
 });
 
+export const DetailToolCell = styled(TableCell)({
+  padding: '12px 4px',
+  border: 'none',
+});
+
 export const DetailTable = styled(Table)({
    '& .MuiTextField-root': {
        marginTop: 0,

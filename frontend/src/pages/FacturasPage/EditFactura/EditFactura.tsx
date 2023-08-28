@@ -19,7 +19,7 @@ import TableContainer from "@mui/material/TableContainer";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import EditIcon from '@mui/icons-material/Edit';
 
-import {DetailCell, DetailTable, editFacturaCss} from "./EditFactura.style.tsx";
+import {DetailCell, DetailTable, DetailToolCell, editFacturaCss} from "./EditFactura.style.tsx";
 import InfoFacturaEdit from "../../../components/InfoFacturaEdit.tsx";
 import TextField from "@mui/material/TextField";
 import DetalleToolbar from "./DetalleToolbar.tsx";
@@ -27,6 +27,8 @@ import DetalleToolbar from "./DetalleToolbar.tsx";
 import InformationIcon from "../../../components/icons/InformationIcon.tsx";
 import Tooltip from "@mui/material/Tooltip";
 import TableFacturaSummary from "./TableFacturaSummary.tsx";
+import {formatCurrency} from "../../../util";
+import {formatAmount} from "../../../util";
 
 const ColDefinition: {
   label: string;
@@ -40,7 +42,7 @@ const ColDefinition: {
   { label: 'Subtotal', align: 'right', style: {width: '180px'} },
   //{ label: 'Descuento', align: 'left', style: {width: '200px'} },
   { label: '', align: 'left', style: {width: '1px'} },
-  { label: '', align: 'center', style: {width: '1px'} },
+  { label: '', align: 'center', style: {width: '1px', border: 'none'} },
 ];
 
 
@@ -246,8 +248,6 @@ const EditFactura: React.FC<{
     }
   };
 
-  console.log('errors', errors);
-
   return (
     <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
       <Typography component="h1" variant="h4" >
@@ -336,7 +336,7 @@ const EditFactura: React.FC<{
                             {...register(`detalles.${index}.cantidad`, { required: true, min: 0.0001 })}
                           />
                         }
-                        {!isEditMode && item.cantidad}
+                        {!isEditMode && item.cantidad && formatAmount(item.cantidad)}
                       </DetailCell>
                       <DetailCell align="right">
                         {isEditMode &&
@@ -356,10 +356,10 @@ const EditFactura: React.FC<{
                             control={control}
                           />
                         }
-                        {!isEditMode && item.precioUnitario}
+                        {!isEditMode && item.precioUnitario && formatCurrency(item.precioUnitario)}
                       </DetailCell>
                       <DetailCell align="right">
-                        {item.precioTotalSinImpuesto}
+                        {item.precioTotalSinImpuesto && formatCurrency(item.precioTotalSinImpuesto)}
                         {errors?.detalles?.[index]?.precioTotalSinImpuesto && <FormHelperText error>{errors?.detalles?.[index]?.precioTotalSinImpuesto?.message}</FormHelperText>}
                       </DetailCell>
                       <DetailCell align="center">
@@ -367,14 +367,14 @@ const EditFactura: React.FC<{
                           <InformationIcon sx={{ fontSize: 12 }} />
                         </Tooltip>
                       </DetailCell>
-                      <DetailCell align="center">
+                      <DetailToolCell align="center">
                         <IconButton
                           disabled={isEditMode}
                           color="primary"
                           onClick={() => handleEditRow(index)}>
                           <EditIcon />
                         </IconButton>
-                      </DetailCell>
+                      </DetailToolCell>
                    </TableRow>
                 );
               })

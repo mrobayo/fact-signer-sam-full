@@ -30,3 +30,6 @@ export * from './hooks';
 // export * from './LabelPrefixContextProvider';
 // export * from './useLabelPrefix';
 // export * from './useCheckForApplicationUpdate';
+
+export { formatCurrency } from './formatCurrency';
+export { formatAmount } from './formatAmount';
