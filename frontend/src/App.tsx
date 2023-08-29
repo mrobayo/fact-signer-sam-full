@@ -3,9 +3,9 @@ import {Outlet, Route, Routes} from "react-router-dom";
 import Dashboard from "./layout/Dashboard/Dashboard.tsx";
 import LoginPage from "./layout/LoginPage/LoginPage.tsx";
 import PublicPage from "./layout/PublicPage/PublicPage.tsx";
-import FacturasPage from "./pages/FacturasPage/FacturasPage.tsx";
+import FacturasPage from "./pages/FacturasPage";
 import NoMatch from "./components/ui/NoMatch/NoMatch.tsx";
-import EditFactura from "./pages/FacturasPage/EditFactura/EditFactura.tsx";
+import EditFactura from "./pages/EditFacturaPage";
 
 function App() {
   return (
@@ -16,7 +16,7 @@ function App() {
           <Route path="/facturas" element={<FacturasPage />} />
           <Route
               path="/facturas/new"
-              element={<EditFactura isNew />}
+              element={<EditFactura />}
             />
           <Route
             path="/facturas/edit/:id"

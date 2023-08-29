@@ -3,8 +3,8 @@ import TableRow from "@mui/material/TableRow";
 
 import {TableFooter} from "@mui/material";
 import React from "react";
-import {DetalleFacturaType} from "../factura";
-import {computeFacturaSummary} from "../facturaUtil.ts";
+import {DetalleFacturaType} from "../FacturasPage/factura";
+import {computeFacturaSummary} from "../FacturasPage/facturaUtil.ts";
 import {DetailSummaryCell} from "./EditFactura.style.tsx";
 
 const TableFacturaSummary: React.FC<{

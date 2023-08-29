@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 import TopToolbar from "../../components/ui/TopToolbar/TopToolbar.tsx";
 import {useNavigate} from "react-router-dom";
 import withAuth from "../../services/auth/withAuth.tsx";
+import FacturaList from "./FacturaList/FacturaList.tsx";
 
 const FacturasPage: React.FC = () => {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ const FacturasPage: React.FC = () => {
       />
         <TopToolbar>
           <Button
-            variant="contained"
+            variant="text"
             onClick={handleOpenNew}
             css={css`float: right;`}
             startIcon={<AddIcon />}
@@ -34,7 +35,7 @@ const FacturasPage: React.FC = () => {
         </Button>
       </TopToolbar>
 
-
+      <FacturaList />
     </Box>
   );
 };

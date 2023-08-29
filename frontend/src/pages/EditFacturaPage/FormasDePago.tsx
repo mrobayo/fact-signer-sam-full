@@ -11,8 +11,8 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import {PagoType} from "../factura";
-import {FORMAS_PAGO} from "../../tarifario.ts";
+import {PagoType} from "../FacturasPage/factura";
+import {FORMAS_PAGO} from "../tarifario.ts";
 import { isEmpty } from 'lodash';
 import FormaPagoModalModal from "./FormaPagoModal.tsx";
 

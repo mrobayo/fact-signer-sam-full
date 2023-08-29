@@ -1,7 +1,7 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {Controller, useFieldArray, useForm} from "react-hook-form";
 import { isEmpty } from "lodash";
-import {type FacturaType, type ImpuestoType} from "../factura";
+import {type FacturaType, type ImpuestoType} from "../FacturasPage/factura";
 
 import Box from '@mui/material/Box';
 import Typography from "@mui/material/Typography";
@@ -21,17 +21,18 @@ import EditIcon from '@mui/icons-material/Edit';
 import NotInterestedIcon from '@mui/icons-material/NotInterested';
 
 import {DetailCell, DetailTable, DetailToolCell, editFacturaCss} from "./EditFactura.style.tsx";
-import InfoFacturaEdit from "../../../components/InfoFacturaEdit.tsx";
+import InfoFacturaEdit from "../../components/InfoFacturaEdit.tsx";
 import TextField from "@mui/material/TextField";
 import DetalleToolbar from "./DetalleToolbar.tsx";
 
-import InformationIcon from "../../../components/icons/InformationIcon.tsx";
+import InformationIcon from "../../components/icons/InformationIcon.tsx";
 import Tooltip from "@mui/material/Tooltip";
 import TableFacturaSummary from "./TableFacturaSummary.tsx";
-import {formatCurrency} from "../../../util";
-import {formatAmount} from "../../../util";
+import {formatCurrency} from "../../util";
+import {formatAmount} from "../../util";
 import EditImpuestosModal from "./EditImpuestosModal.tsx";
 import FormasDePago from "./FormasDePago.tsx";
+import withAuth from "../../services/auth/withAuth.tsx";
 
 const ColDefinition: {
   label: string;
@@ -50,7 +51,7 @@ const ColDefinition: {
 
 
 // https://codesandbox.io/s/react-hook-form-usefieldarray-ssugn?file=/src/index.tsx
-const EditFactura: React.FC<{
+const EditFacturaPage: React.FC<{
   isNew: boolean;
 }> = ({ isNew }) => {
    //const [_ignore, forceUpdate] = React.useReducer(x => x + 1, 0);
@@ -450,4 +451,4 @@ const EditFactura: React.FC<{
   );
 };
 
-export default EditFactura;
+export default withAuth(EditFacturaPage);

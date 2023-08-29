@@ -14,20 +14,20 @@ import {
     useTheme
 } from "@mui/material";
 
-import {type PagoType} from "../factura";
-import DialogTitle from "../../../components/ui/DialogTitle";
-import { StyledInput } from '../../../components/ui/StyledInput/StyledInput';
-import {FORMAS_PAGO} from "../../tarifario";
+import {type ImpuestoType} from "../FacturasPage/factura";
+import DialogTitle from "../../components/ui/DialogTitle";
+import { StyledInput } from '../../components/ui/StyledInput/StyledInput.tsx';
+import {TARIFAS_IVA} from "../tarifario.ts";
 
-interface FormaPagoModalProps {
-    pago?: PagoType;
-    onUpdate?: (pago: PagoType) => void;
+interface EditImpuestosProps {
+    impuesto?: ImpuestoType;
+    onUpdate?: (impuestos: ImpuestoType) => void;
     isVisible: boolean;
     setVisible: (visible: boolean) => void;
 }
 
-const FormaPagoModalModal: React.FC<FormaPagoModalProps> = ({
-    pago,
+const EditImpuestosModal: React.FC<EditImpuestosProps> = ({
+    impuesto,
     onUpdate,
     isVisible,
     setVisible
@@ -37,67 +37,67 @@ const FormaPagoModalModal: React.FC<FormaPagoModalProps> = ({
     reset,
     handleSubmit,
     formState: { errors }
-  } = useForm<PagoType>({
+  } = useForm<ImpuestoType>({
     defaultValues: {
-      formaPago: '01',
-      total: 0,
-      plazo: 0,
-      unidadTiempo: 'días'
+      codigo: 2,
+      codigoPorcentaje: 2,
+      tarifa: 12,
+      baseImponible: 0,
+      valor: 0
     }
   });
   const formRef = useRef<HTMLFormElement>(null);
   const theme = useTheme();
 
   useEffect(() => {
-    reset(pago ?? {formaPago: '01', total: 0, plazo: 0, unidadTiempo: 'días'});
-  }, [pago, reset]);
+    reset(impuesto ?? {codigo: 2, codigoPorcentaje: 2, tarifa: 12, baseImponible: 0, valor: 0});
+  }, [impuesto, reset]);
 
   const handleCloseDialog = () => setVisible(false);
 
   const onFormSubmit = handleSubmit((data) => {
-    // const index = FORMAS_PAGO
-    //   .findIndex(({ codigo }) => codigo === data.formaPago);
-    const pago = {
-      formaPago: data.formaPago,
-      total: data.total,
-      plazo: data.plazo,
-      unidadTiempo: 'días'
-    } as PagoType;
-    onUpdate && onUpdate(pago);
+    const index = TARIFAS_IVA
+      .findIndex(({ codigoPorcentaje }) => codigoPorcentaje === +data.codigoPorcentaje);
+    const impuesto = {
+      ...data,
+      codigoPorcentaje: +data.codigoPorcentaje,
+      tarifa: TARIFAS_IVA[index]?.tarifa
+    } as ImpuestoType;
+    onUpdate && onUpdate(impuesto);
   })
   return (
     <Dialog
       fullWidth
       maxWidth="sm"
       onClose={handleCloseDialog}
-      aria-labelledby="edit-forma-pago-title"
+      aria-labelledby="edit-impuesto-title"
       open={isVisible}
     >
-      <DialogTitle id="edit-forma-pago-title" onClose={handleCloseDialog}>
-        Seleccione forma de pago
+      <DialogTitle id="edit-impuesto-title" onClose={handleCloseDialog}>
+        Seleccione el Impuesto a Aplicar
       </DialogTitle>
       <DialogContent sx={[ { minHeight: '240px', }, ]}>
         <form ref={formRef} noValidate autoComplete="off" onSubmit={onFormSubmit}>
-          <FormControl fullWidth variant="outlined" error={errors.formaPago !== undefined}
+          <FormControl fullWidth variant="outlined" error={errors.codigoPorcentaje !== undefined}
              css={css`.Mui-error>select { border-color: ${theme.palette.error.main} !important; }`}>
             <InputLabel
                 htmlFor="device-type-select"
                 shrink={false}
                 css={css`margin-bottom: -24px; transform: none; position: relative; color: ${theme.palette.text.primary}!important; `}
             >
-                Forma de Pago *
+                Tarifa del IVA *
             </InputLabel>
             <NativeSelect
               id="device-type-select"
               input={<StyledInput />}
-              {...register("formaPago", { required: true })}
+              {...register("codigoPorcentaje", { required: true })}
             >
-              <option value="" disabled>Forma de Pago</option>
-              {FORMAS_PAGO.map(
-                forma => <option key={forma.codigo} value={forma.codigo}>{forma.label}</option>
+              <option value="" disabled>Tarifa del IVA</option>
+              {TARIFAS_IVA.filter(({active}) => active).map(
+                tarifa => <option key={tarifa.codigoPorcentaje} value={tarifa.codigoPorcentaje}>{tarifa.label}</option>
               )}
             </NativeSelect>
-            <FormHelperText>{errors?.formaPago?.message}</FormHelperText>
+            <FormHelperText>{errors?.codigoPorcentaje?.message}</FormHelperText>
           </FormControl>
         </form>
       </DialogContent>
@@ -112,4 +112,4 @@ const FormaPagoModalModal: React.FC<FormaPagoModalProps> = ({
   );
 }
 
-export default FormaPagoModalModal;
+export default EditImpuestosModal;
