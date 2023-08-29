@@ -1,6 +1,6 @@
 package com.marvic.factsigner.model.sistema;
 
-import com.marvic.factsigner.model.sistema.extra.GrupoCliente;
+import com.marvic.factsigner.model.sistema.extra.Grupo;
 import ec.gob.sri.types.SriEnumIdentidad;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -76,6 +76,6 @@ public class Cliente {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="grupo_id", nullable = false)
-    private GrupoCliente grupo;
+    private Grupo grupo;
 
 }

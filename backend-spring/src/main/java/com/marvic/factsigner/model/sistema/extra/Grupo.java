@@ -5,7 +5,7 @@ import javax.persistence.*;
 @Entity
 @Table(name="si_grupo_cliente",
         uniqueConstraints = @UniqueConstraint(name="si_grupo_cliente_uk", columnNames = {"name"}))
-public class GrupoCliente {
+public class Grupo {
 
     @Id
     @Column(length = 20)
