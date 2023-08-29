@@ -25,6 +25,6 @@ public class Categoria {
     private String name;
 
     @Column(nullable = false)
-    private Boolean activo;
+    private boolean activo;
 
 }

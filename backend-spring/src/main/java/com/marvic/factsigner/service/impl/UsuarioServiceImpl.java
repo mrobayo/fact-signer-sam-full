@@ -44,8 +44,8 @@ public class UsuarioServiceImpl implements UsuarioService  {
         return modelMapper.map(dto, Usuario.class);
     }
 
-    private UsuarioDTO mapToDTO(Usuario Cliente){
-        return modelMapper.map(Cliente, UsuarioDTO.class);
+    private UsuarioDTO mapToDTO(Usuario model){
+        return modelMapper.map(model, UsuarioDTO.class);
     }
 
 }

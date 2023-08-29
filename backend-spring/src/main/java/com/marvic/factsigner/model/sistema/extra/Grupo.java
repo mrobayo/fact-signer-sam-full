@@ -15,6 +15,6 @@ public class Grupo {
     private String name;
 
     @Column(nullable = false)
-    private Boolean activo;
+    private boolean activo;
 
 }

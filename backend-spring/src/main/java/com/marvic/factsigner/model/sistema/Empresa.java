@@ -35,9 +35,6 @@ public class Empresa {
     @Column(nullable = false, length = 60)
     private String color;
 
-    @Column(nullable = false, length = 60)
-    private String codigo;
-
     @Column(nullable = false, length = 100)
     private String comercial;
 
@@ -48,25 +45,25 @@ public class Empresa {
     @Column(nullable = false)
     private BigDecimal tarifaIva;
 
-    @Column(nullable = false, length = 20)
+    @Column(length = 20)
     private String numeroContribuyente;   // Num de Contribuyente Especial
 
     @Column(nullable = false)
-    private Boolean obligado;   // Obligado a llevar contabilidad
+    private boolean obligado;   // Obligado a llevar contabilidad
 
-    @Column(nullable = false, length = 300)
+    @Column(length = 300)
     private String logo;
 
     @Column(nullable = false, length = 100)
     private String direccion;
 
-    @Column(nullable = true, length = 300)
+    @Column(length = 300)
     private String certFile;
 
-    @Column(nullable = true, length = 100)
+    @Column(length = 100)
     private String claveCert;
 
-    @Column(nullable = true, length = 100)
+    @Column(length = 100)
     private String telefono;
 
 }

@@ -35,7 +35,7 @@ public class Cliente {
     private String identidad;
 
     @Column(nullable = false)
-    private Boolean activo;
+    private boolean activo;
 
     @Column(nullable = false, length = 60)
     private String nombres;
@@ -68,7 +68,7 @@ public class Cliente {
     private String contacto;
 
     @Column(nullable = false)
-    private Boolean aseguradora;
+    private boolean aseguradora;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="seguro_id", nullable = false)

@@ -1,15 +1,13 @@
-package com.marvic.factsigner.model.comprobantes.extra;
+package com.marvic.factsigner.payload;
 import com.marvic.factsigner.model.sistema.Empresa;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -20,7 +18,7 @@ import java.util.UUID;
 @Entity
 @Table(name="si_punto_venta",
         uniqueConstraints = @UniqueConstraint(name="si_punto_venta_ide_uk", columnNames = {"empresa_id", "estab", "pto_emi"}))
-public class PuntoVenta {
+public class PuntoVentaDTO {
 
     @Id
     private UUID id;
@@ -49,5 +47,7 @@ public class PuntoVenta {
 
     @Column(nullable = false, length = 100)
     private String telefono;
+
+    private List<PuntoSecuenciaDTO> secuencias = new ArrayList<>();
 
 }

@@ -31,7 +31,7 @@ public class Unidad {
     private UnidadTipo tipo; // Peso, Volumen, Empaque
 
     @Column(nullable = false)
-    private Boolean base; // Unidad principal/base de este tipo
+    private boolean base; // Unidad principal/base de este tipo
 
     @Column(nullable = false)
     private BigDecimal factor; // Factor de conversion con respecto a la unidad base

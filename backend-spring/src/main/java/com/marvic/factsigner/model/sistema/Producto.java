@@ -32,7 +32,7 @@ public class Producto {
     private String codigo;
 
     @Column(nullable = false)
-    private Boolean activo;
+    private boolean activo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="empresa_id", nullable = false)
@@ -60,10 +60,10 @@ public class Producto {
     private StockTipo control;
 
     @Column(nullable = false)
-    private Boolean vendido;
+    private boolean vendido;
 
     @Column(nullable = false)
-    private Boolean comprado;
+    private boolean comprado;
 
     // Lista de precio
     // private ListaPrecio listaPrecio;
