@@ -30,7 +30,8 @@ import Tooltip from "@mui/material/Tooltip";
 import TableFacturaSummary from "./TableFacturaSummary.tsx";
 import {formatCurrency} from "../../../util";
 import {formatAmount} from "../../../util";
-import EditImpuestos from "./EditImpuestos.tsx";
+import EditImpuestosModal from "./EditImpuestosModal.tsx";
+import FormasDePago from "./FormasDePago.tsx";
 
 const ColDefinition: {
   label: string;
@@ -72,7 +73,7 @@ const EditFactura: React.FC<{
   } = useForm<FacturaType>({
     defaultValues: {
       infoFactura: {
-
+        pagos: [],
       },
       infoTributaria: {
 
@@ -416,6 +417,8 @@ const EditFactura: React.FC<{
             </DetailTable>
           </TableContainer>
 
+          <FormasDePago pagos={getValues("infoFactura.pagos")} />
+
           <Button
             type="button"
             onClick={handleAppendRow}
@@ -435,12 +438,14 @@ const EditFactura: React.FC<{
 
         </Box>
       </Box>
-      <EditImpuestos
+      <EditImpuestosModal
         impuesto={detalle?.impuestos?.[0]}
         onUpdate={handleUpdateImpuestos}
         isVisible={isEditImpuesto}
         setVisible={setEditImpuesto}
       />
+
+
     </Paper>
   );
 };

@@ -26,7 +26,7 @@ interface EditImpuestosProps {
     setVisible: (visible: boolean) => void;
 }
 
-const EditImpuestos: React.FC<EditImpuestosProps> = ({
+const EditImpuestosModal: React.FC<EditImpuestosProps> = ({
     impuesto,
     onUpdate,
     isVisible,
@@ -50,7 +50,6 @@ const EditImpuestos: React.FC<EditImpuestosProps> = ({
   const theme = useTheme();
 
   useEffect(() => {
-    console.log(impuesto);
     reset(impuesto ?? {codigo: 2, codigoPorcentaje: 2, tarifa: 12, baseImponible: 0, valor: 0});
   }, [impuesto, reset]);
 
@@ -71,10 +70,10 @@ const EditImpuestos: React.FC<EditImpuestosProps> = ({
       fullWidth
       maxWidth="sm"
       onClose={handleCloseDialog}
-      aria-labelledby="edit-device-dialog-title"
+      aria-labelledby="edit-impuesto-title"
       open={isVisible}
     >
-      <DialogTitle id="edit-device-dialog-title" onClose={handleCloseDialog}>
+      <DialogTitle id="edit-impuesto-title" onClose={handleCloseDialog}>
         Seleccione el Impuesto a Aplicar
       </DialogTitle>
       <DialogContent sx={[ { minHeight: '240px', }, ]}>
@@ -113,4 +112,4 @@ const EditImpuestos: React.FC<EditImpuestosProps> = ({
   );
 }
 
-export default EditImpuestos;
+export default EditImpuestosModal;

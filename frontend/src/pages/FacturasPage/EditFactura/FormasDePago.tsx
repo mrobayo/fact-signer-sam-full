@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
@@ -13,9 +13,21 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import {PagoType} from "../factura";
 import {FORMAS_PAGO} from "../../tarifario.ts";
+import { isEmpty } from 'lodash';
+import FormaPagoModalModal from "./FormaPagoModal.tsx";
 
-const FormasDePago: React.FC<{ pagos: PagoType[]}> = ({ pagos }) => {
-  const [open, setOpen] = React.useState(true);
+// const examplePagos = [
+//   {formaPago: '01', total: 50, plazo: 0, unidadTiempo: 'días'},
+//   {formaPago: '16', total: 100, plazo: 30, unidadTiempo: 'días'},
+// ];
+
+const FormasDePago: React.FC<{
+  pagos: PagoType[];
+  onUpdatePagos?: PagoType[];
+}> = ({ pagos }) => {
+  const [openDetalle, setOpenDetalle] = useState(true);
+  const [isEditFormas, setEditFormas] = useState(false);
+  const [pagoIndex, setPagoIndex] = useState<number>(-1);
   const getFormaPago = (formaPago: string) => {
     return FORMAS_PAGO.find(forma => forma.codigo === formaPago)?.label;
   }
@@ -27,8 +39,8 @@ const FormasDePago: React.FC<{ pagos: PagoType[]}> = ({ pagos }) => {
           <TableRow>
             <TableCell>
               <Typography sx={{ flex: '1 1 100%' }} variant="h6" id="FormaPagoTitle" component="div">
-                <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
-                  {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                <IconButton aria-label="expand row" size="small" onClick={() => setOpenDetalle(!openDetalle)}>
+                  {openDetalle ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                 </IconButton>
                 Formas de Pago
               </Typography>
@@ -37,9 +49,11 @@ const FormasDePago: React.FC<{ pagos: PagoType[]}> = ({ pagos }) => {
             <TableCell align="right">Plazo</TableCell>
             <TableCell align="right">
               <IconButton
-                  aria-label="Edit formas de pago"
-                  color="info"
-                  onClick={() => {
+                aria-label="Edit formas de pago"
+                color="info"
+                onClick={() => {
+                  setPagoIndex(-1);
+                  setEditFormas(true);
                 }}>
                     <EditIcon />
                 </IconButton>
@@ -49,9 +63,14 @@ const FormasDePago: React.FC<{ pagos: PagoType[]}> = ({ pagos }) => {
         <TableBody>
           <TableRow>
             <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={4}>
-              <Collapse in={open} timeout="auto" unmountOnExit>
+              <Collapse in={openDetalle} timeout="auto" unmountOnExit>
                 <Table size="small" aria-label="purchases">
-                {pagos.map((row) => (
+                {isEmpty(pagos) && (
+                  <TableRow>
+                    <TableCell align="center">(Ingrese al menos 1 forma de pago)</TableCell>
+                  </TableRow>
+                )}
+                {!isEmpty(pagos) && pagos?.map((row) => (
                 <TableRow key={row.formaPago}>
                   <TableCell component="th" scope="row">{getFormaPago(row.formaPago)}</TableCell>
                   <TableCell>{row.total}</TableCell>
@@ -65,6 +84,12 @@ const FormasDePago: React.FC<{ pagos: PagoType[]}> = ({ pagos }) => {
           </TableRow>
         </TableBody>
       </Table>
+      <FormaPagoModalModal
+        pago={pagoIndex >= 0 && pagos.length > pagoIndex ? pagos[pagoIndex] : {} as PagoType}
+        onUpdate={(data) => { console.log(data); }}
+        isVisible={isEditFormas}
+        setVisible={setEditFormas}
+      />
     </Box>
   );
 };
