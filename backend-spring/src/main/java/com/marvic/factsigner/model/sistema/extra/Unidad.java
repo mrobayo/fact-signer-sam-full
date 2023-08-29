@@ -33,7 +33,7 @@ public class Unidad {
     @Column(nullable = false)
     private boolean base; // Unidad principal/base de este tipo
 
-    @Column(nullable = false)
+    @Column(nullable = false, precision = 10, scale = 3)
     private BigDecimal factor; // Factor de conversion con respecto a la unidad base
 
 }

@@ -11,8 +11,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.List;
 
-@RestController
-@RequestMapping("/usuarios")
+//@RestController
+//@RequestMapping("/usuarios")
 public class UsuarioController {
 
     @Autowired

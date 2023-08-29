@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface UnidadRepository extends JpaRepository<Unidad, String> {
 
+    Optional<Unidad> findByName(String name);
+
 }

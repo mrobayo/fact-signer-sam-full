@@ -22,7 +22,7 @@ public class UnidadDTO {
     private String name;
 
     @NotEmpty
-    private UnidadTipo tipo;
+    private String tipo;
 
     @NotNull
     private boolean base;
