@@ -19,7 +19,7 @@ import java.util.List;
  * https://www.appsdeveloperblog.com/add-and-validate-custom-claims-in-jwt/
  */
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 public class AuthController {
 
     private final AuthService authService;

@@ -78,7 +78,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) ->
                         //authorize.anyRequest().authenticated()
                         authorize
-                                .mvcMatchers("/api/auth/**").permitAll()
+                                .mvcMatchers("/auth/**").permitAll()
                                 .mvcMatchers("/usuarios/**").permitAll()
                                 .anyRequest().authenticated()
 
