@@ -21,7 +21,6 @@ public class EmpresaDTO {
 
     private boolean activo;
 
-    @NotEmpty
     private String ruc;
 
     @NotEmpty
@@ -30,10 +29,9 @@ public class EmpresaDTO {
     @NotEmpty
     private String comercial;
 
-    @NotEmpty
     private String ambiente;
 
-    @NotEmpty
+    @NotNull
     private BigDecimal tarifaIva;
 
     private String numeroContribuyente;

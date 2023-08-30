@@ -13,7 +13,6 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
 
 @Entity
 @Table(name="si_unidad",

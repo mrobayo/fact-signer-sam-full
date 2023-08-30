@@ -16,10 +16,14 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class UsuarioDTO {
 
+    private String id;
+
     @NotEmpty
     private String username;
 
     @NotEmpty
+    private String name;
+
     private String password;
 
     private String roles;

@@ -16,21 +16,22 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
 
 @Entity
 @Table(name="si_empresa",
-        uniqueConstraints = @UniqueConstraint(name="si_empresa_ruc_uk", columnNames = {"ruc"}))
+        uniqueConstraints = @UniqueConstraint(name="si_empresa_name_uk", columnNames = {"name"}))
 public class Empresa {
 
     @Id
-    private UUID id;
+    @Column(name = "ruc", nullable = false, length = 20)
+    private String id;
 
     @Column(nullable = false, length = 100)
     private String name;
 
-    @Column(nullable = false, length = 20)
-    private String ruc;
+    public String getRuc() {
+        return id;
+    }
 
     @Column(nullable = false, length = 60)
     private String color;

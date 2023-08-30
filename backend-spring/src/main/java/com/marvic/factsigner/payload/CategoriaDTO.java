@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 @Data
 @AllArgsConstructor
@@ -18,5 +17,8 @@ public class CategoriaDTO {
     private String name;
 
     private boolean activo;
+
+    @NotEmpty
+    private String empresaId;
 
 }

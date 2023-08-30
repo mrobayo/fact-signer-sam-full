@@ -1,10 +1,8 @@
 package com.marvic.factsigner.payload;
 
-import com.marvic.factsigner.model.sistema.Empresa;
 import com.marvic.factsigner.model.sistema.extra.Categoria;
 import com.marvic.factsigner.model.sistema.extra.Unidad;
-import com.marvic.factsigner.model.sistema.types.ProductoTipo;
-import com.marvic.factsigner.model.sistema.types.StockTipo;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

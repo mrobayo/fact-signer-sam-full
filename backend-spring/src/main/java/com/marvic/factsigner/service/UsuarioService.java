@@ -6,14 +6,14 @@ import java.util.List;
 
 public interface UsuarioService {
 
-    UsuarioDTO getUsuario(Integer UsuarioId);
+    UsuarioDTO getOne(String id);
 
-    List<UsuarioDTO> getUsuarios();
+    List<UsuarioDTO> getMany();
 
-    UsuarioDTO createUsuario(UsuarioDTO UsuarioDTO);
+    UsuarioDTO create(UsuarioDTO dto);
 
-    void deleteUsuario(Integer UsuarioId);
+    void delete(String id);
 
-    UsuarioDTO updateUsuario(UsuarioDTO UsuarioDTO, Integer UsuarioId);
+    UsuarioDTO update(UsuarioDTO dto, String id);
 
 }

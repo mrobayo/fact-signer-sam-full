@@ -8,42 +8,41 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import java.util.List;
 
-//@RestController
-//@RequestMapping("/usuarios")
+@RestController
+@RequestMapping("/usuarios")
 public class UsuarioController {
 
     @Autowired
-    private UsuarioService usuarioService;
+    private UsuarioService service;
 
     @GetMapping("{id}")
-    public ResponseEntity<UsuarioDTO> getUsuario(@PathVariable("id") Integer usuarioId) {
-        UsuarioDTO usuarioDto = usuarioService.getUsuario(usuarioId);
+    public ResponseEntity<UsuarioDTO> getOne(@PathVariable("id") String id) {
+        UsuarioDTO usuarioDto = service.getOne(id);
         return ResponseEntity.ok(usuarioDto);
     }
 
     @GetMapping
     public List<UsuarioDTO> getUsuarios() {
-        return usuarioService.getUsuarios();
+        return service.getMany();
     }
 
     @PostMapping
-    public ResponseEntity<UsuarioDTO> saveUsuario(@RequestBody @Valid UsuarioDTO dto) {
-        UsuarioDTO saved = usuarioService.createUsuario(dto);
+    public ResponseEntity<UsuarioDTO> save(@RequestBody @Valid UsuarioDTO dto) {
+        UsuarioDTO saved = service.create(dto);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteUsuario(@PathVariable("id") Integer usuarioId) {
-        usuarioService.deleteUsuario(usuarioId);
-        return ResponseEntity.ok("Usuario eliminado exitosamente!");
+    public ResponseEntity<String> delete(@PathVariable("id") String id) {
+        service.delete(id);
+        return ResponseEntity.ok("eliminado exitosamente!");
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<UsuarioDTO> updateUsuario(@RequestBody UsuarioDTO dto, @PathVariable("id") Integer usuarioId) {
-        return ResponseEntity.ok(usuarioService.updateUsuario(dto, usuarioId));
+    public ResponseEntity<UsuarioDTO> update(@RequestBody UsuarioDTO dto, @PathVariable("id") String id) {
+        return ResponseEntity.ok(service.update(dto, id));
     }
 
 }

@@ -12,7 +12,6 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
 @Entity
 @Table(name="si_punto_secuencia",
         uniqueConstraints = @UniqueConstraint(name="si_punto_secuencia_uk", columnNames = {"tipo_doc", "punto_venta_id"}))

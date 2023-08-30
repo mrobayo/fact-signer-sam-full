@@ -24,8 +24,8 @@ public class UnidadServiceImpl implements UnidadService {
 
     private ModelMapper modelMapper;
 
-    public UnidadServiceImpl(UnidadRepository unidadRepository, ModelMapper modelMapper) {
-        this.repository = unidadRepository;
+    public UnidadServiceImpl(UnidadRepository repository, ModelMapper modelMapper) {
+        this.repository = repository;
         this.modelMapper = modelMapper;
     }
 

@@ -14,15 +14,21 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
 
 @Entity
-@Table(name="si_usuario",
-        uniqueConstraints = @UniqueConstraint(name="si_usuario_ide_uk", columnNames = {"identidad"}))
+@Table(name = "si_usuario",
+       uniqueConstraints = {
+        @UniqueConstraint(name="si_usuario_id_uk", columnNames = {"identidad"}),
+        @UniqueConstraint(name="si_usuario_email_uk", columnNames = {"email"})
+        })
 public class Usuario {
 
     @Id
-    private String username;
+    private String id;
+
+    public String getUsername() {
+        return id;
+    }
 
     @Column(nullable = false, length = 60)
     private String password;
@@ -33,7 +39,7 @@ public class Usuario {
     @Column(nullable = false, length = 300)
     private String roles;
 
-    @Column(nullable = false, length = 300)
+    @Column(length = 300)
     private String empresas;
 
     @Column(length = 300)

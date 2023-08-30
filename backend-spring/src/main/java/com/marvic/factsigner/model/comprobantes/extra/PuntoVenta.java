@@ -15,7 +15,6 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
 
 @Entity
 @Table(name="si_punto_venta",
