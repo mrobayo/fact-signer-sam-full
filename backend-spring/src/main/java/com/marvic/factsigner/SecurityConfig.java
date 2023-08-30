@@ -18,13 +18,19 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableMethodSecurity
+//@SecurityScheme(
+//        name = "Bear Authentication",
+//        type = SecuritySchemeType.HTTP,
+//        bearerFormat = "JWT",
+//        scheme = "bearer"
+//)
 public class SecurityConfig {
 
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
-    private JwtAuthenticationEntryPoint authenticationEntryPoint;
+    private final JwtAuthenticationEntryPoint authenticationEntryPoint;
 
-    private JwtAuthenticationFilter authenticationFilter;
+    private final JwtAuthenticationFilter authenticationFilter;
 
     public SecurityConfig(UserDetailsService userDetailsService,
                           JwtAuthenticationEntryPoint authenticationEntryPoint,
@@ -44,6 +50,27 @@ public class SecurityConfig {
         return configuration.getAuthenticationManager();
     }
 
+    /**
+     * https://docs.spring.io/spring-security/reference/5.8/migration/servlet/config.html
+     *
+     * As this methods' signatures clearly say is also stated in the official documentation -
+     *
+     * antMatcher(String antPattern) - Allows configuring the HttpSecurity to only be invoked when matching the provided ant pattern.
+     *
+     * mvcMatcher(String mvcPattern) - Allows configuring the HttpSecurity to only be invoked when matching the provided Spring MVC pattern.
+     *
+     * Generally mvcMatcher is more secure than an antMatcher. As an example:
+     *
+     * antMatchers("/secured") matches only the exact /secured URL
+     * mvcMatchers("/secured") matches /secured as well as /secured/, /secured.html, /secured.xyz
+     * and therefore is more general and can also handle some possible configuration mistakes.
+     *
+     * mvcMatcher uses the same rules that Spring MVC uses for matching (when using @RequestMapping annotation).
+     *
+     * @param http
+     * @return
+     * @throws Exception
+     */
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -51,6 +78,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) ->
                         //authorize.anyRequest().authenticated()
                         authorize
+                                .mvcMatchers("/api/auth/**").permitAll()
+                                .mvcMatchers("/usuarios/**").permitAll()
+                                .anyRequest().authenticated()
 
                                 //.requestMatchers(HttpMethod.GET, "/api/**").permitAll()
                                 //.requestMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
@@ -59,8 +89,7 @@ public class SecurityConfig {
                                 //   .requestMatchers("/swagger-ui/**").permitAll()
                                 //   .requestMatchers("/v3/api-docs/**").permitAll()
 
-                                //.anyRequest().authenticated()
-                                .anyRequest().permitAll()
+                                //.anyRequest().permitAll()
 
                 ).exceptionHandling( exception -> exception
                         .authenticationEntryPoint(authenticationEntryPoint)

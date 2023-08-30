@@ -2,9 +2,11 @@ package com.marvic.factsigner.security;
 
 import com.marvic.factsigner.EnvProperties;
 import com.marvic.factsigner.exception.APIException;
+import com.marvic.factsigner.util.Utils;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -29,9 +31,10 @@ public class JwtTokenProvider {
 
     public String generateToken(Authentication authentication){
         String username = authentication.getName();
+        long millis = NumberUtils.toLong(env.getJwtExpirationMilliseconds(), EnvProperties.ONE_DAY_MS);
 
         Date currentDate = new Date();
-        Date expireDate = new Date(currentDate.getTime() + env.getJwtExpirationMilliseconds());
+        Date expireDate = new Date(currentDate.getTime() + millis);
 
         String token = Jwts.builder()
                 .setSubject(username)

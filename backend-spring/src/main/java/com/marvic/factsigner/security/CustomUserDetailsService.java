@@ -2,6 +2,7 @@ package com.marvic.factsigner.security;
 
 import com.marvic.factsigner.model.sistema.Usuario;
 import com.marvic.factsigner.repository.UsuarioRepository;
+import com.marvic.factsigner.util.Utils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,17 +19,18 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private UsuarioRepository repository;
+    private final UsuarioRepository repository;
 
-    public CustomUserDetailsService(UsuarioRepository usuarioRepository) {
-        this.repository = usuarioRepository;
+    public CustomUserDetailsService(UsuarioRepository repository) {
+        this.repository = repository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
-          Usuario usuario = repository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
-                 .orElseThrow(() ->
-                         new UsernameNotFoundException("User not found with usuarioname or email: "+ usernameOrEmail));
+        String username = Utils.coalesce(usernameOrEmail, "").toUpperCase();
+        Usuario usuario = repository.findByUsernameOrEmail(username, usernameOrEmail)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException("User not found with usuarioname or email: "+ usernameOrEmail));
 
         List<String> roles = Collections.emptyList();
         if (isNotEmpty(usuario.getRoles())) {

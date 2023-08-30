@@ -9,6 +9,7 @@ import com.marvic.factsigner.service.UsuarioService;
 import org.apache.commons.lang3.ArrayUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import static com.marvic.factsigner.util.Utils.coalesce;
@@ -24,13 +25,16 @@ import static com.marvic.factsigner.util.Utils.cleanUpper;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService  {
-    private UsuarioRepository repository;
+    private final UsuarioRepository repository;
 
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
-    public UsuarioServiceImpl(UsuarioRepository repository, ModelMapper modelMapper) {
+    private final PasswordEncoder passwordEncoder;
+
+    public UsuarioServiceImpl(UsuarioRepository repository, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
         this.repository = repository;
         this.modelMapper = modelMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -73,9 +77,7 @@ public class UsuarioServiceImpl implements UsuarioService  {
                 .ifPresent((c) -> {throw new ResourceExistsException(dto.getIdentidad());});
 
         Usuario entity = mapToEntity(dto);
-        if (isNotEmpty(dto.getNewPassword())) {
-            entity.setPassword(dto.getNewPassword());
-        }
+        entity.setPassword( passwordEncoder.encode(dto.getNewPassword()) );
 
         Usuario saved = repository.save(entity);
         return mapToDTO(saved);
@@ -91,8 +93,9 @@ public class UsuarioServiceImpl implements UsuarioService  {
     public UsuarioDTO update(UsuarioDTO dto, String id) {
         Usuario entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("not found"));
 
+        // Update password
         if (isNotEmpty(dto.getNewPassword())) {
-            entity.setPassword(dto.getNewPassword());
+            entity.setPassword( passwordEncoder.encode(dto.getNewPassword()) );
         }
 
         entity.setName(dto.getName());
