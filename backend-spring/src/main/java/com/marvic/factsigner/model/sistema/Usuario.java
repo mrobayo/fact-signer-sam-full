@@ -26,9 +26,8 @@ public class Usuario {
     @Id
     private String id;
 
-    public String getUsername() {
-        return id;
-    }
+    @Column(name="id", updatable = false, insertable = false)
+    private String username;
 
     @Column(nullable = false, length = 60)
     private String password;

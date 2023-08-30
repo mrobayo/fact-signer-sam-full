@@ -10,8 +10,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-//@RestController
-//@RequestMapping("/auth")
+/**
+ * https://www.javainuse.com/spring/boot-jwt
+ * https://www.appsdeveloperblog.com/add-and-validate-custom-claims-in-jwt/
+ */
+@RestController
+@RequestMapping("/auth")
 public class AuthController {
 
     @Autowired

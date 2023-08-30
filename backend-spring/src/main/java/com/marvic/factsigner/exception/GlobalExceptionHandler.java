@@ -27,6 +27,17 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(APIException.class)
+    public ResponseEntity<ErrorDetails> handleBlogAPIException(APIException exception,
+                                                               WebRequest webRequest){
+        ErrorDetails errorDetails = new ErrorDetails();
+        errorDetails.setTimestamp(LocalDate.now().toString());
+        errorDetails.setMessage(exception.getMessage());
+        errorDetails.setDetails(webRequest.getDescription(false));
+
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   WebRequest request) {
