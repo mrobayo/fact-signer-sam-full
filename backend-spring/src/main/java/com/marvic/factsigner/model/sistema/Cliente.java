@@ -16,11 +16,14 @@ import java.util.UUID;
 @AllArgsConstructor
 
 @Entity
-@Table(name="si_cliente",
-        uniqueConstraints = @UniqueConstraint(name="si_cliente_ide_uk", columnNames = {"tipo", "identidad"}))
+@Table(name="si_cliente"
+        , uniqueConstraints = @UniqueConstraint(name="si_cliente_ide_uk", columnNames = {"tipo", "identidad"})
+)
 public class Cliente {
 
     @Id
+    @GeneratedValue
+    @Column(columnDefinition = "uuid", updatable = false)
     private UUID id;
 
     @Column(nullable = false, length = 100)
@@ -33,7 +36,7 @@ public class Cliente {
     @Column(nullable = false, length = 20)
     private String identidad;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "boolean default true")
     private boolean activo;
 
     @Column(nullable = false, length = 60)
@@ -57,7 +60,7 @@ public class Cliente {
     @Column(nullable = false, length = 20)
     private String ciudad;
 
-    @Column(nullable = false, length = 300)
+    @Column(length = 300)
     private String observacion;
 
     @Column(name="ultima_venta")
@@ -66,7 +69,7 @@ public class Cliente {
     @Column(length = 100)
     private String contacto;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean aseguradora;
 
     @ManyToOne(fetch = FetchType.LAZY)

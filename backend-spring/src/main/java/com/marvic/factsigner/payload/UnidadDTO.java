@@ -29,4 +29,6 @@ public class UnidadDTO {
 
     private BigDecimal factor;
 
+    private boolean activo;
+
 }

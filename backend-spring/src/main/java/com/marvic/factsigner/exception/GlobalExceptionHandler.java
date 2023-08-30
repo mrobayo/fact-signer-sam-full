@@ -6,9 +6,10 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,18 +21,46 @@ public class GlobalExceptionHandler {
                                                               WebRequest webRequest){
         ErrorDetails errorDetails = new ErrorDetails();
 
-        errorDetails.setTimestamp(LocalDate.now().toString());
+        errorDetails.setTimestamp(LocalDateTime.now().toString());
         errorDetails.setMessage(exception.getMessage());
         errorDetails.setDetails(webRequest.getDescription(false));
 
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(APIException.class)
-    public ResponseEntity<ErrorDetails> handleBlogAPIException(APIException exception,
-                                                               WebRequest webRequest){
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorDetails> handleResourceNotFoundException(Exception exception,
+                                                              WebRequest webRequest){
         ErrorDetails errorDetails = new ErrorDetails();
-        errorDetails.setTimestamp(LocalDate.now().toString());
+
+        String path = ((ServletWebRequest)webRequest).getRequest().getRequestURI();
+        errorDetails.setPath(path);
+        errorDetails.setTimestamp(LocalDateTime.now().toString());
+        errorDetails.setMessage(exception.getMessage());
+        errorDetails.setDetails(webRequest.getDescription(false));
+
+        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ResourceExistsException.class)
+    public ResponseEntity<ErrorDetails> handleResourceExistsException(Exception exception,
+                                                                        WebRequest webRequest){
+        ErrorDetails errorDetails = new ErrorDetails();
+
+        String path = ((ServletWebRequest)webRequest).getRequest().getRequestURI();
+        errorDetails.setPath(path);
+        errorDetails.setTimestamp(LocalDateTime.now().toString());
+        errorDetails.setMessage(exception.getMessage());
+        errorDetails.setDetails(webRequest.getDescription(false));
+
+        return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(APIException.class)
+    public ResponseEntity<ErrorDetails> handleAPIException(APIException exception,
+                                                           WebRequest webRequest){
+        ErrorDetails errorDetails = new ErrorDetails();
+        errorDetails.setTimestamp(LocalDateTime.now().toString());
         errorDetails.setMessage(exception.getMessage());
         errorDetails.setDetails(webRequest.getDescription(false));
 

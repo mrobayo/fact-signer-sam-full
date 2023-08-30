@@ -60,10 +60,8 @@ public class ClienteDTO {
     @NotNull
     private boolean aseguradora;
 
-    @NotNull
-    private ClienteDTO seguro;
+    private String grupoId;
 
-    @NotNull
-    private GrupoDTO grupo;
+    private String seguroId;
 
 }

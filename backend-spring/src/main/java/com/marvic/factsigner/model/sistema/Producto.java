@@ -30,7 +30,7 @@ public class Producto {
     @Column(nullable = false)
     private String codigo;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "boolean default true")
     private boolean activo;
 
     @ManyToOne(fetch = FetchType.LAZY)

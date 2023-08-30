@@ -30,10 +30,13 @@ public class Unidad {
     @Enumerated(EnumType.STRING)
     private UnidadTipo tipo; // Peso, Volumen, Empaque
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean base; // Unidad principal/base de este tipo
 
     @Column(nullable = false, precision = 10, scale = 3)
     private BigDecimal factor; // Factor de conversion con respecto a la unidad base
+
+    @Column(nullable = false, columnDefinition = "boolean default true")
+    private boolean activo;
 
 }

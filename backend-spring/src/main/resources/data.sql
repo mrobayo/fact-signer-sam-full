@@ -1,5 +1,4 @@
 insert into si_grupo_cliente (activo, name, id) values (true, 'Particular', 'PARTICULAR');
-insert into si_grupo_cliente (activo, name, id) values (true, 'Ninguno', 'NINGUNO');
 insert into si_grupo_cliente (activo, name, id) values (true, 'IESS', 'IESS');
 insert into si_grupo_cliente (activo, name, id) values (true, 'Referido', 'REFERIDO');
 

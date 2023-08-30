@@ -25,7 +25,7 @@ public class Categoria {
     @Column(nullable = false, length = 20)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "boolean default true")
     private boolean activo;
 
     @ManyToOne(fetch = FetchType.LAZY)

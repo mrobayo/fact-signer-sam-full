@@ -65,8 +65,11 @@ public class UnidadServiceImpl implements UnidadService {
                 .findById(id)
                 .ifPresent((c) -> {throw new ResourceExistsException(dto.getId());});
 
-        Unidad entidad = mapToEntity(dto);
-        Unidad saved = repository.save(entidad);
+        Unidad entity = mapToEntity(dto);
+        entity.setId(null);
+        entity.setActivo(true);
+
+        Unidad saved = repository.save(entity);
         return mapToDTO(saved);
     }
 
@@ -83,6 +86,7 @@ public class UnidadServiceImpl implements UnidadService {
         entity.setFactor(dto.getFactor());
         entity.setName(dto.getName());
         entity.setTipo(UnidadTipo.valueOf(dto.getTipo()));
+        entity.setActivo(dto.isActivo());
         repository.save(entity);
         return mapToDTO(entity);
     }
