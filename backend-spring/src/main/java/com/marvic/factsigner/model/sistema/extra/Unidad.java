@@ -27,6 +27,7 @@ public class Unidad {
     private String name;
 
     @Column(nullable = false, length = 20)
+    @Enumerated(EnumType.STRING)
     private UnidadTipo tipo; // Peso, Volumen, Empaque
 
     @Column(nullable = false)

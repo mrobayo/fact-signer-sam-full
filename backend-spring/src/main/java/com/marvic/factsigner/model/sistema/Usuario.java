@@ -47,15 +47,15 @@ public class Usuario {
     @Column
     private LocalDate ultimaConexion;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean cuentaBloqueada = false;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "boolean default true")
     private boolean cambiarPasswd = true;
 
     private LocalDate ultimoPasswd;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean nuncaExpira = false;
 
     @Column(nullable = false, length = 20)

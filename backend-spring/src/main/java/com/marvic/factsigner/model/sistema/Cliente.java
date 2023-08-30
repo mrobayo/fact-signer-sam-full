@@ -70,7 +70,7 @@ public class Cliente {
     private boolean aseguradora;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="seguro_id", nullable = false)
+    @JoinColumn(name="seguro_id")
     private Cliente seguro;
 
     @ManyToOne(fetch = FetchType.LAZY)

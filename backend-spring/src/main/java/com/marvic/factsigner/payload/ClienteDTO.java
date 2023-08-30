@@ -1,15 +1,13 @@
 package com.marvic.factsigner.payload;
 
-import com.marvic.factsigner.model.sistema.Cliente;
-import com.marvic.factsigner.model.sistema.extra.Grupo;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 @Data
@@ -19,53 +17,53 @@ public class ClienteDTO {
 
     private String id;
 
-    @NotEmpty
+    @NotBlank @Size(min=2, max=100)
     private String name;
 
     private boolean activo;
 
-    @NotEmpty
+    @NotBlank @Size(min=3, max=3)
     private String tipo;
 
-    @NotEmpty
+    @NotBlank @Size(min=3, max=20)
     private String identidad;
 
-    @NotEmpty
+    @NotBlank @Size(min=2, max=60)
     private String nombres;
 
-    @NotEmpty
+    @NotBlank @Size(min=2, max=60)
     private String apellidos;
 
-    @NotEmpty
+    @NotBlank
     private String telefono;
 
-    @NotEmpty
-    @Email
+    @NotBlank @Email @Size(max=100)
     private String email;
 
-    @NotEmpty
+    @NotBlank @Size(max=100)
     private String direccion;
 
-    @NotEmpty
+    @NotBlank @Size(max=20)
     private String pais;
 
-    @NotEmpty
+    @NotBlank @Size(max=20)
     private String ciudad;
 
+    @Size(max=300)
     private String observacion;
 
     private LocalDate ultimaVenta;
 
-    @NotEmpty
+    @NotBlank @Size(max=100)
     private String contacto;
 
     @NotNull
     private boolean aseguradora;
 
     @NotNull
-    private Cliente seguro;
+    private ClienteDTO seguro;
 
-    @NotEmpty
-    private Grupo grupo;
+    @NotNull
+    private GrupoDTO grupo;
 
 }

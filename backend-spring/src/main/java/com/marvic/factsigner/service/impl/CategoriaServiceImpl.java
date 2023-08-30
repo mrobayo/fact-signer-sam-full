@@ -11,12 +11,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.marvic.factsigner.util.Utils.cleanUpper;
-import static com.marvic.factsigner.util.Utils.coalesce;
 
 @Service
 public class CategoriaServiceImpl implements CategoriaService {
