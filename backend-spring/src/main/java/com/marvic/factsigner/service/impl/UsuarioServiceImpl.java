@@ -12,7 +12,7 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import static com.marvic.factsigner.util.Utils.coalesce;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.trim;
 import static org.springframework.util.StringUtils.trimAllWhitespace;
 
@@ -73,8 +73,9 @@ public class UsuarioServiceImpl implements UsuarioService  {
                 .ifPresent((c) -> {throw new ResourceExistsException(dto.getIdentidad());});
 
         Usuario entity = mapToEntity(dto);
-        String roles = String.join(",", dto.getRoles());
-        entity.setRoles(roles);
+        if (isNotEmpty(dto.getNewPassword())) {
+            entity.setPassword(dto.getNewPassword());
+        }
 
         Usuario saved = repository.save(entity);
         return mapToDTO(saved);
@@ -90,41 +91,56 @@ public class UsuarioServiceImpl implements UsuarioService  {
     public UsuarioDTO update(UsuarioDTO dto, String id) {
         Usuario entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("not found"));
 
+        if (isNotEmpty(dto.getNewPassword())) {
+            entity.setPassword(dto.getNewPassword());
+        }
+
         entity.setName(dto.getName());
-        entity.setEmail(dto.getEmail());
-        entity.setNuncaExpira(dto.isNuncaExpira());
-        entity.setIdentidad(dto.getIdentidad());
-        entity.setTelefono(dto.getTelefono());
-        entity.setCambiarPasswd(dto.isCambiarPasswd());
+
+        entity.setRoles( String.join(",", coalesce(dto.getRoles(), ArrayUtils.EMPTY_STRING_ARRAY )) );
+        entity.setEmpresas( String.join(",", coalesce(dto.getEmpresas(), ArrayUtils.EMPTY_STRING_ARRAY)) );
+
         entity.setCuentaBloqueada(dto.isCuentaBloqueada());
+        entity.setCambiarPasswd(dto.isCambiarPasswd());
+        entity.setNuncaExpira(dto.isNuncaExpira());
+
+        entity.setIdentidad(dto.getIdentidad());
+        entity.setEmail(dto.getEmail());
+        entity.setTelefono(dto.getTelefono());
 
         repository.save(entity);
         return mapToDTO(entity);
     }
 
     private Usuario mapToEntity(UsuarioDTO dto) {
-        Usuario usuario = modelMapper.map(dto, Usuario.class);
-        usuario.setRoles( String.join(",", coalesce(dto.getRoles(), ArrayUtils.EMPTY_STRING_ARRAY )) );
-        usuario.setEmpresas( String.join(",", coalesce(dto.getEmpresas(), ArrayUtils.EMPTY_STRING_ARRAY)) );
-        return usuario;
+        Usuario entity = modelMapper.map(dto, Usuario.class);
+        entity.setRoles( String.join(",", coalesce(dto.getRoles(), ArrayUtils.EMPTY_STRING_ARRAY )) );
+        entity.setEmpresas( String.join(",", coalesce(dto.getEmpresas(), ArrayUtils.EMPTY_STRING_ARRAY)) );
+        return entity;
     }
 
     private UsuarioDTO mapToDTO(Usuario model){
         UsuarioDTO dto = modelMapper.map(model, UsuarioDTO.class);
 
-        String roles[] = ArrayUtils.EMPTY_STRING_ARRAY;
-        if (!isEmpty(model.getRoles())) {
+        String[] roles = ArrayUtils.EMPTY_STRING_ARRAY;
+        if (isNotEmpty(model.getRoles())) {
             roles = model.getRoles().split(",");
         }
         dto.setRoles(roles);
 
         String[] empresas = ArrayUtils.EMPTY_STRING_ARRAY;
-        if (!isEmpty(model.getEmpresas())) {
+        if (isNotEmpty(model.getEmpresas())) {
             empresas = model.getEmpresas().split(",");
         }
         dto.setEmpresas(empresas);
 
+        //skipField(dto);
+
         return dto;
     }
+
+//    private void skipField(UsuarioDTO dto) {
+//        dto.setNewPassword(null);
+//    }
 
 }

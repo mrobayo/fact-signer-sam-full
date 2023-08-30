@@ -25,7 +25,7 @@ public class UsuarioDTO {
     @NotEmpty
     private String name;
 
-    private String password;
+    private String newPassword;
 
     @NotNull
     private String[] roles;
@@ -37,8 +37,6 @@ public class UsuarioDTO {
     private boolean cuentaBloqueada = false;
 
     private boolean cambiarPasswd = true;
-
-    private LocalDate ultimoPasswd;
 
     private boolean nuncaExpira = false;
 
