@@ -1,13 +1,13 @@
 package com.marvic.factsigner.service.impl;
 
-import com.marvic.factsigner.exception.RequiredKeyException;
 import com.marvic.factsigner.exception.ResourceExistsException;
+import com.marvic.factsigner.exception.ResourceNotFoundException;
 import com.marvic.factsigner.model.sistema.extra.Categoria;
 import com.marvic.factsigner.payload.CategoriaDTO;
 import com.marvic.factsigner.repository.CategoriaRepository;
 import com.marvic.factsigner.service.CategoriaService;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -21,9 +21,9 @@ import static com.marvic.factsigner.util.Utils.coalesce;
 @Service
 public class CategoriaServiceImpl implements CategoriaService {
     
-    private CategoriaRepository repository;
+    private final CategoriaRepository repository;
 
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     public CategoriaServiceImpl(CategoriaRepository categoriaRepository, ModelMapper modelMapper) {
         this.repository = categoriaRepository;

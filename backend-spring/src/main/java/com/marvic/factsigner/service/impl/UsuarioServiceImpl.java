@@ -8,7 +8,7 @@ import com.marvic.factsigner.repository.UsuarioRepository;
 import com.marvic.factsigner.service.UsuarioService;
 import org.apache.commons.lang3.ArrayUtils;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import com.marvic.factsigner.exception.ResourceNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

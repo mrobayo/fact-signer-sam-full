@@ -8,7 +8,7 @@ import com.marvic.factsigner.service.EmpresaService;
 import ec.gob.sri.types.SriAmbiente;
 import static org.apache.commons.lang3.StringUtils.trim;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import com.marvic.factsigner.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import static org.springframework.util.StringUtils.trimAllWhitespace;

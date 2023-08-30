@@ -9,7 +9,7 @@ import com.marvic.factsigner.repository.UnidadRepository;
 import com.marvic.factsigner.service.UnidadService;
 import static com.marvic.factsigner.util.Utils.*;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import com.marvic.factsigner.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
