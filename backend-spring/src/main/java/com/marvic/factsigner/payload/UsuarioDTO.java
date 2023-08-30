@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Data
@@ -26,9 +27,10 @@ public class UsuarioDTO {
 
     private String password;
 
-    private String roles;
+    @NotNull
+    private String[] roles;
 
-    private String empresas;
+    private String[] empresas;
 
     private LocalDate ultimaConexion;
 
