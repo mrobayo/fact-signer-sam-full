@@ -1,16 +1,12 @@
-package com.marvic.factsigner.controller;
+package com.marvic.factsigner.controller.sistema;
 
-import com.marvic.factsigner.payload.CategoriaDTO;
-import com.marvic.factsigner.payload.PuntoSecuenciaDTO;
-import com.marvic.factsigner.service.CategoriaService;
+import com.marvic.factsigner.payload.sistema.PuntoSecuenciaDTO;
 import com.marvic.factsigner.service.PuntoSecuenciaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/secuencias")

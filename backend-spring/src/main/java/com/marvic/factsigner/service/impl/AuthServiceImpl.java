@@ -20,17 +20,12 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImpl implements AuthService  {
 
     private final AuthenticationManager authenticationManager;
-    private final UsuarioRepository repository;
-    private final PasswordEncoder passwordEncoder;
+
     private final JwtTokenProvider jwtTokenProvider;
 
     public AuthServiceImpl(AuthenticationManager authenticationManager,
-                           UsuarioRepository usuarioRepository,
-                           PasswordEncoder passwordEncoder,
                            JwtTokenProvider jwtTokenProvider) {
         this.authenticationManager = authenticationManager;
-        this.repository = usuarioRepository;
-        this.passwordEncoder = passwordEncoder;
         this.jwtTokenProvider = jwtTokenProvider;
     }
 

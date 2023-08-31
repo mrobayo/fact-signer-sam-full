@@ -1,4 +1,4 @@
-package com.marvic.factsigner.payload;
+package com.marvic.factsigner.payload.sistema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +8,6 @@ import javax.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -39,5 +38,7 @@ public class PuntoVentaDTO {
     private String telefono;
 
     private List<PuntoSecuenciaDTO> secuencias = new ArrayList<>();
+
+    private EmpresaDTO empresa;
 
 }

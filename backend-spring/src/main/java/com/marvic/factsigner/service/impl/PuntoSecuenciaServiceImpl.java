@@ -1,6 +1,6 @@
 package com.marvic.factsigner.service.impl;
 
-import com.marvic.factsigner.payload.PuntoSecuenciaDTO;
+import com.marvic.factsigner.payload.sistema.PuntoSecuenciaDTO;
 import com.marvic.factsigner.service.PuntoSecuenciaService;
 import org.springframework.stereotype.Service;
 

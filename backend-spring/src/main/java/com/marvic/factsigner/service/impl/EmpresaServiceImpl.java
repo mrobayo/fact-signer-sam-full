@@ -2,7 +2,7 @@ package com.marvic.factsigner.service.impl;
 
 import com.marvic.factsigner.exception.ResourceExistsException;
 import com.marvic.factsigner.model.sistema.Empresa;
-import com.marvic.factsigner.payload.EmpresaDTO;
+import com.marvic.factsigner.payload.sistema.EmpresaDTO;
 import com.marvic.factsigner.repository.EmpresaRepository;
 import com.marvic.factsigner.service.EmpresaService;
 import ec.gob.sri.types.SriAmbiente;
@@ -13,12 +13,8 @@ import org.springframework.stereotype.Service;
 
 import static org.springframework.util.StringUtils.trimAllWhitespace;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.marvic.factsigner.util.Utils.cleanUpper;
-import static com.marvic.factsigner.util.Utils.coalesce;
 
 @Service
 public class EmpresaServiceImpl implements EmpresaService {

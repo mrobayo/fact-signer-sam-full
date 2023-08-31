@@ -1,6 +1,6 @@
 package com.marvic.factsigner.service;
 
-import com.marvic.factsigner.payload.UsuarioDTO;
+import com.marvic.factsigner.payload.sistema.UsuarioDTO;
 
 import java.util.List;
 

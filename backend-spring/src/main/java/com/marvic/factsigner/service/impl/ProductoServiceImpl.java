@@ -8,7 +8,7 @@ import com.marvic.factsigner.model.sistema.extra.Categoria;
 import com.marvic.factsigner.model.sistema.extra.Unidad;
 import com.marvic.factsigner.model.sistema.types.ProductoTipo;
 
-import com.marvic.factsigner.payload.ProductoDTO;
+import com.marvic.factsigner.payload.sistema.ProductoDTO;
 import com.marvic.factsigner.repository.*;
 import com.marvic.factsigner.service.ProductoService;
 import com.marvic.factsigner.util.Utils;

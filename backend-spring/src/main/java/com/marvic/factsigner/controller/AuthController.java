@@ -1,18 +1,14 @@
 package com.marvic.factsigner.controller;
 
-import com.marvic.factsigner.payload.UsuarioDTO;
 import com.marvic.factsigner.payload.auth.JWTAuthResponse;
 import com.marvic.factsigner.payload.auth.LoginDto;
 import com.marvic.factsigner.payload.auth.RegisterDto;
 import com.marvic.factsigner.service.AuthService;
-import com.marvic.factsigner.service.UsuarioService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * https://www.javainuse.com/spring/boot-jwt

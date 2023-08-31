@@ -1,4 +1,4 @@
-package com.marvic.factsigner.payload;
+package com.marvic.factsigner.payload.sistema;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

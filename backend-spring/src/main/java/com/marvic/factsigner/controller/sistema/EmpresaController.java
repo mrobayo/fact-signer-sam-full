@@ -1,7 +1,7 @@
-package com.marvic.factsigner.controller;
+package com.marvic.factsigner.controller.sistema;
 
-import com.marvic.factsigner.payload.UnidadDTO;
-import com.marvic.factsigner.service.UnidadService;
+import com.marvic.factsigner.payload.sistema.EmpresaDTO;
+import com.marvic.factsigner.service.EmpresaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,27 +11,27 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/unidades")
-public class UnidadController {
+@RequestMapping("/empresas")
+public class EmpresaController {
 
     @Autowired
-    private UnidadService service;
+    private EmpresaService service;
 
     @GetMapping("{id}")
-    public ResponseEntity<UnidadDTO> getOne(@PathVariable("id") String id) {
-        UnidadDTO dto = service.getOne(id);
+    public ResponseEntity<EmpresaDTO> getOne(@PathVariable("id") String id) {
+        EmpresaDTO dto = service.getOne(id);
         return ResponseEntity.ok(dto);
     }
 
     @GetMapping
-    public List<UnidadDTO> getMany() {
+    public List<EmpresaDTO> getMany() {
         List many = service.getMany();
         return many;
     }
 
     @PostMapping
-    public ResponseEntity<UnidadDTO> save(@RequestBody @Valid UnidadDTO dto) {
-        UnidadDTO saved = service.create(dto);
+    public ResponseEntity<EmpresaDTO> save(@RequestBody @Valid EmpresaDTO dto) {
+        EmpresaDTO saved = service.create(dto);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
@@ -42,7 +42,7 @@ public class UnidadController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<UnidadDTO> update(@RequestBody @Valid UnidadDTO dto, @PathVariable("id") String id) {
+    public ResponseEntity<EmpresaDTO> update(@RequestBody @Valid EmpresaDTO dto, @PathVariable("id") String id) {
         return ResponseEntity.ok(service.update(dto, id));
     }
 

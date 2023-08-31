@@ -1,4 +1,4 @@
-package com.marvic.factsigner.payload;
+package com.marvic.factsigner.payload.sistema;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,17 +10,15 @@ import javax.validation.constraints.Size;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoriaDTO {
+public class GrupoDTO {
 
-    @Size(max=20)
     private String id;
 
-    @NotBlank @Size(min=1, max=20)
+    @NotBlank @Size(min=1)
     private String name;
 
     private boolean activo;
 
-    @NotBlank @Size(max=20)
-    private String empresaId;
+    private String seguroId;
 
 }

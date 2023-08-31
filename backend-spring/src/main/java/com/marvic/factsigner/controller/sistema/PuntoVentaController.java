@@ -1,31 +1,30 @@
-package com.marvic.factsigner.controller;
+package com.marvic.factsigner.controller.sistema;
 
-import com.marvic.factsigner.payload.CategoriaDTO;
-import com.marvic.factsigner.service.CategoriaService;
+import com.marvic.factsigner.payload.sistema.PuntoVentaDTO;
+import com.marvic.factsigner.service.PuntoVentaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Size;
 import java.util.List;
 
 @RestController
-@RequestMapping("/categorias")
-public class CategoriaController {
+@RequestMapping("/punto-ventas")
+public class PuntoVentaController {
 
     @Autowired
-    private CategoriaService service;
+    private PuntoVentaService service;
 
     @GetMapping("{id}")
-    public ResponseEntity<CategoriaDTO> getOne(@PathVariable("id") Integer id) {
-        CategoriaDTO dto = service.getOne(id);
+    public ResponseEntity<PuntoVentaDTO> getOne(@PathVariable("id") String id) {
+        PuntoVentaDTO dto = service.getOne(id);
         return ResponseEntity.ok(dto);
     }
 
     @GetMapping
-    public List<CategoriaDTO> getByEmpresa(
+    public List<PuntoVentaDTO> getByEmpresa(
             @RequestParam(value = "empresa_id", required = true) String empresaId
     ) {
         List many = service.getAll(empresaId);
@@ -33,19 +32,19 @@ public class CategoriaController {
     }
 
     @PostMapping
-    public ResponseEntity<CategoriaDTO> save(@RequestBody @Valid CategoriaDTO dto) {
-        CategoriaDTO saved = service.create(dto);
+    public ResponseEntity<PuntoVentaDTO> save(@RequestBody @Valid PuntoVentaDTO dto) {
+        PuntoVentaDTO saved = service.create(dto);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") Integer id) {
+    public ResponseEntity<String> delete(@PathVariable("id") String id) {
         service.delete(id);
         return ResponseEntity.ok("1");
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<CategoriaDTO> update(@RequestBody @Valid CategoriaDTO dto, @PathVariable("id") Integer id) {
+    public ResponseEntity<PuntoVentaDTO> update(@RequestBody @Valid PuntoVentaDTO dto, @PathVariable("id") String id) {
         return ResponseEntity.ok(service.update(dto, id));
     }
 

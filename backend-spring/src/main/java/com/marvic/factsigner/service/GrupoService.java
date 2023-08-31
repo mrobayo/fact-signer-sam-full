@@ -1,6 +1,6 @@
 package com.marvic.factsigner.service;
 
-import com.marvic.factsigner.payload.GrupoDTO;
+import com.marvic.factsigner.payload.sistema.GrupoDTO;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
-package com.marvic.factsigner.controller;
+package com.marvic.factsigner.controller.sistema;
 
-import com.marvic.factsigner.payload.EmpresaDTO;
-import com.marvic.factsigner.service.EmpresaService;
+import com.marvic.factsigner.payload.sistema.GrupoDTO;
+import com.marvic.factsigner.service.GrupoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,27 +11,27 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/empresas")
-public class EmpresaController {
+@RequestMapping("/grupos")
+public class GrupoController {
 
     @Autowired
-    private EmpresaService service;
+    private GrupoService service;
 
     @GetMapping("{id}")
-    public ResponseEntity<EmpresaDTO> getOne(@PathVariable("id") String id) {
-        EmpresaDTO dto = service.getOne(id);
+    public ResponseEntity<GrupoDTO> getOne(@PathVariable("id") String id) {
+        GrupoDTO dto = service.getOne(id);
         return ResponseEntity.ok(dto);
     }
 
     @GetMapping
-    public List<EmpresaDTO> getMany() {
-        List many = service.getMany();
-        return many;
+    public List<GrupoDTO> getAll() {
+        List<GrupoDTO> all = service.getAll();
+        return all;
     }
 
     @PostMapping
-    public ResponseEntity<EmpresaDTO> save(@RequestBody @Valid EmpresaDTO dto) {
-        EmpresaDTO saved = service.create(dto);
+    public ResponseEntity<GrupoDTO> save(@RequestBody @Valid GrupoDTO dto) {
+        GrupoDTO saved = service.create(dto);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
@@ -42,7 +42,7 @@ public class EmpresaController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<EmpresaDTO> update(@RequestBody @Valid EmpresaDTO dto, @PathVariable("id") String id) {
+    public ResponseEntity<GrupoDTO> update(@RequestBody @Valid GrupoDTO dto, @PathVariable("id") String id) {
         return ResponseEntity.ok(service.update(dto, id));
     }
 

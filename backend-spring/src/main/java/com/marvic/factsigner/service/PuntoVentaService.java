@@ -1,6 +1,6 @@
 package com.marvic.factsigner.service;
 
-import com.marvic.factsigner.payload.PuntoVentaDTO;
+import com.marvic.factsigner.payload.sistema.PuntoVentaDTO;
 
 import java.util.List;
 

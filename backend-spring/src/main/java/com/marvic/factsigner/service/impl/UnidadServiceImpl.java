@@ -4,7 +4,7 @@ import com.marvic.factsigner.exception.RequiredKeyException;
 import com.marvic.factsigner.exception.ResourceExistsException;
 import com.marvic.factsigner.model.sistema.extra.Unidad;
 import com.marvic.factsigner.model.sistema.types.UnidadTipo;
-import com.marvic.factsigner.payload.UnidadDTO;
+import com.marvic.factsigner.payload.sistema.UnidadDTO;
 import com.marvic.factsigner.repository.UnidadRepository;
 import com.marvic.factsigner.service.UnidadService;
 import static com.marvic.factsigner.util.Utils.*;

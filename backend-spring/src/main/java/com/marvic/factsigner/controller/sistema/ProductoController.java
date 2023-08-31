@@ -1,6 +1,6 @@
-package com.marvic.factsigner.controller;
+package com.marvic.factsigner.controller.sistema;
 
-import com.marvic.factsigner.payload.ProductoDTO;
+import com.marvic.factsigner.payload.sistema.ProductoDTO;
 import com.marvic.factsigner.service.ProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

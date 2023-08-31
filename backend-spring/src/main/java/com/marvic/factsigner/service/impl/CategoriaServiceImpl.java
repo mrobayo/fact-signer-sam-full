@@ -4,7 +4,7 @@ import com.marvic.factsigner.exception.ResourceExistsException;
 import com.marvic.factsigner.exception.ResourceNotFoundException;
 import com.marvic.factsigner.model.sistema.Empresa;
 import com.marvic.factsigner.model.sistema.extra.Categoria;
-import com.marvic.factsigner.payload.CategoriaDTO;
+import com.marvic.factsigner.payload.sistema.CategoriaDTO;
 import com.marvic.factsigner.repository.CategoriaRepository;
 import com.marvic.factsigner.repository.EmpresaRepository;
 import com.marvic.factsigner.service.CategoriaService;

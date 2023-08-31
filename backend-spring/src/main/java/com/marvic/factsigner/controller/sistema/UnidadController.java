@@ -1,7 +1,7 @@
-package com.marvic.factsigner.controller;
+package com.marvic.factsigner.controller.sistema;
 
-import com.marvic.factsigner.payload.ClienteDTO;
-import com.marvic.factsigner.service.ClienteService;
+import com.marvic.factsigner.payload.sistema.UnidadDTO;
+import com.marvic.factsigner.service.UnidadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,27 +11,27 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/clientes")
-public class ClienteController {
+@RequestMapping("/unidades")
+public class UnidadController {
 
     @Autowired
-    private ClienteService service;
+    private UnidadService service;
 
     @GetMapping("{id}")
-    public ResponseEntity<ClienteDTO> getOne(@PathVariable("id") String id) {
-        ClienteDTO dto = service.getOne(id);
+    public ResponseEntity<UnidadDTO> getOne(@PathVariable("id") String id) {
+        UnidadDTO dto = service.getOne(id);
         return ResponseEntity.ok(dto);
     }
 
     @GetMapping
-    public List<ClienteDTO> getAll() {
-        List<ClienteDTO> all = service.getAll();
-        return all;
+    public List<UnidadDTO> getMany() {
+        List many = service.getMany();
+        return many;
     }
 
     @PostMapping
-    public ResponseEntity<ClienteDTO> save(@RequestBody @Valid ClienteDTO dto) {
-        ClienteDTO saved = service.create(dto);
+    public ResponseEntity<UnidadDTO> save(@RequestBody @Valid UnidadDTO dto) {
+        UnidadDTO saved = service.create(dto);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
@@ -42,7 +42,7 @@ public class ClienteController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<ClienteDTO> update(@RequestBody @Valid ClienteDTO dto, @PathVariable("id") String id) {
+    public ResponseEntity<UnidadDTO> update(@RequestBody @Valid UnidadDTO dto, @PathVariable("id") String id) {
         return ResponseEntity.ok(service.update(dto, id));
     }
 

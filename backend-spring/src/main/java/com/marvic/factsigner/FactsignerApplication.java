@@ -1,7 +1,7 @@
 package com.marvic.factsigner;
 
 import com.marvic.factsigner.model.sistema.Cliente;
-import com.marvic.factsigner.payload.ClienteDTO;
+import com.marvic.factsigner.payload.sistema.ClienteDTO;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.springframework.boot.SpringApplication;

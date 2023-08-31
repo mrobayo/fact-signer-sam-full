@@ -5,8 +5,9 @@ import com.marvic.factsigner.exception.ResourceNotFoundException;
 import com.marvic.factsigner.model.comprobantes.extra.PuntoSecuencia;
 import com.marvic.factsigner.model.comprobantes.extra.PuntoVenta;
 import com.marvic.factsigner.model.sistema.Empresa;
-import com.marvic.factsigner.payload.PuntoSecuenciaDTO;
-import com.marvic.factsigner.payload.PuntoVentaDTO;
+import com.marvic.factsigner.payload.sistema.EmpresaDTO;
+import com.marvic.factsigner.payload.sistema.PuntoSecuenciaDTO;
+import com.marvic.factsigner.payload.sistema.PuntoVentaDTO;
 import com.marvic.factsigner.repository.PuntoSecuenciaRepository;
 import com.marvic.factsigner.repository.PuntoVentaRepository;
 import com.marvic.factsigner.repository.EmpresaRepository;
@@ -42,13 +43,14 @@ public class PuntoVentaServiceImpl implements PuntoVentaService  {
     
     @Override
     public PuntoVentaDTO getOne(String id) {
-        PuntoVenta entidad = puntoVentaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("not found"));
+        PuntoVenta entity = puntoVentaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("not found"));
 
         List<PuntoSecuencia> secuencias = puntoSecuenciaRepository.findAllByPuntoVentaId(id);
         List<PuntoSecuenciaDTO> secuenciasDto = secuencias.stream().map(this::mapSecuenciaToDTO).collect(Collectors.toList());
 
-        PuntoVentaDTO dto = mapToDTO(entidad);
+        PuntoVentaDTO dto = mapToDTO(entity);
         dto.setSecuencias(secuenciasDto);
+        dto.setEmpresa(modelMapper.map(entity.getEmpresa(), EmpresaDTO.class));
 
         return dto;
     }
@@ -85,6 +87,7 @@ public class PuntoVentaServiceImpl implements PuntoVentaService  {
 
         PuntoVentaDTO savedDto = mapToDTO(saved);
         savedDto.setSecuencias(secuenciasDTO);
+
         return savedDto;
     }
 

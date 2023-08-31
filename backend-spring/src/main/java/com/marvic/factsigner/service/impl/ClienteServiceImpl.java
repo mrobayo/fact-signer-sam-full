@@ -1,11 +1,10 @@
 package com.marvic.factsigner.service.impl;
 
-import com.marvic.factsigner.exception.RequiredKeyException;
 import com.marvic.factsigner.exception.ResourceExistsException;
 import com.marvic.factsigner.exception.ResourceNotFoundException;
 import com.marvic.factsigner.model.sistema.Cliente;
 import com.marvic.factsigner.model.sistema.extra.Grupo;
-import com.marvic.factsigner.payload.ClienteDTO;
+import com.marvic.factsigner.payload.sistema.ClienteDTO;
 import com.marvic.factsigner.repository.ClienteRepository;
 import com.marvic.factsigner.repository.GrupoRepository;
 import com.marvic.factsigner.service.ClienteService;
@@ -19,7 +18,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.marvic.factsigner.util.Utils.cleanUpper;
 import static com.marvic.factsigner.util.Utils.coalesce;
 
 @Service

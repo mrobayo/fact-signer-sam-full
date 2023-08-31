@@ -6,7 +6,7 @@ import com.marvic.factsigner.exception.ResourceNotFoundException;
 import com.marvic.factsigner.model.sistema.Cliente;
 import com.marvic.factsigner.model.sistema.extra.Grupo;
 
-import com.marvic.factsigner.payload.GrupoDTO;
+import com.marvic.factsigner.payload.sistema.GrupoDTO;
 import com.marvic.factsigner.repository.ClienteRepository;
 import com.marvic.factsigner.repository.GrupoRepository;
 import com.marvic.factsigner.service.GrupoService;
