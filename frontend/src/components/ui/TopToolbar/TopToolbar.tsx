@@ -1,5 +1,5 @@
 import React from 'react';
-import { styled } from '@mui/material/styles';
+import {alpha, styled} from '@mui/material/styles';
 import PropTypes from 'prop-types';
 import Toolbar, { ToolbarProps } from '@mui/material/Toolbar';
 
@@ -24,6 +24,7 @@ const StyledToolbar = styled(Toolbar, {
     whiteSpace: 'nowrap',
     flex: '0 1 auto',
     minHeight: theme.spacing(8),
+    bgcolor: alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
     [theme.breakpoints.up('md')]: {
         padding: theme.spacing(0.5),
         paddingTop: theme.spacing(1),
