@@ -62,6 +62,4 @@ public class ClienteDTO {
 
     private String grupoId;
 
-    private String seguroId;
-
 }

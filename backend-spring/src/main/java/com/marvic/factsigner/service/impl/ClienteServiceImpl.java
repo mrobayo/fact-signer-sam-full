@@ -63,21 +63,13 @@ public class ClienteServiceImpl implements ClienteService {
 
         entity.setTipo(tipo);
         entity.setId(null);
-        entity.setSeguro(null);
+
         entity.setUltimaVenta(null);
         entity.setActivo(true);
 
-        // Seguro & Grupo
+        // Grupo
         Grupo grupo = grupoRepository.findById(coalesce(dto.getGrupoId(), "PARTICULAR")).get();
         entity.setGrupo(grupo);
-
-        if (StringUtils.isNotBlank(dto.getSeguroId())) {
-            UUID seguroUUID = Utils.toUUID(dto.getSeguroId());
-            Cliente seguro = repository.findById(seguroUUID).get();
-            entity.setSeguro(seguro);
-        } else {
-            entity.setSeguro(null);
-        }
 
         Cliente saved = repository.save(entity);
         return mapToDTO(saved);

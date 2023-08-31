@@ -23,4 +23,6 @@ public class GrupoDTO {
 
     private boolean activo;
 
+    private String seguroId;
+
 }

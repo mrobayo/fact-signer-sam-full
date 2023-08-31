@@ -1,5 +1,6 @@
 package com.marvic.factsigner.model.sistema.extra;
 
+import com.marvic.factsigner.model.sistema.Cliente;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,5 +25,9 @@ public class Grupo {
 
     @Column(nullable = false, columnDefinition = "boolean default true")
     private boolean activo;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="seguro_id")
+    private Cliente seguro;
 
 }

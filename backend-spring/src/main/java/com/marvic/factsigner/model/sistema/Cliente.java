@@ -73,10 +73,6 @@ public class Cliente {
     private boolean aseguradora;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="seguro_id")
-    private Cliente seguro;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="grupo_id", nullable = false)
     private Grupo grupo;
 
