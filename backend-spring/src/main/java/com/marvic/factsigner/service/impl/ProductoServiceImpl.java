@@ -51,8 +51,7 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Override
     public List<ProductoDTO> getAll(String empresaId) {
-        UUID empresaUuid = Utils.toUUID(empresaId);
-        return productoRepository.findAllByEmpresaId(empresaUuid).stream().map(this::mapToDTO).collect(Collectors.toList());
+        return productoRepository.findAllByEmpresaId(empresaId).stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
     @Override
@@ -60,12 +59,11 @@ public class ProductoServiceImpl implements ProductoService {
         // Validate
         dto.setName(StringUtils.trim(dto.getName()));
 
-        UUID empresaUuid = Utils.toUUID(dto.getEmpresaId());
         ProductoTipo tipo = ProductoTipo.valueOf(dto.getTipo());
 
         // Check UK by empresa + codigo
         productoRepository
-                .findByEmpresaIdAndCodigo(empresaUuid, dto.getCodigo())
+                .findByEmpresaIdAndCodigo(dto.getEmpresaId(), dto.getCodigo())
                 .ifPresent((c) -> {throw new ResourceExistsException(dto.getName());});
 
         Producto entity = mapToEntity(dto);
@@ -79,8 +77,11 @@ public class ProductoServiceImpl implements ProductoService {
         entity.setUnidadVenta(unidadVenta);
 
         // Categoria
-        Categoria categoria = categoriaRepository.findById(coalesce(dto.getCategoriaId(), 1)).get();
-        entity.setCategoria(categoria);
+        entity.setCategoria(null);
+        if (dto.getCategoriaId() != null) {
+            Categoria categoria = categoriaRepository.findById(dto.getCategoriaId()).get();
+            entity.setCategoria(categoria);
+        }
 
         Producto saved = productoRepository.save(entity);
         return mapToDTO(saved);

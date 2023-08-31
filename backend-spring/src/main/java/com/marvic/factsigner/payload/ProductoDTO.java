@@ -40,7 +40,7 @@ public class ProductoDTO {
     @NotNull @Size(max=20)
     private String unidadVentaId;
 
-    @NotNull @Min(0)
+    @NotNull @Min(1)
     private Integer categoriaId;
 
     @NotNull @Size(max=20)

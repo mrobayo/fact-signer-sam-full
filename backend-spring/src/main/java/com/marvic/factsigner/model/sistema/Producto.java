@@ -40,7 +40,7 @@ public class Producto {
     private Empresa empresa;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 20)
+    @Column(columnDefinition = "varchar(20) default 'BIEN'")
     private ProductoTipo tipo;
 
     @Column(nullable = false, name = "codigo_iva")
@@ -57,7 +57,7 @@ public class Producto {
 
     // Control de stock
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, name="control_stock", length = 20)
+    @Column(nullable = false, name="control_stock", columnDefinition = "varchar(20) default 'ALMACENABLE'")
     private StockTipo control;
 
     @Column(nullable = false, columnDefinition = "boolean default false")
