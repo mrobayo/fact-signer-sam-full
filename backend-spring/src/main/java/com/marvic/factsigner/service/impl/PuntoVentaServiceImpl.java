@@ -2,31 +2,40 @@ package com.marvic.factsigner.service.impl;
 
 import com.marvic.factsigner.exception.ResourceExistsException;
 import com.marvic.factsigner.exception.ResourceNotFoundException;
+import com.marvic.factsigner.model.comprobantes.extra.PuntoSecuencia;
 import com.marvic.factsigner.model.comprobantes.extra.PuntoVenta;
 import com.marvic.factsigner.model.sistema.Empresa;
+import com.marvic.factsigner.payload.PuntoSecuenciaDTO;
 import com.marvic.factsigner.payload.PuntoVentaDTO;
-import com.marvic.factsigner.payload.PuntoVentaDTO;
+import com.marvic.factsigner.repository.PuntoSecuenciaRepository;
 import com.marvic.factsigner.repository.PuntoVentaRepository;
 import com.marvic.factsigner.repository.EmpresaRepository;
-import com.marvic.factsigner.repository.PuntoVentaRepository;
 import com.marvic.factsigner.service.PuntoVentaService;
+
+import ec.gob.sri.types.SriTipoDoc;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class PuntoVentaServiceImpl implements PuntoVentaService  {
 
     private final PuntoVentaRepository puntoVentaRepository;
+
+    private final PuntoSecuenciaRepository puntoSecuenciaRepository;
 
     private final EmpresaRepository empresaRepository;
 
     private final ModelMapper modelMapper;
 
-    public PuntoVentaServiceImpl(PuntoVentaRepository puntoVentaRepository, EmpresaRepository empresaRepository, ModelMapper modelMapper) {
+    public PuntoVentaServiceImpl(PuntoVentaRepository puntoVentaRepository, PuntoSecuenciaRepository puntoSecuenciaRepository, EmpresaRepository empresaRepository, ModelMapper modelMapper) {
         this.puntoVentaRepository = puntoVentaRepository;
+        this.puntoSecuenciaRepository = puntoSecuenciaRepository;
         this.empresaRepository = empresaRepository;
         this.modelMapper = modelMapper;
     }
@@ -34,7 +43,14 @@ public class PuntoVentaServiceImpl implements PuntoVentaService  {
     @Override
     public PuntoVentaDTO getOne(String id) {
         PuntoVenta entidad = puntoVentaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("not found"));
-        return mapToDTO(entidad);
+
+        List<PuntoSecuencia> secuencias = puntoSecuenciaRepository.findAllByPuntoVentaId(id);
+        List<PuntoSecuenciaDTO> secuenciasDto = secuencias.stream().map(this::mapSecuenciaToDTO).collect(Collectors.toList());
+
+        PuntoVentaDTO dto = mapToDTO(entidad);
+        dto.setSecuencias(secuenciasDto);
+
+        return dto;
     }
 
     @Override
@@ -57,7 +73,19 @@ public class PuntoVentaServiceImpl implements PuntoVentaService  {
         entity.setId(String.format("%s-%s-%s", empresa.getId(), entity.getEstab(), entity.getPtoEmi()));
 
         PuntoVenta saved = puntoVentaRepository.save(entity);
-        return mapToDTO(saved);
+
+        // Guardar secuencias
+        List<PuntoSecuencia> secuencias = Arrays.stream(SriTipoDoc.values())
+                .map((tipoDoc -> tipoDocToSecuencia(tipoDoc, saved)))
+                .collect(Collectors.toList());
+
+        List<PuntoSecuenciaDTO> secuenciasDTO = puntoSecuenciaRepository
+                .saveAll(secuencias)
+                .stream().map(this::mapSecuenciaToDTO).collect(Collectors.toList());
+
+        PuntoVentaDTO savedDto = mapToDTO(saved);
+        savedDto.setSecuencias(secuenciasDTO);
+        return savedDto;
     }
 
     @Override
@@ -76,6 +104,20 @@ public class PuntoVentaServiceImpl implements PuntoVentaService  {
 
     private PuntoVentaDTO mapToDTO(PuntoVenta model) {
         return modelMapper.map(model, PuntoVentaDTO.class);
+    }
+
+    private PuntoSecuenciaDTO mapSecuenciaToDTO(PuntoSecuencia model) {
+        return modelMapper.map(model, PuntoSecuenciaDTO.class);
+    }
+
+    private PuntoSecuencia tipoDocToSecuencia(SriTipoDoc tipoDoc, PuntoVenta puntoVenta) {
+        PuntoSecuencia secuencia = new PuntoSecuencia();
+        secuencia.setTipoDoc(tipoDoc);
+        secuencia.setSecuencia(1);
+        secuencia.setPuntoVenta(puntoVenta);
+        secuencia.setId(String.format("%s-%s", puntoVenta.getId(), tipoDoc.name()));
+
+        return secuencia;
     }
     
 }
