@@ -19,10 +19,9 @@ import java.util.stream.Collectors;
 @Service
 public class EmpresaServiceImpl implements EmpresaService {
 
+    private final EmpresaRepository repository;
 
-    private EmpresaRepository repository;
-
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     public EmpresaServiceImpl(EmpresaRepository repository, ModelMapper modelMapper) {
         this.repository = repository;
@@ -31,8 +30,8 @@ public class EmpresaServiceImpl implements EmpresaService {
 
     @Override
     public EmpresaDTO getOne(String id) {
-        Empresa entidad = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("not found"));
-        return mapToDTO(entidad);
+        Empresa entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("not found"));
+        return mapToDTO(entity);
     }
 
     @Override
@@ -61,6 +60,7 @@ public class EmpresaServiceImpl implements EmpresaService {
         Empresa entity = mapToEntity(dto);
         entity.setAmbiente(SriAmbiente.PRUEBAS);
         entity.setActivo(true);
+        entity.setMoneda("DOLAR");
 
         Empresa saved = repository.save(entity);
         return mapToDTO(saved);

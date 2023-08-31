@@ -23,7 +23,7 @@ import java.util.Set;
         })
 public class Usuario {
 
-    @Id
+    @Id @Column(length = 20)
     private String id;
 
     @Column(name="id", updatable = false, insertable = false)

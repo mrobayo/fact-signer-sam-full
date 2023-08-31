@@ -1,4 +1,4 @@
-package com.marvic.factsigner.model.comprobantes;
+package com.marvic.factsigner.model.comprobantes.types;
 
 public enum EstadoTipo {
 

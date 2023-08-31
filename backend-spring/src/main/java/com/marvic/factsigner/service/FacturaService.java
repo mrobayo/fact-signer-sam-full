@@ -11,7 +11,7 @@ public interface FacturaService {
 
     List<FacturaDTO> getAllByEmpresaId(String empresaId);
 
-    List<FacturaDTO> getAllByPuntoVentaId(String puntoVentaId);
+    // List<FacturaDTO> getAllByPuntoVentaId(String puntoVentaId);
 
     FacturaDTO create(FacturaDTO dto);
 

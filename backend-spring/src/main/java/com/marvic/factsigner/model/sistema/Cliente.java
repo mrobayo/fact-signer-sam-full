@@ -11,6 +11,16 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.UUID;
 
+/**
+ * Valid UUID
+ *
+ * facade00-0000-4000-a000-000000000000
+ * decade00-0000-4000-a000-000000000000
+ * ad0be000-0000-4000-a000-000000000000
+ * c0c0a000-0000-4000-a000-000000000000
+ * 5ca1ab1e-0000-4000-a000-000000000000
+ * f100ded0-0000-4000-a000-000000000000
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -39,10 +49,10 @@ public class Cliente {
     @Column(nullable = false, columnDefinition = "boolean default true")
     private boolean activo;
 
-    @Column(nullable = false, length = 60)
+    @Column(nullable = false, length = 40)
     private String nombres;
 
-    @Column(nullable = false, length = 60)
+    @Column(nullable = false, length = 40)
     private String apellidos;
 
     @Column(nullable = false, length = 60)

@@ -22,6 +22,7 @@ import java.util.UUID;
 public class PuntoVenta {
 
     @Id
+    @Column(length = 40)
     private String id;
 
     @Column(name="id", updatable = false, insertable = false)
