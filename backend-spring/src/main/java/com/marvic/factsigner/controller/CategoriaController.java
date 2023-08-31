@@ -26,7 +26,7 @@ public class CategoriaController {
 
     @GetMapping
     public List<CategoriaDTO> getByEmpresa(
-            @RequestParam(value = "empresa_id", required = true) @Size(min=13, max=13) String empresaId
+            @RequestParam(value = "empresa_id", required = true) String empresaId
     ) {
         List many = service.getAll(empresaId);
         return many;

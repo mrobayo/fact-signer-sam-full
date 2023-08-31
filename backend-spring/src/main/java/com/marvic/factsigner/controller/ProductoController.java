@@ -24,8 +24,7 @@ public class ProductoController {
     }
 
     @GetMapping
-    public List<ProductoDTO> getAll() {
-        String empresaId = "";
+    public List<ProductoDTO> getAll(@RequestParam(value = "empresa_id", required = true) String empresaId) {
         List<ProductoDTO> all = service.getAll(empresaId);
         return all;
     }
