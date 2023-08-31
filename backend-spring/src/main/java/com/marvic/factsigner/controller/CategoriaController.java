@@ -8,8 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/categorias")
@@ -25,8 +25,10 @@ public class CategoriaController {
     }
 
     @GetMapping
-    public List<CategoriaDTO> getMany() {
-        List many = service.getMany("");
+    public List<CategoriaDTO> getByEmpresa(
+            @RequestParam(value = "empresa_id", required = true) @Size(min=13, max=13) String empresaId
+    ) {
+        List many = service.getAll(empresaId);
         return many;
     }
 

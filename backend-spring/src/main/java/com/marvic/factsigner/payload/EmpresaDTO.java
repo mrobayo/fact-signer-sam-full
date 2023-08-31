@@ -5,7 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
@@ -17,17 +18,17 @@ public class EmpresaDTO {
 
     private String id;
 
-    @NotEmpty
+    @NotBlank @Size(min=1, max=100)
     private String name;
 
     private boolean activo;
 
     private String ruc;
 
-    @NotEmpty
+    @NotBlank @Size(min=1, max=20)
     private String color;
 
-    @NotEmpty
+    @NotBlank @Size(min=1, max=100)
     private String comercial;
 
     @Size(max=20)
@@ -42,12 +43,13 @@ public class EmpresaDTO {
     @NotNull
     private boolean obligado;
 
+    @Size(max=300)
     private String logo;
 
-    @NotEmpty
+    @NotBlank @Size(min=1, max=100)
     private String direccion;
 
-    @NotEmpty
+    @NotBlank @Size(min=7, max=100)
     private String telefono;
 
 }

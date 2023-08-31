@@ -8,7 +8,7 @@ public interface CategoriaService {
 
     CategoriaDTO getOne(Integer id);
 
-    List<CategoriaDTO> getMany(String empresaId);
+    List<CategoriaDTO> getAll(String empresaId);
 
     CategoriaDTO create(CategoriaDTO dto);
 

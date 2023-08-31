@@ -11,3 +11,4 @@ insert into si_empresa (comercial, direccion, name, tarifa_iva, telefono, id) va
 insert into si_categoria (empresa_id, name, id) values ('1100000000001', 'BASICO', 1);
 
 insert into si_producto (categoria_id, codigo, codigo_iva, empresa_id, name, unidad_venta_id, vendido, id) values (1, '101', 2, '1100000000001', 'LAPIZ', 'UN', true, gen_random_uuid());
+

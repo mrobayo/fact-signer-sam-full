@@ -38,8 +38,8 @@ public class CategoriaServiceImpl implements CategoriaService {
     }
 
     @Override
-    public List<CategoriaDTO> getMany(String empresaId) {
-        return repository.findAll().stream().map(this::mapToDTO).collect(Collectors.toList());
+    public List<CategoriaDTO> getAll(String empresaId) {
+        return repository.findAllByEmpresaId(empresaId).stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
     @Override
