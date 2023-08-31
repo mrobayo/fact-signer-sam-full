@@ -22,12 +22,14 @@ import java.util.UUID;
 public class Producto {
 
     @Id
+    @GeneratedValue
+    @Column(columnDefinition = "uuid", updatable = false)
     private UUID id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 60)
     private String codigo;
 
     @Column(nullable = false, columnDefinition = "boolean default true")
@@ -58,14 +60,13 @@ public class Producto {
     @Column(nullable = false, name="control_stock", length = 20)
     private StockTipo control;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean vendido;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean comprado;
 
     // Lista de precio
     // private ListaPrecio listaPrecio;
-
 
 }

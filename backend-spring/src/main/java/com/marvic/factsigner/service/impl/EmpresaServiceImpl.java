@@ -62,9 +62,11 @@ public class EmpresaServiceImpl implements EmpresaService {
                 .findById(dto.getId())
                 .ifPresent((c) -> {throw new ResourceExistsException(dto.getId());});
 
-        Empresa entidad = mapToEntity(dto);
-        entidad.setAmbiente(SriAmbiente.PRUEBAS);
-        Empresa saved = repository.save(entidad);
+        Empresa entity = mapToEntity(dto);
+        entity.setAmbiente(SriAmbiente.PRUEBAS);
+        entity.setActivo(true);
+
+        Empresa saved = repository.save(entity);
         return mapToDTO(saved);
     }
 

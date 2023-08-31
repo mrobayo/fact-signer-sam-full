@@ -8,8 +8,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Data
 @AllArgsConstructor
@@ -18,28 +20,30 @@ public class ProductoDTO {
 
     private String id;
 
-    @NotEmpty
+    @NotBlank @Size(min=1, max=100)
     private String name;
+
+    @NotBlank @Size(min=1, max=60)
+    private String codigo;
 
     private boolean activo;
 
-    private String codigo;
+    @NotBlank @Size(max=20)
+    private String empresaId;
 
-    @NotEmpty
+    @NotBlank @Size(max=20)
     private String tipo;
 
-    @NotNull
+    @NotNull @Min(0)
     private Integer codigoIva;
 
-    // Categorias
-    @NotNull
-    private Unidad unidadVenta;
+    @NotNull @Size(max=20)
+    private String unidadVentaId;
 
-    @NotNull
-    private Categoria categoria;
+    @NotNull @Min(0)
+    private Integer categoriaId;
 
-    // Control de stock
-    @NotNull
+    @NotNull @Size(max=20)
     private String control;
 
     private boolean vendido;

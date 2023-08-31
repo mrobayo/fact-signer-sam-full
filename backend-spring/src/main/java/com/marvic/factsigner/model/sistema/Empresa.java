@@ -23,23 +23,25 @@ import java.util.UUID;
 public class Empresa {
 
     @Id
-    @Column(name = "ruc", nullable = false, length = 20)
+    @Column(name = "id", nullable = false, length = 20)
     private String id;
 
     @Column(nullable = false, length = 100)
     private String name;
 
-    public String getRuc() {
-        return id;
-    }
+    @Column(name="id", updatable = false, insertable = false)
+    private String ruc;
 
-    @Column(nullable = false, length = 60)
+    @Column(nullable = false, columnDefinition = "boolean default true")
+    private boolean activo;
+
+    @Column(nullable = false, columnDefinition = "varchar(20) default '#EEEEEE'")
     private String color;
 
     @Column(nullable = false, length = 100)
     private String comercial;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, columnDefinition = "varchar(20) default 'PRUEBAS'")
     @Enumerated(EnumType.STRING)
     private SriAmbiente ambiente;
 
@@ -49,7 +51,7 @@ public class Empresa {
     @Column(length = 20)
     private String numeroContribuyente;   // Num de Contribuyente Especial
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean obligado;   // Obligado a llevar contabilidad
 
     @Column(length = 300)
