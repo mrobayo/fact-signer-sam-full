@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-@SuperBuilder
+// @SuperBuilder
 
 @MappedSuperclass
 public class Comprobante {

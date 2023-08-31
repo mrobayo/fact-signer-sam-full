@@ -1,6 +1,5 @@
 package com.marvic.factsigner.payload;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -12,11 +11,11 @@ import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder
+// @SuperBuilder
 public class FacturaDTO extends ComprobanteDTO {
 
+    @Size(max=40)
     private String id;
 
     @NotBlank @Size(max=20)

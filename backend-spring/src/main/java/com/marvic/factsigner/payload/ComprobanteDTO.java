@@ -14,12 +14,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder
+//@SuperBuilder
 public class ComprobanteDTO {
-
-    private String id;
 
     private String empresaId;
 

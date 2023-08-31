@@ -69,6 +69,10 @@ public class FacturaServiceImpl implements FacturaService {
         UUID compradorUuid = Utils.toUUID(dto.getCompradorId());
         Cliente comprador = clienteRepository.findById(compradorUuid).get();
 
+        // Check UK by name + empresa
+        facturaRepository.findByNameAndEmpresaId(dto.getName(), empresa.getId())
+            .ifPresent((c) -> {throw new ResourceExistsException(dto.getName());});
+
         Factura entity = mapToEntity(dto);
         entity.setTotalDescuento(ZERO);
         entity.setPropina(ZERO);
@@ -98,7 +102,9 @@ public class FacturaServiceImpl implements FacturaService {
         entity.setAprobador(null);
 
         Factura saved = facturaRepository.save(entity);
-        return mapToDTO(saved);
+        FacturaDTO savedDto = mapToDTO(saved);
+        //
+        return savedDto;
     }
 
     @Override
@@ -116,7 +122,14 @@ public class FacturaServiceImpl implements FacturaService {
     }
 
     private FacturaDTO mapToDTO(Factura model){
-        return modelMapper.map(model, FacturaDTO.class);
+        FacturaDTO dto = modelMapper.map(model, FacturaDTO.class);
+        if (model.getId() != null) {
+            dto.setId(model.getId().toString());
+        }
+        else {
+            dto.setId(null);
+        }
+        return dto;
     }
 
 }

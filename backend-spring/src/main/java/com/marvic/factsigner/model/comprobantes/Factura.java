@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @Data
 @NoArgsConstructor
-@SuperBuilder
+// @SuperBuilder
 
 @Entity
 @Table(name="ct_factura"

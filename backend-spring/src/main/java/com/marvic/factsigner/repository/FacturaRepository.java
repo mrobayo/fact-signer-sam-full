@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface FacturaRepository extends JpaRepository<Factura, UUID> {
 
-    // Optional<Factura> findByNumeroAndEmpresaId(String name, String empresaId);
+    Optional<Factura> findByNameAndEmpresaId(String name, String empresaId);
 
     // List<Factura> findAllByEmpresaId(String empresaId);
 
