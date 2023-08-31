@@ -4,10 +4,8 @@ import ec.gob.sri.types.SriTipoDoc;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -18,7 +16,8 @@ import java.util.UUID;
 public class PuntoSecuencia {
 
     @Id
-    private UUID id;
+    @Column(length=40)
+    private String id;
 
     @Column(nullable = false, name = "tipo_doc", length = 20)
     @Enumerated(EnumType.STRING)
