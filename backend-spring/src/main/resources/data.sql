@@ -8,3 +8,4 @@ insert into si_usuario (email, identidad, name, nunca_expira, password, roles, t
 
 insert into si_empresa (comercial, direccion, name, tarifa_iva, telefono, id) values ('DEMO', 'Padre Hurtado y Alejo Lascano', 'DEMO', 12, '0967800045', '1100000000001');
 
+insert into si_categoria (empresa_id, name, id) values ('1100000000001', 'BASICO', 1);
