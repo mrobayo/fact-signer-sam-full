@@ -1,10 +1,10 @@
 package com.marvic.factsigner.payload;
-import com.marvic.factsigner.model.sistema.Empresa;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,27 +15,27 @@ import java.util.UUID;
 @NoArgsConstructor
 public class PuntoVentaDTO {
 
-    private UUID id;
+    private String id;
 
-    private Empresa empresa;
+    @NotBlank @Size(max=20)
+    private String empresaId;
 
-    @NotEmpty
-    private String nombre;
+    private String name;
 
     private boolean activo;
 
     private boolean matriz = false;
 
-    @NotEmpty
+    @NotBlank @Size(min=3, max=3)
     private String estab;
 
-    @NotEmpty
+    @NotBlank @Size(min=3, max=3)
     private String ptoEmi;
 
-    @NotEmpty
+    @NotBlank @Size(min=1, max=100)
     private String direccion;
 
-    @NotEmpty
+    @NotBlank @Size(min=7, max=60)
     private String telefono;
 
     private List<PuntoSecuenciaDTO> secuencias = new ArrayList<>();

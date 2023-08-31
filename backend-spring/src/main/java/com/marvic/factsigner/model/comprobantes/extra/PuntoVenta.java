@@ -18,35 +18,35 @@ import java.util.UUID;
 
 @Entity
 @Table(name="si_punto_venta",
-        uniqueConstraints = @UniqueConstraint(name="si_punto_venta_ide_uk", columnNames = {"empresa_id", "estab", "pto_emi"}))
+        uniqueConstraints = @UniqueConstraint(name="si_punto_venta_uk", columnNames = {"empresa_id", "estab", "pto_emi"}))
 public class PuntoVenta {
 
     @Id
-    private UUID id;
+    private String id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="empresa_id", nullable = false)
-    private Empresa empresa;
+    @Column(name="id", updatable = false, insertable = false)
+    private String name;
 
-    @Column(nullable = false, length = 60)
-    private String nombre;
-
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "boolean default true")
     private boolean activo;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean matriz = false;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 3)
     private String estab;
 
-    @Column(nullable = false, name="pto_emi", length = 20)
+    @Column(nullable = false, name="pto_emi", length = 3)
     private String ptoEmi;
 
     @Column(nullable = false, length = 100)
     private String direccion;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 60)
     private String telefono;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="empresa_id", nullable = false)
+    private Empresa empresa;
 
 }
