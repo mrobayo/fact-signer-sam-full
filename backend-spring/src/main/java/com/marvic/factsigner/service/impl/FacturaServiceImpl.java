@@ -54,9 +54,9 @@ public class FacturaServiceImpl implements FacturaService {
 
     @Override
     public List<FacturaDTO> getAllByEmpresaId(String empresaId) {
-        List<FacturaDTO> dtoList = null; // facturaRepository
-//                .findAllByEmpresaId(empresaId)
-//                .stream().map(this::mapToDTO).collect(Collectors.toList());
+        List<FacturaDTO> dtoList = facturaRepository
+                .findAllByEmpresaId(empresaId)
+                .stream().map(this::mapToDTO).collect(Collectors.toList());
 
         return dtoList;
     }

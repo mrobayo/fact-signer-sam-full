@@ -11,6 +11,6 @@ public interface FacturaRepository extends JpaRepository<Factura, UUID> {
 
     Optional<Factura> findByNameAndEmpresaId(String name, String empresaId);
 
-    // List<Factura> findAllByEmpresaId(String empresaId);
+    List<Factura> findAllByEmpresaId(String empresaId);
 
 }
