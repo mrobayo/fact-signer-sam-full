@@ -70,8 +70,10 @@ public class FacturaServiceImpl implements FacturaService {
         Cliente comprador = clienteRepository.findById(compradorUuid).get();
 
         // Check UK by name + empresa
-        facturaRepository.findByNameAndEmpresaId(dto.getName(), empresa.getId())
-            .ifPresent((c) -> {throw new ResourceExistsException(dto.getName());});
+        if (dto.getName() != null) {
+            facturaRepository.findByNameAndEmpresaId(dto.getName(), empresa.getId())
+                    .ifPresent((c) -> {throw new ResourceExistsException(dto.getName());});
+        }
 
         Factura entity = mapToEntity(dto);
         entity.setTotalDescuento(ZERO);
