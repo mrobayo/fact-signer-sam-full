@@ -104,9 +104,7 @@ public class FacturaServiceImpl implements FacturaService {
         entity.setAprobador(null);
 
         Factura saved = facturaRepository.save(entity);
-        FacturaDTO savedDto = mapToDTO(saved);
-        //
-        return savedDto;
+        return mapToDTO(saved);
     }
 
     @Override
