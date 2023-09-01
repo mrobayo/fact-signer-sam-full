@@ -1,6 +1,7 @@
 package com.marvic.factsigner.service.impl;
 
 import com.marvic.factsigner.exception.ResourceExistsException;
+import com.marvic.factsigner.model.comprobantes.DetalleFactura;
 import com.marvic.factsigner.model.comprobantes.Factura;
 import com.marvic.factsigner.model.comprobantes.extra.PuntoVenta;
 import com.marvic.factsigner.model.comprobantes.types.EstadoTipo;
@@ -17,14 +18,14 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import static java.math.BigDecimal.ZERO;
-import java.util.List;
-import java.util.UUID;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 
 
 @Service
-// @Transactional
+@Transactional
 public class FacturaServiceImpl implements FacturaService {
 
     private final FacturaRepository facturaRepository;
@@ -102,6 +103,19 @@ public class FacturaServiceImpl implements FacturaService {
         entity.setSujetoEmail(comprador.getEmail());
 
         entity.setAprobador(null);
+
+        if (entity.getDetalles() != null) {
+            entity.getDetalles().forEach((detalle) -> {
+                detalle.setItem(null);
+            });
+        }
+
+
+//        DetalleFactura detalle = new DetalleFactura();
+//        detalle.setDescripcion("2");
+//        detalle.setLinea(1);
+//
+//        entity.getDetalles().add(detalle);
 
         Factura saved = facturaRepository.save(entity);
         return mapToDTO(saved);

@@ -9,6 +9,8 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.SortedSet;
 import java.util.UUID;
 
 @Data
@@ -54,6 +56,11 @@ public class Factura extends Comprobante {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="comprador_id", nullable = false)
     private Cliente comprador;
+
+    @OrderBy("linea ASC")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) // , mappedBy = "factura"
+    @JoinColumn(name = "factura_id")
+    private List<DetalleFactura> detalles;
 
     //private Pago
 
