@@ -5,19 +5,17 @@ import com.marvic.factsigner.model.comprobantes.types.TipoFactura;
 import com.marvic.factsigner.model.comprobantes.types.TotalImpuesto;
 import com.marvic.factsigner.model.sistema.Cliente;
 import com.marvic.factsigner.util.HashMapConverter;
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
 import java.util.UUID;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 // @SuperBuilder
@@ -26,7 +24,7 @@ import java.util.UUID;
 @Table(name="ct_factura"
     , uniqueConstraints = @UniqueConstraint(name="ct_factura_numero_uk", columnNames = {"numero", "empresa_id"})
 )
-public class Factura extends Comprobante {
+public class FacturaComp extends Comprobante {
 
     @Id
     @GeneratedValue

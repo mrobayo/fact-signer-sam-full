@@ -1,8 +1,7 @@
 package com.marvic.factsigner.service.impl;
 
 import com.marvic.factsigner.exception.ResourceExistsException;
-import com.marvic.factsigner.model.comprobantes.DetalleFactura;
-import com.marvic.factsigner.model.comprobantes.Factura;
+import com.marvic.factsigner.model.comprobantes.FacturaComp;
 import com.marvic.factsigner.model.comprobantes.extra.PuntoVenta;
 import com.marvic.factsigner.model.comprobantes.types.EstadoTipo;
 import com.marvic.factsigner.model.sistema.Cliente;
@@ -16,7 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.math.BigDecimal;
+
 import static java.math.BigDecimal.ZERO;
 
 import java.util.*;
@@ -76,7 +75,7 @@ public class FacturaServiceImpl implements FacturaService {
                     .ifPresent((c) -> {throw new ResourceExistsException(dto.getName());});
         }
 
-        Factura entity = mapToEntity(dto);
+        FacturaComp entity = mapToEntity(dto);
         entity.setTotalDescuento(ZERO);
         entity.setPropina(ZERO);
         entity.setTotalSinImpuestos(ZERO);
@@ -110,7 +109,7 @@ public class FacturaServiceImpl implements FacturaService {
             });
         }
 
-        Factura saved = facturaRepository.save(entity);
+        FacturaComp saved = facturaRepository.save(entity);
         return mapToDTO(saved);
     }
 
@@ -124,11 +123,11 @@ public class FacturaServiceImpl implements FacturaService {
         return null;
     }
 
-    private Factura mapToEntity(FacturaDTO dto) {
-        return modelMapper.map(dto, Factura.class);
+    private FacturaComp mapToEntity(FacturaDTO dto) {
+        return modelMapper.map(dto, FacturaComp.class);
     }
 
-    private FacturaDTO mapToDTO(Factura model){
+    private FacturaDTO mapToDTO(FacturaComp model){
         FacturaDTO dto = modelMapper.map(model, FacturaDTO.class);
         if (model.getId() != null) {
             dto.setId(model.getId().toString());
