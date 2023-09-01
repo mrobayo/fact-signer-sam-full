@@ -1,6 +1,8 @@
 package com.marvic.factsigner.model.comprobantes;
 
+import com.marvic.factsigner.model.comprobantes.types.Pago;
 import com.marvic.factsigner.model.comprobantes.types.TipoFactura;
+import com.marvic.factsigner.model.comprobantes.types.TotalImpuesto;
 import com.marvic.factsigner.model.sistema.Cliente;
 import com.marvic.factsigner.util.HashMapConverter;
 import lombok.AllArgsConstructor;
@@ -9,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -67,12 +70,32 @@ public class Factura extends Comprobante {
     @OrderColumn(name = "linea")
     private List<DetalleFactura> detalles;
 
-    //private Pago
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride( name = "codigoPorcentaje", column = @Column(name = "codigo_iva")),
+            @AttributeOverride( name = "descuentoAdicional", column = @Column(name = "descuento_iva", precision = 14, scale = 2)),
+            @AttributeOverride( name = "baseImponible", column = @Column(name = "base_imponible_iva", precision = 14, scale = 2)),
+            @AttributeOverride( name = "valor", column = @Column(name = "valor_iva", precision = 14, scale = 2))
+    })
+    private TotalImpuesto totalIva;
+
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride( name = "codigoPorcentaje", column = @Column(name = "codigo_ice")),
+            @AttributeOverride( name = "descuentoAdicional", column = @Column(name = "descuento_ice", precision = 14, scale = 2)),
+            @AttributeOverride( name = "baseImponible", column = @Column(name = "base_imponible_ice", precision = 14, scale = 2)),
+            @AttributeOverride( name = "valor", column = @Column(name = "valor_ice", precision = 14, scale = 2))
+    })
+    private TotalImpuesto totalIce;
 
     //private AuditObject audit;
 
     @Convert(converter = HashMapConverter.class)
     @Column(name="info_adicional", length = 4000)
     private Map<String, String> infoAdicional;
+
+    @Convert(converter = HashMapConverter.class)
+    @Column(name="pagos", length = 4000)
+    private Map<String, Pago> pagos;
 
 }

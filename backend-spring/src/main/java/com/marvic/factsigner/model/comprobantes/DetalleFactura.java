@@ -56,7 +56,7 @@ public class DetalleFactura {
     // ICE
     @Embedded
     @AttributeOverrides({
-        @AttributeOverride( name = "codigo", column = @Column(name = "codigo_ice")),
+        @AttributeOverride( name = "codigoPorcentaje", column = @Column(name = "codigo_ice")),
         @AttributeOverride( name = "tarifa", column = @Column(name = "tarifa_ice", precision = 6, scale = 2)),
         @AttributeOverride( name = "baseImponible", column = @Column(name = "base_imponible_ice", precision = 14, scale = 2)),
         @AttributeOverride( name = "valor", column = @Column(name = "valor_ice", precision = 14, scale = 2))
@@ -78,7 +78,7 @@ public class DetalleFactura {
     // IVA
     @Embedded
     @AttributeOverrides({
-        @AttributeOverride( name = "codigo", column = @Column(name = "codigo_iva")),
+        @AttributeOverride( name = "codigoPorcentaje", column = @Column(name = "codigo_iva")),
         @AttributeOverride( name = "tarifa", column = @Column(name = "tarifa_iva", precision = 6, scale = 2)),
         @AttributeOverride( name = "baseImponible", column = @Column(name = "base_imponible_iva", precision = 14, scale = 2)),
         @AttributeOverride( name = "valor", column = @Column(name = "valor_iva", precision = 14, scale = 2))

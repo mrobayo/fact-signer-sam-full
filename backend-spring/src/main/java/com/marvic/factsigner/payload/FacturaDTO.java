@@ -1,8 +1,10 @@
 package com.marvic.factsigner.payload;
 
+import com.marvic.factsigner.model.comprobantes.types.Pago;
+import com.marvic.factsigner.model.comprobantes.types.TotalImpuesto;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -10,7 +12,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 // @SuperBuilder
@@ -44,6 +48,18 @@ public class FacturaDTO extends ComprobanteDTO {
     @NotBlank @Size(max=40)
     private String compradorId;
 
+    @NotNull
     private List<DetalleFacturaDTO> detalles;
+
+    private Map<String, String> infoAdicional;
+
+    @NotNull
+    private Map<String, Pago> pagos;
+
+    @NotNull
+    private TotalImpuesto totalIva;
+
+    @NotNull
+    private TotalImpuesto totalIce;
 
 }

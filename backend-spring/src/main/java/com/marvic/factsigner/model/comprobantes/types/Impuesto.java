@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 public class Impuesto {
 
     // @Column
-    private Integer codigo;
+    private Integer codigoPorcentaje;
 
     // @Column(precision = 6, scale = 2)
     private BigDecimal tarifa;
