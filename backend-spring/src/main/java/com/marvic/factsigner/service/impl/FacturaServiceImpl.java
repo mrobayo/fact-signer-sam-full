@@ -110,13 +110,6 @@ public class FacturaServiceImpl implements FacturaService {
             });
         }
 
-
-//        DetalleFactura detalle = new DetalleFactura();
-//        detalle.setDescripcion("2");
-//        detalle.setLinea(1);
-//
-//        entity.getDetalles().add(detalle);
-
         Factura saved = facturaRepository.save(entity);
         return mapToDTO(saved);
     }

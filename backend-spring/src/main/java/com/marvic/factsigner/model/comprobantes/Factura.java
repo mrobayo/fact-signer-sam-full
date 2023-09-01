@@ -2,6 +2,7 @@ package com.marvic.factsigner.model.comprobantes;
 
 import com.marvic.factsigner.model.comprobantes.types.TipoFactura;
 import com.marvic.factsigner.model.sistema.Cliente;
+import com.marvic.factsigner.util.HashMapConverter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,7 @@ import lombok.experimental.SuperBuilder;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.SortedSet;
 import java.util.UUID;
 
@@ -57,14 +59,20 @@ public class Factura extends Comprobante {
     @JoinColumn(name="comprador_id", nullable = false)
     private Cliente comprador;
 
-    @OrderBy("linea ASC")
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) // , mappedBy = "factura"
-    @JoinColumn(name = "factura_id")
+//    @OrderBy("linea ASC")
+//    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) // , mappedBy = "factura"
+//    @JoinColumn(name = "factura_id")
+    @ElementCollection
+    @CollectionTable(name="ct_factura_detalles")
+    @OrderColumn(name = "linea")
     private List<DetalleFactura> detalles;
 
     //private Pago
 
     //private AuditObject audit;
-    //private List<DatoAdicional> adicionales = new ArrayList<DatoAdicional>();
+
+    @Convert(converter = HashMapConverter.class)
+    @Column(name="info_adicional", length = 4000)
+    private Map<String, String> infoAdicional;
 
 }

@@ -1,5 +1,6 @@
 package com.marvic.factsigner.payload;
 
+import com.marvic.factsigner.model.comprobantes.types.Impuesto;
 import com.marvic.factsigner.model.sistema.Producto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.util.Map;
 
 @Data
 @NoArgsConstructor
@@ -44,10 +46,11 @@ public class DetalleFacturaDTO {
     @Size(max=40)
     private String itemId;
 
-    @NotNull @Min(0)
-    private Integer codigoIva;
+    private Impuesto ice;
 
-    @NotNull @Min(0)
-    private BigDecimal valorIva;
+    @NotNull
+    private Impuesto iva;
+
+    private Map<String, String> detallesAdicionales;
 
 }
