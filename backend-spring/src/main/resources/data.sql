@@ -14,3 +14,12 @@ insert into si_producto (categoria_id, codigo, codigo_iva, empresa_id, name, uni
 
 insert into si_punto_venta (direccion, empresa_id, estab, pto_emi, telefono, id) values ('.', '1100000000001', '001', '001', '2150012', '1100000000001-001-001');
 
+insert into si_cliente (
+ apellidos, ciudad, direccion, email, grupo_id, identidad, name, nombres,
+ pais, telefono, tipo, id) values ('Apellidos', 'Guayaquil', 'Direccion', 'factsigner@gmail.com', 'PARTICULAR',
+ '0910203040', 'Nombre Apellidos', 'Nombres', 'EC', '2157638', 'CED', 'facade00-0000-4000-a000-000000000000');
+
+insert into si_cliente (
+ apellidos, ciudad, direccion, email, grupo_id, identidad, name, nombres,
+ pais, telefono, tipo, id) values ('Apellidos', 'Guayaquil', 'Direccion', 'factsigner@gmail.com', 'PARTICULAR',
+ '0510203040', 'Nombre Apellidos', 'Nombres', 'EC', '2157638', 'CED', 'decade00-0000-4000-a000-000000000000');

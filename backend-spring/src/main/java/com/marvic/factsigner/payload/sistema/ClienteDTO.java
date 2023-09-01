@@ -28,10 +28,10 @@ public class ClienteDTO {
     @NotBlank @Size(min=3, max=20)
     private String identidad;
 
-    @NotBlank @Size(min=2, max=60)
+    @NotBlank @Size(min=2, max=40)
     private String nombres;
 
-    @NotBlank @Size(min=2, max=60)
+    @NotBlank @Size(min=2, max=40)
     private String apellidos;
 
     @NotBlank

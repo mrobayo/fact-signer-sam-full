@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 @Data
@@ -16,13 +17,13 @@ public class UsuarioDTO {
 
     private String id;
 
-    @NotEmpty
+    @NotEmpty @Size(min=1, max=20)
     private String username;
 
-    @NotEmpty
+    @NotEmpty @Size(min=1, max=60)
     private String name;
 
-    @ValidPassword
+    @ValidPassword @Size(min=1, max=60)
     private String newPassword;
 
     @NotNull
@@ -38,12 +39,12 @@ public class UsuarioDTO {
 
     private boolean nuncaExpira = false;
 
-    @NotEmpty
+    @NotEmpty @Size(min=1, max=20)
     private String identidad;
 
-    @NotEmpty
+    @NotEmpty @Size(min=1, max=100)
     private String email;
 
-    @NotEmpty
+    @NotEmpty @Size(min=1, max=60)
     private String telefono;
 }

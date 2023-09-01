@@ -16,8 +16,10 @@ public class FactsignerApplication {
 		ModelMapper mapper = new ModelMapper();
 
 		// Skip cliente ID
-		TypeMap<ClienteDTO, Cliente> propertyMapper = mapper.createTypeMap(ClienteDTO.class, Cliente.class);
-		propertyMapper.addMappings(expression -> expression.skip(Cliente::setId));
+//		TypeMap<ClienteDTO, Cliente> propertyMapper = mapper.createTypeMap(ClienteDTO.class, Cliente.class);
+//		propertyMapper.addMappings(expression -> expression.skip(Cliente::setId));
+
+
 
 		return mapper;
 	}

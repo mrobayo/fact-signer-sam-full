@@ -1,17 +1,12 @@
 package com.marvic.factsigner.model.sistema;
 import ec.gob.sri.types.SriAmbiente;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -45,10 +40,10 @@ public class Empresa {
     @Enumerated(EnumType.STRING)
     private SriAmbiente ambiente;
 
-    @Column(nullable = false)
+    @Column(name = "tarifa_iva", nullable = false)
     private BigDecimal tarifaIva;
 
-    @Column(length = 20)
+    @Column(name = "numero_contribuyente", length = 20)
     private String numeroContribuyente;   // Num de Contribuyente Especial
 
     @Column(nullable = false, columnDefinition = "boolean default false")
@@ -68,5 +63,8 @@ public class Empresa {
 
     @Column(length = 100)
     private String telefono;
+
+    @Column(nullable = false, columnDefinition = "varchar(20) default 'DOLAR'")
+    private String moneda;
 
 }

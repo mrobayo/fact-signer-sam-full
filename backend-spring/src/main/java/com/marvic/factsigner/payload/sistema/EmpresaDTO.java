@@ -51,4 +51,6 @@ public class EmpresaDTO {
     @NotBlank @Size(min=7, max=100)
     private String telefono;
 
+    private String moneda;
+
 }

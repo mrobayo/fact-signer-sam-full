@@ -2,6 +2,7 @@ package com.marvic.factsigner.controller;
 
 import com.marvic.factsigner.payload.FacturaDTO;
 import com.marvic.factsigner.service.FacturaService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import java.util.List;
 @RequestMapping("/facturas")
 public class FacturaController {
 
+    @Autowired
     private FacturaService facturaService;
 
     @GetMapping("{id}")
@@ -22,7 +24,7 @@ public class FacturaController {
     }
 
     @GetMapping
-    public List<FacturaDTO> getAll(@RequestParam(value = "empresa_id", required = true) String empresaId) {
+    public List<FacturaDTO> getAll(@RequestParam(value = "empresa_id") String empresaId) {
         List<FacturaDTO> all = facturaService.getAllByEmpresaId(empresaId);
         return all;
     }
