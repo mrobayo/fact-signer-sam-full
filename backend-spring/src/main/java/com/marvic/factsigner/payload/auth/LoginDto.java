@@ -15,8 +15,11 @@ import javax.validation.constraints.Size;
 public class LoginDto {
 
     @NotBlank @Size(min = 3)
-    private String usernameOrEmail;
+    private String username; // OrEmail
 
     @NotBlank @Size(min = 8)
     private String password;
+
+    @Size(min = 13, max = 13)
+    private String empresaId;
 }

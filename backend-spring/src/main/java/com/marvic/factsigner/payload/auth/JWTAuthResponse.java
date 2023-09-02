@@ -11,5 +11,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class JWTAuthResponse {
     private String accessToken;
-    private String tokenType = "Bearer";
+    private final String tokenType = "Bearer";
+
+    // Listado de puntos de venta que el usuario puede usar
+    private String[] puntos;
 }
