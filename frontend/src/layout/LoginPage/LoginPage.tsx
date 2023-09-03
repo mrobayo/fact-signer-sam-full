@@ -12,9 +12,9 @@ import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import {useForm} from "react-hook-form";
-import {AuthType} from "../../services/auth/types.ts";
+import {AuthFormType} from "../../services/auth/types.ts";
 import Typography from "@mui/material/Typography";
-import {Avatar} from "@mui/material";
+import {Alert, Avatar} from "@mui/material";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 function LoginPage() {
@@ -27,7 +27,7 @@ function LoginPage() {
       reset,
       handleSubmit,
       formState: { errors }
-  } = useForm<AuthType>();
+  } = useForm<AuthFormType>();
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -37,8 +37,15 @@ function LoginPage() {
     reset();
   }, [auth.user]);
 
+  useEffect(() => {
+    if (auth.error) {
+      console.log('error', auth.error);
+    }
+  }, [auth.error]);
+
   const onFormSubmit = handleSubmit((data) => {
-    auth.signin(data.username, () => {
+
+    auth.signin(data.username, data.password, () => {
       navigate(from, { replace: true });
     });
   })
@@ -104,6 +111,7 @@ function LoginPage() {
             </Link>
           </Grid>
         </Grid>
+        { auth.error && <Alert severity="error">{auth.error}</Alert> }
       </Box>
     </Box>
     // <div>
