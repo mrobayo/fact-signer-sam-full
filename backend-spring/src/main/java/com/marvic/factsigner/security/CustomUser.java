@@ -1,5 +1,7 @@
 package com.marvic.factsigner.security;
 
+import com.marvic.factsigner.model.comprobantes.extra.PuntoVenta;
+import com.marvic.factsigner.payload.sistema.PuntoVentaDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,8 +14,9 @@ import java.util.Collection;
 @Getter
 public class CustomUser extends User {
 
+    private String usuarioId;
     private String email;
-    private String[] puntos;
+    private String puntoVentaId;
 
     public CustomUser(String username, String password, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);

@@ -45,7 +45,7 @@ public class ComprobanteDTO {
 
     private String moneda;
 
-    private String ambiente;
+    // private String ambiente;
 
     private String autorizacion;
 

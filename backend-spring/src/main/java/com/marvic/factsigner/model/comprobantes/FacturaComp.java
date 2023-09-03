@@ -1,16 +1,16 @@
 package com.marvic.factsigner.model.comprobantes;
 
-import com.marvic.factsigner.model.comprobantes.types.Pago;
-import com.marvic.factsigner.model.comprobantes.types.TipoFactura;
-import com.marvic.factsigner.model.comprobantes.types.TotalImpuesto;
+import com.marvic.factsigner.model.comprobantes.types.*;
 import com.marvic.factsigner.model.sistema.Cliente;
 import com.marvic.factsigner.util.HashMapConverter;
+import ec.gob.sri.types.SriEnumIdentidad;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -31,9 +31,38 @@ public class FacturaComp extends Comprobante {
     @Column(columnDefinition = "uuid", updatable = false)
     private UUID id;
 
+    @Embedded
+    private InfoTributaria infoTributaria;
+
+    // @Embedded
+    // private InfoFactura infoFactura;
+    @Column(name="fecha_emision")
+    private LocalDate fechaEmision;
+
+    @Column(name = "contribuyente_especial", length = 20)
+    private String contribuyenteEspecial;
+
+    @Column(nullable = false)
+    private boolean obligadoContabilidad;
+
+    @Column(name="tipo_comprador", length = 20)
     @Enumerated(EnumType.STRING)
-    @Column(name = "tipo_factura", nullable = false, columnDefinition = "varchar(20) default 'VENTA_LOCAL'")
-    private TipoFactura tipoFactura;
+    private SriEnumIdentidad tipoIdentificacionComprador;
+
+    @Column(name="razon_social_comprador", length = 100)
+    private String razonSocialComprador;
+
+    @Column(name="identidad_comprador", length = 20)
+    private String identificacionComprador;
+
+    @Column(name="direccion_comprador", length = 100)
+    private String direccionComprador;
+
+    @Column(name = "guia_remision", length = 60)
+    private String guiaRemision;
+
+    @Column(name = "total_sinimpuestos", nullable = false, precision = 10, scale = 2)
+    private BigDecimal totalSinImpuestos;
 
     @Column(name = "total_descuento", nullable = false, precision = 10, scale = 2)
     private BigDecimal totalDescuento;
@@ -41,11 +70,16 @@ public class FacturaComp extends Comprobante {
     @Column(name = "propina", nullable = false, precision = 10, scale = 2)
     private BigDecimal propina;
 
-    @Column(name = "total_sinimpuestos", nullable = false, precision = 10, scale = 2)
-    private BigDecimal totalSinImpuestos;
-
     @Column(name = "importe_total", nullable = false, precision = 10, scale = 2)
     private BigDecimal importeTotal;
+
+    @Column(name="moneda", length = 20)
+    private String moneda;
+    //********
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_factura", nullable = false, columnDefinition = "varchar(20) default 'VENTA_LOCAL'")
+    private TipoFactura tipoFactura;
 
     @Column(name = "valor_retiva", precision = 10, scale = 2)
     private BigDecimal valorRetIva;
@@ -53,16 +87,10 @@ public class FacturaComp extends Comprobante {
     @Column(name = "valor_retrenta", precision = 10, scale = 2)
     private BigDecimal valorRetRenta;
 
-    @Column(name = "guia_remision", length = 60)
-    private String guiaRemision;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="comprador_id", nullable = false)
     private Cliente comprador;
 
-//    @OrderBy("linea ASC")
-//    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true) // , mappedBy = "factura"
-//    @JoinColumn(name = "factura_id")
     @ElementCollection
     @CollectionTable(name="ct_factura_detalles")
     @OrderColumn(name = "linea")
@@ -95,5 +123,16 @@ public class FacturaComp extends Comprobante {
     @Convert(converter = HashMapConverter.class)
     @Column(name="pagos", length = 4000)
     private Map<String, Pago> pagos;
+
+//    @Column(name = "total_descuento", nullable = false, precision = 10, scale = 2)
+//    private BigDecimal totalDescuento;
+//    @Column(name = "propina", nullable = false, precision = 10, scale = 2)
+//    private BigDecimal propina;
+//    @Column(name = "total_sinimpuestos", nullable = false, precision = 10, scale = 2)
+//    private BigDecimal totalSinImpuestos;
+//    @Column(name = "importe_total", nullable = false, precision = 10, scale = 2)
+//    private BigDecimal importeTotal;
+//    @Column(name = "guia_remision", length = 60)
+//    private String guiaRemision;
 
 }

@@ -20,17 +20,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthServiceImpl implements AuthService  {
 
-    private final UsuarioRepository usuarioRepository;
-
     private final AuthenticationManager authenticationManager;
 
     private final JwtTokenProvider jwtTokenProvider;
 
     public AuthServiceImpl(AuthenticationManager authenticationManager,
-                           UsuarioRepository usuarioRepository,
                            JwtTokenProvider jwtTokenProvider) {
         this.authenticationManager = authenticationManager;
-        this.usuarioRepository = usuarioRepository;
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
@@ -42,7 +38,7 @@ public class AuthServiceImpl implements AuthService  {
         String jwtToken = jwtTokenProvider.generateToken(authentication);
 
         CustomUser principal = (CustomUser) authentication.getPrincipal();
-        return new JWTAuthResponse(jwtToken, principal.getPuntos());
+        return new JWTAuthResponse(principal.getUsuarioId(), jwtToken, null);
     }
 
     @Override
