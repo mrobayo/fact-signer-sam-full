@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Paper from '@mui/material/Paper';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
@@ -6,6 +6,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from '@mui/material/TableRow';
 import TableCell from "@mui/material/TableCell";
 import TableBody from '@mui/material/TableBody';
+import facturaService from "../../../services";
 
 const ColDefinition: {
   label: string;
@@ -23,6 +24,17 @@ const ColDefinition: {
 ];
 
 const FacturaList: React.FC = () => {
+  const service = facturaService;
+  const empresaId = '1100000000001';
+
+  const getAll = async () => {
+    const test = await service.get(`facturas/${empresaId}`);
+    console.log(test);
+  }
+  useEffect(() => {
+    getAll();
+  }, []);
+
   return (
     <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
         <TableContainer sx={{ maxHeight: 440 }}>

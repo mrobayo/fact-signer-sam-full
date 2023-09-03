@@ -12,11 +12,14 @@ import {useNavigate} from "react-router-dom";
 import PopupState from "material-ui-popup-state";
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+import {blueGrey} from '@mui/material/colors';
+
 import {
   bindTrigger,
   bindMenu,
 } from 'material-ui-popup-state/hooks';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import Avatar from "@mui/material/Avatar";
 
 const MainBar: React.FC<{
     open: boolean;
@@ -25,9 +28,11 @@ const MainBar: React.FC<{
   const auth = useAuth();
   const navigate = useNavigate();
   const appTitle = import.meta.env.VITE_APP_TITLE;
+  const { puntoVenta} = auth;
+  const { empresa } = puntoVenta ?? {};
 
   return (
-      <AppBar position="absolute" open={open}>
+      <AppBar position="absolute" open={open} sx={ empresa?.color ? { backgroundColor: empresa?.color }: {}}>
         <Toolbar
           sx={{
             pr: '24px', // keep right padding when drawer closed
@@ -53,8 +58,14 @@ const MainBar: React.FC<{
             noWrap
             sx={{ flexGrow: 1 }}
           >
-              {appTitle}
+              {empresa?.name ?? appTitle} - <small>[{empresa?.ambiente}]</small>
           </Typography>
+          <Avatar sx={{ bgcolor: blueGrey[900] }} variant="square">
+            {puntoVenta?.estab}
+          </Avatar> -
+          <Avatar sx={{ bgcolor: blueGrey[900] }} variant="square">
+            {puntoVenta?.ptoEmi}
+          </Avatar>
           <IconButton color="inherit">
             <Badge badgeContent={0} color="secondary">
               <NotificationsIcon />
@@ -84,7 +95,16 @@ const MainBar: React.FC<{
                       {auth.user}
                     </Button>
                     <Menu {...bindMenu(popupState)}>
-                      {/*<MenuItem onClick={popupState.close}>Profile</MenuItem>*/}
+                      {/*{auth.puntoVenta && (*/}
+                      {/*  <MenuItem*/}
+                      {/*    data-test-id={`P-${auth.puntoVenta.empresaId}`}*/}
+                      {/*    key={`P-${auth.puntoVenta.empresaId}`}*/}
+                      {/*    onClick={() => {*/}
+                      {/*      console.log('punto venta...');*/}
+                      {/*  }}>*/}
+                      {/*    {auth.puntoVenta.empresaId}*/}
+                      {/*  </MenuItem>*/}
+                      {/*)}*/}
                       {/*<MenuItem onClick={popupState.close}>My account</MenuItem>*/}
                       <MenuItem onClick={() => {
                         popupState.close();
