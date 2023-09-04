@@ -1,6 +1,14 @@
 package ec.gob.sri.types;
 
 
+import com.marvic.factsigner.exception.AppException;
+import ec.gob.sri.comprobantes.modelo.LoteXml;
+import ec.gob.sri.comprobantes.modelo.factura.Factura;
+import ec.gob.sri.comprobantes.modelo.guia.GuiaRemision;
+import ec.gob.sri.comprobantes.modelo.notacredito.NotaCredito;
+import ec.gob.sri.comprobantes.modelo.notadebito.NotaDebito;
+import ec.gob.sri.comprobantes.modelo.rentencion.ComprobanteRetencion;
+
 /**
  * TABLA 4 SRI
  * @author mrobayo Dec 24, 2014
@@ -75,5 +83,24 @@ public enum SriTipoDoc {
 		return GENERA_GUIA_REMISION;
 	}
 
+	public Class<?> getJaxbClass() {
+		switch( this ) {
+			case FACTURA:
+				return Factura.class;
+			case RETENCION:
+				return ComprobanteRetencion.class;
+			case NOTACREDITO:
+				return NotaCredito.class;
+			case NOTADEBITO:
+				return NotaDebito.class;
+			case REMISION:
+				return GuiaRemision.class;
+			case LOTE:
+				return LoteXml.class;
+			case LIQCOMPRAS:
+			default:
+				throw new AppException("TIPO DOC NO APLICA PARA JAXB");
+		}
+	}
 
 }

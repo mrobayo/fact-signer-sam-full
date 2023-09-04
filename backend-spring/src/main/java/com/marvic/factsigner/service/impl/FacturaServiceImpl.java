@@ -4,6 +4,8 @@ import com.marvic.factsigner.exception.ResourceExistsException;
 import com.marvic.factsigner.model.comprobantes.FacturaComp;
 import com.marvic.factsigner.model.comprobantes.extra.PuntoVenta;
 import com.marvic.factsigner.model.comprobantes.types.EstadoTipo;
+import com.marvic.factsigner.model.comprobantes.types.InfoFactura;
+import com.marvic.factsigner.model.comprobantes.types.InfoTributaria;
 import com.marvic.factsigner.model.sistema.Cliente;
 import com.marvic.factsigner.model.sistema.Empresa;
 import com.marvic.factsigner.payload.FacturaDTO;
@@ -14,13 +16,14 @@ import ec.gob.sri.types.SriTipoDoc;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.Column;
 import javax.transaction.Transactional;
 
 import static java.math.BigDecimal.ZERO;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
-
 
 
 @Service
@@ -76,32 +79,40 @@ public class FacturaServiceImpl implements FacturaService {
         }
 
         FacturaComp entity = mapToEntity(dto);
+
+        // InfoTributaria
+        modelMapper.map(dto, entity.getInfoTributaria());
+
+        // Basic
+        entity.setPuntoVenta(puntoVenta);
+        entity.setEstadoDoc(EstadoTipo.BORRADOR);
+        entity.setEmailEnviado(false);
+        entity.setAprobador(null);
+
+        // InfoFactura
+        entity.setEmpresa(empresa);
+        entity.getInfoTributaria().setAmbienteSri(empresa.getAmbiente());
+        entity.getInfoTributaria().setTipoDoc(SriTipoDoc.FACTURA);
+
+        entity.setMoneda(empresa.getMoneda());
+        entity.setObligadoContabilidad(empresa.isObligado());
+        entity.setContribuyenteEspecial(empresa.getNumeroContribuyente());
+
+        // Factura
+        entity.setTotalSinImpuestos(ZERO);
         entity.setTotalDescuento(ZERO);
         entity.setPropina(ZERO);
-        entity.setTotalSinImpuestos(ZERO);
         entity.setImporteTotal(ZERO);
 
+        // Comprador
         entity.setComprador(comprador);
-        entity.setEmpresa(puntoVenta.getEmpresa());
-        entity.setPuntoVenta(puntoVenta);
-
-        entity.setEstadoDoc(EstadoTipo.BORRADOR);
-        entity.setTipoDoc(SriTipoDoc.FACTURA);
-        entity.setMoneda(empresa.getMoneda());
-
-        entity.setAmbiente(empresa.getAmbiente());
-        entity.setObligado(empresa.isObligado());
-        entity.setNumeroContribuyente(empresa.getNumeroContribuyente());
-        entity.setEmailEnviado(false);
-
-        entity.setSujetoTipo(comprador.getTipo());
-        entity.setSujetoRazonSocial(comprador.getName());
-        entity.setSujetoIdentidad(comprador.getIdentidad());
-        entity.setSujetoDireccion(comprador.getDireccion());
-        entity.setSujetoTelefono(comprador.getTelefono());
-        entity.setSujetoEmail(comprador.getEmail());
-
-        entity.setAprobador(null);
+        if (comprador != null) {
+            entity.setTipoIdentificacionComprador(comprador.getTipo());
+            entity.setRazonSocialComprador(comprador.getName());
+            entity.setIdentificacionComprador(comprador.getIdentidad());
+            entity.setDireccionComprador(comprador.getDireccion());
+            entity.setSujetoEmail(comprador.getEmail());
+        }
 
         if (entity.getDetalles() != null) {
             entity.getDetalles().forEach((detalle) -> {
@@ -124,7 +135,10 @@ public class FacturaServiceImpl implements FacturaService {
     }
 
     private FacturaComp mapToEntity(FacturaDTO dto) {
-        return modelMapper.map(dto, FacturaComp.class);
+        FacturaComp comp = modelMapper.map(dto, FacturaComp.class);
+        comp.setInfoTributaria(new InfoTributaria());
+        // comp.setInfoFactura(new InfoFactura());
+        return comp;
     }
 
     private FacturaDTO mapToDTO(FacturaComp model){

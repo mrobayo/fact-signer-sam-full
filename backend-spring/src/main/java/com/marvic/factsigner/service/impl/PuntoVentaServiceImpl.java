@@ -40,6 +40,13 @@ public class PuntoVentaServiceImpl implements PuntoVentaService  {
         this.empresaRepository = empresaRepository;
         this.modelMapper = modelMapper;
     }
+
+    @Override
+    public PuntoVentaDTO findPuntoVentaAutorizado(String usuarioId, String empresaId) {
+        PuntoVenta p = puntoVentaRepository
+                .findPuntoVentaAutorizado(usuarioId, empresaId).orElseThrow(() -> new ResourceNotFoundException(String.format("Empresa [%s] no autorizada.", empresaId)));
+        return mapToDTO(p);
+    }
     
     @Override
     public PuntoVentaDTO getOne(String id) {

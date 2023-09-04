@@ -14,4 +14,7 @@ public interface PuntoVentaService {
     void delete(String id);
 
     PuntoVentaDTO update(PuntoVentaDTO dto, String id);
+
+    PuntoVentaDTO findPuntoVentaAutorizado(String usuarioId, String empresaId);
+
 }

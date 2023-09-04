@@ -2,6 +2,7 @@ package com.marvic.factsigner.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -28,6 +29,19 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    //
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorDetails> handleGlobalException(BadCredentialsException exception,
+                                                              WebRequest webRequest){
+        ErrorDetails errorDetails = new ErrorDetails();
+
+        errorDetails.setTimestamp(LocalDateTime.now().toString());
+        errorDetails.setMessage(exception.getMessage());
+        errorDetails.setDetails(webRequest.getDescription(false));
+
+        return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
+    }
+
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorDetails> handleResourceNotFoundException(Exception exception,
                                                               WebRequest webRequest){
@@ -43,7 +57,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ResourceExistsException.class)
-    public ResponseEntity<ErrorDetails> handleResourceExistsException(Exception exception,
+    public ResponseEntity<ErrorDetails> handleResourceExistsException(ResourceExistsException exception,
                                                                         WebRequest webRequest){
         ErrorDetails errorDetails = new ErrorDetails();
 
