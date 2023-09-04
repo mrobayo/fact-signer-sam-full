@@ -25,13 +25,13 @@ import java.util.List;
 public class TestFirma {
 
     String clave = "YVES9837";
-    String certPath = "C:\\home\\ssl\\OPENJSOFTSOFTWARECONSULTING.pfx";
+    String certPath = "/Users/marvic/Home/ssl/OPENJSOFTSOFTWARECONSULTING.pfx";
 
-    File outputDir = new File("C:\\Dev\\OpenJSoft\\signer-ws\\contents\\documentos\\firmados");
+    File outputDir = new File("/Users/marvic/Home/documentos/firmados");
 
     String signedFileName = "factura.signed.xml";
 
-    String fileToSign = "C:\\Dev\\OpenJSoft\\signer-ws\\contents\\documentos\\generados\\0307202301091665655600110010010000000011234567810.xml";
+    String fileToSign = "/Users/marvic/Home/documentos/generados/0307202301091665655600110010010000000011234567810.xml";
 
     private IPKStoreManager getPKStoreManager() {
         IPKStoreManager storeManager = null;

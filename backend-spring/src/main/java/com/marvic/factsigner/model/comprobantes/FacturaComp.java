@@ -31,9 +31,6 @@ public class FacturaComp extends Comprobante {
     @Column(columnDefinition = "uuid", updatable = false)
     private UUID id;
 
-    @Embedded
-    private InfoTributaria infoTributaria;
-
     // @Embedded
     // private InfoFactura infoFactura;
     @Column(name="fecha_emision")

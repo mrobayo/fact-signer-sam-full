@@ -2,6 +2,7 @@ package com.marvic.factsigner.model.comprobantes;
 
 import com.marvic.factsigner.model.comprobantes.extra.PuntoVenta;
 import com.marvic.factsigner.model.comprobantes.types.EstadoTipo;
+import com.marvic.factsigner.model.comprobantes.types.InfoTributaria;
 import com.marvic.factsigner.model.sistema.Empresa;
 import com.marvic.factsigner.model.sistema.Usuario;
 import ec.gob.sri.types.SriAmbiente;
@@ -47,6 +48,9 @@ public class Comprobante {
 
     @Column(name="sujeto_email", length = 100)
     private String sujetoEmail;
+
+    @Embedded
+    private InfoTributaria infoTributaria;
 
     //private AuditObject audit;
     //private List<DatoAdicional> adicionales = new ArrayList<DatoAdicional>();
