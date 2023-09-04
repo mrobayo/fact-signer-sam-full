@@ -48,7 +48,9 @@ public class Model2XML {
 
 
         Factura.InfoFactura f = xml.getInfoFactura();
-        f.setFechaEmision(fmtDMY(entity.getFechaEmision()));
+        if (entity.getFechaEmision() != null) {
+            f.setFechaEmision(fmtDMY(entity.getFechaEmision()));
+        }
         if (empresa.getNumeroContribuyente() != null) {
             f.setContribuyenteEspecial(empresa.getNumeroContribuyente());
         }

@@ -122,9 +122,16 @@ public class FacturaServiceImpl implements FacturaService {
     @Override
     public String buildXml(String id, Authentication auth) {
         FacturaComp entity = getById(id);
-        Factura xml = Model2XML.generarComprobante(entity);
-        String xmlFile = SriUtil.xmlNotSigned(xml, SriTipoDoc.FACTURA);
-        return xmlFile;
+        try {
+            Factura xmlObject = Model2XML.generarComprobante(entity);
+            String xmlContents = SriUtil.xmlNotSigned(xmlObject, SriTipoDoc.FACTURA);
+            //TODO Save file in amazon AWS
+            System.out.println(xmlContents);
+            return xmlContents;
+        } catch (Exception exception) {
+            throw new ComprobanteException(HttpStatus.INTERNAL_SERVER_ERROR, "Generar Comprobante XML - " + exception.getMessage());
+        }
+
         // return entity.getId().toString();
     }
 
