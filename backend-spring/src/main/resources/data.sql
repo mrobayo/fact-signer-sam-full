@@ -14,6 +14,12 @@ insert into si_producto (categoria_id, codigo, codigo_iva, empresa_id, name, uni
 
 insert into si_punto_venta (direccion, empresa_id, estab, pto_emi, telefono, id) values ('.', '1100000000001', '001', '001', '2150012', '1100000000001-001-001');
 
+insert into si_punto_secuencia (punto_venta_id, secuencia, tipo_doc, id) values ('1100000000001-001-001', 1, 'FACTURA', '1100000000001-001-001-FACTURA');
+insert into si_punto_secuencia (punto_venta_id, secuencia, tipo_doc, id) values ('1100000000001-001-001', 1, 'RETENCION', '1100000000001-001-001-RETENCION');
+insert into si_punto_secuencia (punto_venta_id, secuencia, tipo_doc, id) values ('1100000000001-001-001', 1, 'NOTACREDITO', '1100000000001-001-001-NOTACREDITO');
+insert into si_punto_secuencia (punto_venta_id, secuencia, tipo_doc, id) values ('1100000000001-001-001', 1, 'NOTADEBITO', '1100000000001-001-001-NOTADEBITO');
+insert into si_punto_secuencia (punto_venta_id, secuencia, tipo_doc, id) values ('1100000000001-001-001', 1, 'LOTE', '1100000000001-001-001-LOTE');
+
 insert into si_cliente (
  apellidos, ciudad, direccion, email, grupo_id, identidad, name, nombres,
  pais, telefono, tipo, id) values ('Apellidos', 'Guayaquil', 'Direccion', 'factsigner@gmail.com', 'PARTICULAR',

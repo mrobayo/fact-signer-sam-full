@@ -17,7 +17,7 @@ public class ArchivoXML {
     private static final Logger LOG = LoggerFactory.getLogger(ArchivoXML.class);
 
     private static Object getJaxbDocument(Comprobante doc) {
-        if (StringUtils.isBlank(doc.getInfoTributaria().getClaveAcceso())) {
+        if (StringUtils.isBlank(doc.getClaveAcceso())) {
             throw new AppException("CLAVE DE ACCESO ES REQUERIDA");
         }
         try {
@@ -30,7 +30,7 @@ public class ArchivoXML {
     }
 
     private static String guardarDoc(Comprobante entidad) {
-        SriTipoDoc tipoDoc = entidad.getInfoTributaria().getTipoDoc();
+        SriTipoDoc tipoDoc = entidad.getTipoDoc();
         // RepositorioSri repoSri = getRepositorioSri(auth);
 
         // Valida documento
@@ -38,7 +38,7 @@ public class ArchivoXML {
         //SriUtil.validaXml(xmlObject, tipoDoc);
 
         // Generar documento
-        SriUtil.generarXml(xmlObject, tipoDoc, entidad.getInfoTributaria().getClaveAcceso());
+        SriUtil.generarXml(xmlObject, tipoDoc, entidad.getClaveAcceso());
 
         // Firmar documento
         // RutaCert cert = RutaCert.init(getDao().findById(Empresa.class, auth.getEmpresaId()));

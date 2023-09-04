@@ -3,6 +3,7 @@ package com.marvic.factsigner.model.comprobantes;
 import com.marvic.factsigner.model.comprobantes.types.*;
 import com.marvic.factsigner.model.sistema.Cliente;
 import com.marvic.factsigner.util.HashMapConverter;
+import com.marvic.factsigner.util.PagosMapConverter;
 import ec.gob.sri.types.SriEnumIdentidad;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -117,7 +118,7 @@ public class FacturaComp extends Comprobante {
     @Column(name="info_adicional", length = 4000)
     private Map<String, String> infoAdicional;
 
-    @Convert(converter = HashMapConverter.class)
+    @Convert(converter = PagosMapConverter.class)
     @Column(name="pagos", length = 4000)
     private Map<String, Pago> pagos;
 

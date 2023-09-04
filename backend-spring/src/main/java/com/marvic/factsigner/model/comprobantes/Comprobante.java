@@ -23,12 +23,49 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 public class Comprobante {
 
-    @Column(name="numero", length = 20, insertable = false, updatable = false)
+    @Column(name="numero", length = 20)
     private String name;
+
+    @Column(name="empresa_id", insertable = false, updatable = false)
+    protected String ruc;
+
+    public String getEstab() {
+        return name != null ? name.substring(0, 3) : null;
+    }
+
+    public String getPtoEmi() {
+        return name != null ? name.substring(4, 7) : null;
+    }
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20, nullable = false)
+    private SriTipoDoc tipoDoc;
+
+    public String getCodDoc() {
+        return tipoDoc != null ? tipoDoc.value() : null;
+    }
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, columnDefinition = "varchar(20) default 'BORRADOR'")
     private EstadoTipo estadoDoc;
+
+    @Column
+    protected Integer secuencia;
+
+    public String getSecuencial() {
+        return String.format("%09d", secuencia);
+    }
+
+    @Column(name = "clave_acceso", length = 60)
+    protected String claveAcceso;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="ambiente", length = 20, nullable = false)
+    private SriAmbiente ambienteSri;
+
+    public String getAmbiente() {
+        return ambienteSri != null ? ambienteSri.value() : null;
+    }
 
     // Envio lote
     @Column(name = "lote_id", length = 60)
@@ -49,8 +86,8 @@ public class Comprobante {
     @Column(name="sujeto_email", length = 100)
     private String sujetoEmail;
 
-    @Embedded
-    private InfoTributaria infoTributaria;
+//    @Embedded
+//    private InfoTributaria infoTributaria;
 
     //private AuditObject audit;
     //private List<DatoAdicional> adicionales = new ArrayList<DatoAdicional>();
@@ -105,9 +142,13 @@ public class Comprobante {
     @Column(nullable = false)
     private boolean aprobado;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="aprobado_id")
-    private Usuario aprobador;
+    //@ManyToOne(fetch = FetchType.LAZY)
+    //@JoinColumn(name="aprobado_id")
+    @Column(name="aprobado_id", length = 20)
+    private String aprobador;
+
+    @Column(name="fecha_aprobado")
+    private LocalDateTime fechaAprobado;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="empresa_id", nullable = false)

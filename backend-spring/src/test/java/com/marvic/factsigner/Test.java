@@ -12,12 +12,10 @@ public class Test {
 
     public static void main(String[] args) {
         FacturaComp comp = new FacturaComp();
-        comp.setInfoTributaria(new InfoTributaria());
-        comp.getInfoTributaria().setAmbienteSri(SriAmbiente.PRUEBAS);
-        comp.getInfoTributaria().setTipoDoc(SriTipoDoc.FACTURA);
-
-        comp.getInfoTributaria().setName("123-456-000000001");
-        comp.getInfoTributaria().setSecuencia(54321);
+        comp.setAmbienteSri(SriAmbiente.PRUEBAS);
+        comp.setTipoDoc(SriTipoDoc.FACTURA);
+        comp.setName("123-456-000000001");
+        comp.setSecuencia(54321);
 
         ModelMapper mapper = new ModelMapper();
         //Factura xml = new Factura();
