@@ -17,6 +17,12 @@ public class FacturaController {
     @Autowired
     private FacturaService facturaService;
 
+    @GetMapping("build/{id}")
+    public ResponseEntity<FacturaDTO> build(@PathVariable("id") String id) {
+        FacturaDTO dto = facturaService.getOne(id);
+        return ResponseEntity.ok(dto);
+    }
+
     @GetMapping("{id}")
     public ResponseEntity<FacturaDTO> getOne(@PathVariable("id") String id) {
         FacturaDTO dto = facturaService.getOne(id);

@@ -1,6 +1,7 @@
 package com.marvic.factsigner.service.impl;
 
 import com.marvic.factsigner.exception.ResourceExistsException;
+import com.marvic.factsigner.exception.ResourceNotFoundException;
 import com.marvic.factsigner.model.comprobantes.FacturaComp;
 import com.marvic.factsigner.model.comprobantes.extra.PuntoVenta;
 import com.marvic.factsigner.model.comprobantes.types.EstadoTipo;
@@ -51,8 +52,11 @@ public class FacturaServiceImpl implements FacturaService {
 
 
     @Override
-    public FacturaDTO getOne(String id) {
-        return null;
+    public FacturaDTO getOne(String id) {        ;
+        FacturaComp entity = facturaRepository
+                .findById(UUID.fromString(id))
+                .orElseThrow(() -> new ResourceNotFoundException("not found"));;
+        return mapToDTO(entity);
     }
 
     @Override

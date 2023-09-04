@@ -9,7 +9,6 @@ import ec.gob.sri.types.SriTipoDoc;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.event.Level;
 
 import java.io.File;
 
@@ -30,7 +29,7 @@ public class ArchivoXML {
         }
     }
 
-    private static String guardaDoc(Comprobante entidad) {
+    private static String guardarDoc(Comprobante entidad) {
         SriTipoDoc tipoDoc = entidad.getInfoTributaria().getTipoDoc();
         // RepositorioSri repoSri = getRepositorioSri(auth);
 
