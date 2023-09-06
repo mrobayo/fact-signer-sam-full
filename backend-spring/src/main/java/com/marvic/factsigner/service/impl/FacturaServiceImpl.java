@@ -5,7 +5,7 @@ import com.marvic.factsigner.exception.ComprobanteException;
 import com.marvic.factsigner.exception.ResourceExistsException;
 import com.marvic.factsigner.exception.ResourceNotFoundException;
 import com.marvic.factsigner.model.comprobantes.FacturaComp;
-import com.marvic.factsigner.model.comprobantes.Util;
+import com.marvic.factsigner.model.Util;
 import com.marvic.factsigner.model.comprobantes.extra.PuntoSecuencia;
 import com.marvic.factsigner.model.comprobantes.extra.PuntoVenta;
 import com.marvic.factsigner.model.comprobantes.types.EstadoTipo;
@@ -21,6 +21,8 @@ import com.marvic.factsigner.util.Utils;
 import ec.gob.sri.comprobantes.modelo.factura.Factura;
 import com.marvic.factsigner.service.SignerService;
 import ec.gob.sri.types.SriTipoDoc;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -28,9 +30,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
+import software.amazon.awssdk.utils.IoUtils;
 
 import static java.math.BigDecimal.ZERO;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -130,26 +135,34 @@ public class FacturaServiceImpl implements FacturaService {
 
     /**
      * Genera el archivo XML cuando la factura ha sido aprobada
-     * @param id factura Id
-     * @return file path
      */
     @Override
     public String buildXml(String id, Authentication auth) {
         FacturaComp entity = getById(id);
+        Empresa empresa = entity.getEmpresa();
 
-        String url;
+        String xmlContent;
         try {
             Factura xmlObject = Model2XML.generarComprobante(entity);
-            String xmlContent = SriUtil.xmlNotSigned(xmlObject, SriTipoDoc.FACTURA);
+            xmlContent = SriUtil.xmlNotSigned(xmlObject, SriTipoDoc.FACTURA);
+        } catch (Exception exception) {
+            String message = Utils.coalesce(exception.getMessage(), exception.getCause() != null ? exception.getCause().getMessage() : exception.toString());
+            throw new ComprobanteException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al ensamblar XML - " + message);
+        }
 
-            Document document = signerService.signDocument(xmlContent);
+        ImmutablePair<String, InputStream> certificate = Util.getCertificate(empresa);
+
+        String url;
+        try (InputStream inCert = certificate.getRight()) {
+            Document document = signerService.signDocument(xmlContent, inCert, certificate.getLeft());
 
             //Save file in amazon AWS
             String filepath = Util.documentPath(entity, false) + ".signed.xml";
             url = s3Service.saveObject("fact-signer-bucket", filepath, document);
 
         } catch (Exception exception) {
-            throw new ComprobanteException(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
+            String message = Utils.coalesce(exception.getMessage(), exception.getCause() != null ? exception.getCause().getMessage() : exception.toString());
+            throw new ComprobanteException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al firmar XML - " + message);
         }
 
         entity.setDocumentUrl(url);

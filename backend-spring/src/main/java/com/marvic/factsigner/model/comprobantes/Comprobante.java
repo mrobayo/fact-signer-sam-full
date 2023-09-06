@@ -26,7 +26,7 @@ public class Comprobante {
     @Column(name="fecha_emision")
     private LocalDate fechaEmision;
 
-    @Column(name="document_url", length = 100)
+    @Column(name="document_url", length = 300)
     private String documentUrl;
 
     @Column(name="numero", length = 20)

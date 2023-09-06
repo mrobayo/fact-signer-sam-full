@@ -60,6 +60,7 @@ public class Utils {
         return text.replaceAll("[^\\p{ASCII}]", "");
     }
 
+
     private static final DateTimeFormatter SHORT_FMT = DateTimeFormatter.ofPattern("dd/MM/YYYY");
     private static final SimpleDateFormat SHORT_DATE = new SimpleDateFormat("dd/MM/yyyy");
 

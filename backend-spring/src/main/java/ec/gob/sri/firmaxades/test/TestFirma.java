@@ -24,7 +24,7 @@ import java.util.List;
 
 public class TestFirma {
 
-    String clave = "YVES9837";
+    String clave = "";
     String certPath = "/Users/marvic/Home/ssl/OPENJSOFTSOFTWARECONSULTING.pfx";
 
     File outputDir = new File("/Users/marvic/Home/documentos/firmados");

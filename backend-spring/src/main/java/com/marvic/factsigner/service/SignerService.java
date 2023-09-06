@@ -1,5 +1,6 @@
 package com.marvic.factsigner.service;
 
+import com.marvic.factsigner.exception.AppException;
 import ec.gob.sri.firmaxades.test.PassStoreKS;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFicheros;
 import es.mityc.firmaJava.libreria.xades.DataToSign;
@@ -106,24 +107,18 @@ public class SignerService {
         return dataToSign;
     }
 
-    public Document signDocument(String xmlContent) throws ParserConfigurationException, IOException, SAXException {
-        InputStream cert = new FileInputStream("/Users/marvic/Home/ssl/OPENJSOFTSOFTWARECONSULTING.pfx");
-        String clave = "YVES9837";
-        return signDocument(xmlContent, cert, clave);
-    }
-
     public Document signDocument(String xmlContent, InputStream certificateBytes, String password) throws ParserConfigurationException, IOException, SAXException {
         // Obtencion del gestor de claves
         IPKStoreManager storeManager = getPKStoreManager(certificateBytes, password);
         if (storeManager == null) {
-            return null;
+            throw new AppException("Fail to load certificate");
         }
 
         // Obtencion del certificado para firmar. Utilizaremos el primer
         // certificado del almacen.
         X509Certificate certificate = getFirstCertificate(storeManager);
         if (certificate == null) {
-            return null;
+            throw new AppException("Fail to get certificate");
         }
 
         // Obtención de la clave privada asociada al certificado
@@ -131,15 +126,15 @@ public class SignerService {
         try {
             privateKey = storeManager.getPrivateKey(certificate);
         } catch (CertStoreException e) {
-            return null;
+            throw new AppException("Fail to get private key");
         }
 
         // Obtención del provider encargado de las labores criptográficas
         Provider provider = storeManager.getProvider(certificate);
-        System.out.println(" #" + provider.getName() + "# " + provider.getInfo());
+        // System.out.println(" #" + provider.getName() + "# " + provider.getInfo());
         Provider[] providers = Security.getProviders();
         for(int i = 0; i< providers.length; i++) {
-            System.out.println(i + ". #" + providers[i].getName() + "# " + providers[i].getInfo());
+            //System.out.println(i + ". #" + providers[i].getName() + "# " + providers[i].getInfo());
         }
         provider = Security.getProvider("SunRsaSign");
 
@@ -154,20 +149,16 @@ public class SignerService {
          */
         FirmaXML firma = new FirmaXML();
 
-        // Firmamos el documento
+        // Firmar documento
         Document docSigned = null;
         try {
             Object[] res = firma.signFile(certificate, dataToSign, privateKey, provider);
             docSigned = (Document) res[0];
         } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
+            throw new AppException("Fail to sign document");
         }
 
         // Guardamos la firma a un fichero en el home del usuario
-        //ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        //UtilidadFicheros.writeXML(docSigned, outputStream);
-        //byte[] sss = outputStream.toByteArray();
         return docSigned;
     }
 

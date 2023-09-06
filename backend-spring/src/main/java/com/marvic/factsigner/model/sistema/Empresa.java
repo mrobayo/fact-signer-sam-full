@@ -55,7 +55,7 @@ public class Empresa {
     @Column(nullable = false, length = 100)
     private String direccion;
 
-    @Column(length = 300)
+    @Column(length = 8000)
     private String certFile;
 
     @Column(length = 100)
