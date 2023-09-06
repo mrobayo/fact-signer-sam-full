@@ -1,7 +1,7 @@
 package com.marvic.factsigner.controller.sistema;
 
 import com.marvic.factsigner.payload.sistema.CategoriaDTO;
-import com.marvic.factsigner.service.CategoriaService;
+import com.marvic.factsigner.service.sistema.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

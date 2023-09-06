@@ -239,19 +239,44 @@ public class SriUtil {
 	 *
 	 * @param fecha
 	 * @param tipo
-	 * @param rucSujeto
+	 * @param ruc
 	 * @param ambiente
 	 * @param codigoNumerico
 	 * @return
 	 */
-	public static String claveAcceso(Date fecha, SriTipoDoc tipo, String rucSujeto, SriAmbiente ambiente, String serie, String secuencial, String codigoNumerico) {
+	public static String claveAcceso(
+			Date fecha,
+			SriTipoDoc tipo,
+			String ruc,
+			SriAmbiente ambiente,
+			String serie,
+			String secuencial,
+			String codigoNumerico
+	) {
+		return claveAcceso(ddmmyyyy(fecha),
+				tipo, ruc, ambiente, serie, "", secuencial, codigoNumerico);
+	}
+
+	public static String claveAcceso(
+			String fechaDMY,
+			SriTipoDoc tipo,
+			String ruc,
+			SriAmbiente ambiente,
+			String estab,
+			String punto,
+			String secuencial,
+			String codigoNumerico
+	) {
 		StringBuffer clave = new StringBuffer();
 
-		clave.append(ddmmyyyy(fecha));    // 8
+		String dmy = fechaDMY.replaceAll("\\D", ""); //non digit: [^0-9]
+
+		clave.append(dmy);    // 8
 		clave.append(tipo.value());       // 2
-		clave.append(rucSujeto);          //13
+		clave.append(ruc);          //13
 		clave.append(ambiente.value());   // 1
-		clave.append(serie);              // 6
+		clave.append(estab);              // 3
+		clave.append(punto);              // 3
 		clave.append(secuencial);         // 9
 		clave.append(codigoNumerico);     // 8
 		clave.append(1);                  // 1

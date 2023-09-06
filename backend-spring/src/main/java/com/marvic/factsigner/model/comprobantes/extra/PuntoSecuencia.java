@@ -19,6 +19,10 @@ public class PuntoSecuencia {
     @Column(length=40)
     private String id;
 
+    @Version
+    @Column(name="version", columnDefinition = "integer default 0", nullable = false)
+    private Integer version;
+
     @Column(nullable = false, name = "tipo_doc", length = 20)
     @Enumerated(EnumType.STRING)
     private SriTipoDoc tipoDoc;

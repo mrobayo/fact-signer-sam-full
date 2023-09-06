@@ -6,7 +6,7 @@ import com.marvic.factsigner.model.sistema.extra.Unidad;
 import com.marvic.factsigner.model.sistema.types.UnidadTipo;
 import com.marvic.factsigner.payload.sistema.UnidadDTO;
 import com.marvic.factsigner.repository.UnidadRepository;
-import com.marvic.factsigner.service.UnidadService;
+import com.marvic.factsigner.service.sistema.UnidadService;
 import static com.marvic.factsigner.util.Utils.*;
 import org.modelmapper.ModelMapper;
 import com.marvic.factsigner.exception.ResourceNotFoundException;

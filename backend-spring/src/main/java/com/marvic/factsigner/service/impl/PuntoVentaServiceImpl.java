@@ -13,6 +13,7 @@ import com.marvic.factsigner.repository.PuntoVentaRepository;
 import com.marvic.factsigner.repository.EmpresaRepository;
 import com.marvic.factsigner.service.PuntoVentaService;
 
+import com.marvic.factsigner.util.Utils;
 import ec.gob.sri.types.SriTipoDoc;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -125,7 +126,7 @@ public class PuntoVentaServiceImpl implements PuntoVentaService  {
         secuencia.setTipoDoc(tipoDoc);
         secuencia.setSecuencia(1);
         secuencia.setPuntoVenta(puntoVenta);
-        secuencia.setId(String.format("%s-%s", puntoVenta.getId(), tipoDoc.name()));
+        secuencia.setId(Utils.secuenciaId(puntoVenta.getId(), tipoDoc));
 
         return secuencia;
     }

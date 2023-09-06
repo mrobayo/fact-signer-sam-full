@@ -1,6 +1,7 @@
 package com.marvic.factsigner.util;
 
 import com.marvic.factsigner.exception.InvalidKeyException;
+import ec.gob.sri.types.SriTipoDoc;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
@@ -13,6 +14,13 @@ import java.util.Date;
 import java.util.UUID;
 
 public class Utils {
+
+    /**
+     * Secuencia ID
+     */
+    public static String secuenciaId(String puntoVentaId, SriTipoDoc tipo) {
+        return String.format("%s-%s", puntoVentaId, tipo.name());
+    }
 
     public static UUID toUUID(String id) {
         try {
@@ -51,6 +59,7 @@ public class Utils {
 
         return text.replaceAll("[^\\p{ASCII}]", "");
     }
+
 
     private static final DateTimeFormatter SHORT_FMT = DateTimeFormatter.ofPattern("dd/MM/YYYY");
     private static final SimpleDateFormat SHORT_DATE = new SimpleDateFormat("dd/MM/yyyy");

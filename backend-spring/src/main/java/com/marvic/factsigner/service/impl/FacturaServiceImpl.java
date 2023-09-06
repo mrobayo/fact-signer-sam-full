@@ -1,27 +1,43 @@
 package com.marvic.factsigner.service.impl;
 
+import com.marvic.factsigner.service.aws.S3Service;
+import com.marvic.factsigner.exception.ComprobanteException;
 import com.marvic.factsigner.exception.ResourceExistsException;
+import com.marvic.factsigner.exception.ResourceNotFoundException;
 import com.marvic.factsigner.model.comprobantes.FacturaComp;
+import com.marvic.factsigner.model.Util;
+import com.marvic.factsigner.model.comprobantes.extra.PuntoSecuencia;
 import com.marvic.factsigner.model.comprobantes.extra.PuntoVenta;
 import com.marvic.factsigner.model.comprobantes.types.EstadoTipo;
-import com.marvic.factsigner.model.comprobantes.types.InfoFactura;
-import com.marvic.factsigner.model.comprobantes.types.InfoTributaria;
 import com.marvic.factsigner.model.sistema.Cliente;
 import com.marvic.factsigner.model.sistema.Empresa;
 import com.marvic.factsigner.payload.FacturaDTO;
 import com.marvic.factsigner.repository.*;
 import com.marvic.factsigner.service.FacturaService;
+import com.marvic.factsigner.util.Model2XML;
+import com.marvic.factsigner.util.SriUtil;
 import com.marvic.factsigner.util.Utils;
-import ec.gob.sri.types.SriTipoDoc;
-import org.modelmapper.ModelMapper;
-import org.springframework.stereotype.Service;
 
-import javax.persistence.Column;
-import javax.transaction.Transactional;
+import ec.gob.sri.comprobantes.modelo.factura.Factura;
+import com.marvic.factsigner.service.SignerService;
+import ec.gob.sri.types.SriTipoDoc;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.w3c.dom.Document;
+import software.amazon.awssdk.utils.IoUtils;
 
 import static java.math.BigDecimal.ZERO;
 
-import java.math.BigDecimal;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -33,29 +49,135 @@ public class FacturaServiceImpl implements FacturaService {
     private final FacturaRepository facturaRepository;
 
     private final PuntoVentaRepository puntoVentaRepository;
+
+    private final PuntoSecuenciaRepository secuenciaRepository;
+
     private final ClienteRepository clienteRepository;
 
     private final ModelMapper modelMapper;
 
+    private final S3Service s3Service;
+
+    private final SignerService signerService;
+
     public FacturaServiceImpl(
             FacturaRepository facturaRepository,
             PuntoVentaRepository puntoVentaRepository,
+            PuntoSecuenciaRepository secuenciaRepository,
             ClienteRepository clienteRepository,
-            ModelMapper modelMapper
+            ModelMapper modelMapper,
+            S3Service s3Service,
+            SignerService signerService
     ) {
         this.facturaRepository = facturaRepository;
         this.puntoVentaRepository = puntoVentaRepository;
+        this.secuenciaRepository = secuenciaRepository;
         this.clienteRepository = clienteRepository;
         this.modelMapper = modelMapper;
+        this.s3Service = s3Service;
+        this.signerService = signerService;
+    }
+
+    private FacturaComp getById(String id) {
+        return facturaRepository
+                .findById(UUID.fromString(id))
+                .orElseThrow(() -> new ResourceNotFoundException("not found"));
+    }
+
+    private Integer siguienteSecuencia(String puntoVentaId, SriTipoDoc tipo) {
+        PuntoSecuencia punto = secuenciaRepository
+                .lockById(Utils.secuenciaId(puntoVentaId, tipo))
+                .orElseThrow(() -> new ResourceNotFoundException("secuencia not found"));
+
+        Integer secuencia = punto.getSecuencia();
+        punto.setSecuencia( secuencia + 1);
+
+        secuenciaRepository.save(punto);
+        return secuencia;
+    }
+
+    @Override
+    public String approve(String id, Authentication auth) {
+        FacturaComp entity = getById(id);
+        if (entity.isAprobado()) {
+            throw new ComprobanteException(HttpStatus.BAD_REQUEST, "Comprobante ya ha sido aprobado y emitido.");
+        }
+
+        entity.setAprobado(true);
+        entity.setAprobador(auth.getName());
+        entity.setFechaAprobado(LocalDateTime.now().withSecond(0));
+        entity.setSecuencia(siguienteSecuencia(
+                entity.getPuntoVenta().getId(), entity.getTipoDoc())
+        );
+        entity.setFechaEmision(LocalDate.now());
+        entity.setFechaHora(LocalDateTime.now().withSecond(0));
+        entity.setName(String.format("%s-%s-%09d",
+                entity.getPuntoVenta().getEstab(),
+                entity.getPuntoVenta().getPtoEmi(),
+                entity.getSecuencia())
+        );
+        String claveAcceso = SriUtil.claveAcceso(
+                Utils.fmtDMY(entity.getFechaEmision()),
+                entity.getTipoDoc(),
+                entity.getRuc(), // RUC
+                entity.getAmbienteSri(),
+                entity.getPuntoVenta().getEstab(),
+                entity.getPuntoVenta().getPtoEmi(),
+                entity.getSecuencial(),
+                "00000000"
+        );
+        entity.setClaveAcceso( claveAcceso );
+        facturaRepository.save(entity);
+        return "1";
     }
 
 
+
+    /**
+     * Genera el archivo XML cuando la factura ha sido aprobada
+     */
     @Override
+    public String buildXml(String id, Authentication auth) {
+        FacturaComp entity = getById(id);
+        Empresa empresa = entity.getEmpresa();
+
+        String xmlContent;
+        try {
+            Factura xmlObject = Model2XML.generarComprobante(entity);
+            xmlContent = SriUtil.xmlNotSigned(xmlObject, SriTipoDoc.FACTURA);
+        } catch (Exception exception) {
+            String message = Utils.coalesce(exception.getMessage(), exception.getCause() != null ? exception.getCause().getMessage() : exception.toString());
+            throw new ComprobanteException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al ensamblar XML - " + message);
+        }
+
+        ImmutablePair<String, InputStream> certificate = Util.getCertificate(empresa);
+
+        String url;
+        try (InputStream inCert = certificate.getRight()) {
+            Document document = signerService.signDocument(xmlContent, inCert, certificate.getLeft());
+
+            //Save file in amazon AWS
+            String filepath = Util.documentPath(entity, false) + ".signed.xml";
+            url = s3Service.saveObject("fact-signer-bucket", filepath, document);
+
+        } catch (Exception exception) {
+            String message = Utils.coalesce(exception.getMessage(), exception.getCause() != null ? exception.getCause().getMessage() : exception.toString());
+            throw new ComprobanteException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al firmar XML - " + message);
+        }
+
+        entity.setDocumentUrl(url);
+        entity.setEstadoDoc(EstadoTipo.EMITIDO);
+
+        return url;
+    }
+
+    @Override @Transactional(readOnly = true)
     public FacturaDTO getOne(String id) {
-        return null;
+        FacturaComp entity = getById(id);
+        return mapToDTO(entity);
     }
 
-    @Override
+    @Override @Transactional(readOnly = true)
     public List<FacturaDTO> getAllByEmpresaId(String empresaId) {
         List<FacturaDTO> dtoList = facturaRepository
                 .findAllByEmpresaId(empresaId)
@@ -81,7 +203,7 @@ public class FacturaServiceImpl implements FacturaService {
         FacturaComp entity = mapToEntity(dto);
 
         // InfoTributaria
-        modelMapper.map(dto, entity.getInfoTributaria());
+        // modelMapper.map(dto, entity.getInfoTributaria());
 
         // Basic
         entity.setPuntoVenta(puntoVenta);
@@ -91,8 +213,8 @@ public class FacturaServiceImpl implements FacturaService {
 
         // InfoFactura
         entity.setEmpresa(empresa);
-        entity.getInfoTributaria().setAmbienteSri(empresa.getAmbiente());
-        entity.getInfoTributaria().setTipoDoc(SriTipoDoc.FACTURA);
+        entity.setAmbienteSri(empresa.getAmbiente());
+        entity.setTipoDoc(SriTipoDoc.FACTURA);
 
         entity.setMoneda(empresa.getMoneda());
         entity.setObligadoContabilidad(empresa.isObligado());
@@ -136,7 +258,7 @@ public class FacturaServiceImpl implements FacturaService {
 
     private FacturaComp mapToEntity(FacturaDTO dto) {
         FacturaComp comp = modelMapper.map(dto, FacturaComp.class);
-        comp.setInfoTributaria(new InfoTributaria());
+        // comp.setInfoTributaria(new InfoTributaria());
         // comp.setInfoFactura(new InfoFactura());
         return comp;
     }

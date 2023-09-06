@@ -10,7 +10,7 @@ import com.marvic.factsigner.model.sistema.types.ProductoTipo;
 
 import com.marvic.factsigner.payload.sistema.ProductoDTO;
 import com.marvic.factsigner.repository.*;
-import com.marvic.factsigner.service.ProductoService;
+import com.marvic.factsigner.service.sistema.ProductoService;
 import com.marvic.factsigner.util.Utils;
 
 import org.apache.commons.lang3.StringUtils;

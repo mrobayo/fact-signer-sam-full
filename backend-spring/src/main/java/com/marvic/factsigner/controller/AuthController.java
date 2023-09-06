@@ -1,13 +1,11 @@
 package com.marvic.factsigner.controller;
 
-import com.marvic.factsigner.model.comprobantes.extra.PuntoVenta;
 import com.marvic.factsigner.payload.auth.JWTAuthResponse;
 import com.marvic.factsigner.payload.auth.LoginDto;
 import com.marvic.factsigner.payload.auth.RegisterDto;
 import com.marvic.factsigner.payload.sistema.PuntoVentaDTO;
-import com.marvic.factsigner.service.AuthService;
+import com.marvic.factsigner.service.sistema.AuthService;
 import com.marvic.factsigner.service.PuntoVentaService;
-import com.marvic.factsigner.service.UsuarioService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

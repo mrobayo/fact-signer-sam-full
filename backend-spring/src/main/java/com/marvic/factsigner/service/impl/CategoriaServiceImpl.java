@@ -7,7 +7,7 @@ import com.marvic.factsigner.model.sistema.extra.Categoria;
 import com.marvic.factsigner.payload.sistema.CategoriaDTO;
 import com.marvic.factsigner.repository.CategoriaRepository;
 import com.marvic.factsigner.repository.EmpresaRepository;
-import com.marvic.factsigner.service.CategoriaService;
+import com.marvic.factsigner.service.sistema.CategoriaService;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 
