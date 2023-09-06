@@ -3,10 +3,9 @@ package com.marvic.factsigner.service.impl;
 import com.marvic.factsigner.payload.auth.JWTAuthResponse;
 import com.marvic.factsigner.payload.auth.LoginDto;
 import com.marvic.factsigner.payload.auth.RegisterDto;
-import com.marvic.factsigner.repository.UsuarioRepository;
 import com.marvic.factsigner.security.CustomUser;
 import com.marvic.factsigner.security.JwtTokenProvider;
-import com.marvic.factsigner.service.AuthService;
+import com.marvic.factsigner.service.sistema.AuthService;
 
 import org.apache.commons.lang3.NotImplementedException;
 

@@ -4,7 +4,7 @@ import com.marvic.factsigner.exception.ResourceExistsException;
 import com.marvic.factsigner.model.sistema.Empresa;
 import com.marvic.factsigner.payload.sistema.EmpresaDTO;
 import com.marvic.factsigner.repository.EmpresaRepository;
-import com.marvic.factsigner.service.EmpresaService;
+import com.marvic.factsigner.service.sistema.EmpresaService;
 import ec.gob.sri.types.SriAmbiente;
 import static org.apache.commons.lang3.StringUtils.trim;
 import org.modelmapper.ModelMapper;

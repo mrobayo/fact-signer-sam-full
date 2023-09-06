@@ -4,7 +4,7 @@ import es.mityc.javasign.pkstore.IPassStoreKS;
 
 import java.security.cert.X509Certificate;
 
-class PassStoreKS implements IPassStoreKS {
+public class PassStoreKS implements IPassStoreKS {
 
 	/** Contraseña de acceso al almacén. */
 	private transient String password;
@@ -13,7 +13,7 @@ class PassStoreKS implements IPassStoreKS {
 	 * <p>Crea una instancia con la contraseña que se utilizará con el almacén relacionado.</p>
 	 * @param pass Contraseña del almacén
 	 */
-	PassStoreKS(final String pass) {
+	public PassStoreKS(final String pass) {
 		this.password = new String(pass);
 	}
 

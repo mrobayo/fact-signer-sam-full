@@ -9,7 +9,7 @@ import com.marvic.factsigner.model.sistema.extra.Grupo;
 import com.marvic.factsigner.payload.sistema.GrupoDTO;
 import com.marvic.factsigner.repository.ClienteRepository;
 import com.marvic.factsigner.repository.GrupoRepository;
-import com.marvic.factsigner.service.GrupoService;
+import com.marvic.factsigner.service.sistema.GrupoService;
 import com.marvic.factsigner.util.Utils;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;

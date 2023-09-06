@@ -1,9 +1,11 @@
 package com.marvic.factsigner.service.impl;
 
+import com.marvic.factsigner.service.aws.S3Service;
 import com.marvic.factsigner.exception.ComprobanteException;
 import com.marvic.factsigner.exception.ResourceExistsException;
 import com.marvic.factsigner.exception.ResourceNotFoundException;
 import com.marvic.factsigner.model.comprobantes.FacturaComp;
+import com.marvic.factsigner.model.comprobantes.Util;
 import com.marvic.factsigner.model.comprobantes.extra.PuntoSecuencia;
 import com.marvic.factsigner.model.comprobantes.extra.PuntoVenta;
 import com.marvic.factsigner.model.comprobantes.types.EstadoTipo;
@@ -17,6 +19,7 @@ import com.marvic.factsigner.util.SriUtil;
 import com.marvic.factsigner.util.Utils;
 
 import ec.gob.sri.comprobantes.modelo.factura.Factura;
+import com.marvic.factsigner.service.SignerService;
 import ec.gob.sri.types.SriTipoDoc;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -24,6 +27,7 @@ import org.springframework.security.core.Authentication;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.w3c.dom.Document;
 
 import static java.math.BigDecimal.ZERO;
 
@@ -47,18 +51,26 @@ public class FacturaServiceImpl implements FacturaService {
 
     private final ModelMapper modelMapper;
 
+    private final S3Service s3Service;
+
+    private final SignerService signerService;
+
     public FacturaServiceImpl(
             FacturaRepository facturaRepository,
             PuntoVentaRepository puntoVentaRepository,
             PuntoSecuenciaRepository secuenciaRepository,
             ClienteRepository clienteRepository,
-            ModelMapper modelMapper
+            ModelMapper modelMapper,
+            S3Service s3Service,
+            SignerService signerService
     ) {
         this.facturaRepository = facturaRepository;
         this.puntoVentaRepository = puntoVentaRepository;
         this.secuenciaRepository = secuenciaRepository;
         this.clienteRepository = clienteRepository;
         this.modelMapper = modelMapper;
+        this.s3Service = s3Service;
+        this.signerService = signerService;
     }
 
     private FacturaComp getById(String id) {
@@ -114,6 +126,8 @@ public class FacturaServiceImpl implements FacturaService {
         return "1";
     }
 
+
+
     /**
      * Genera el archivo XML cuando la factura ha sido aprobada
      * @param id factura Id
@@ -122,17 +136,26 @@ public class FacturaServiceImpl implements FacturaService {
     @Override
     public String buildXml(String id, Authentication auth) {
         FacturaComp entity = getById(id);
+
+        String url;
         try {
             Factura xmlObject = Model2XML.generarComprobante(entity);
-            String xmlContents = SriUtil.xmlNotSigned(xmlObject, SriTipoDoc.FACTURA);
-            //TODO Save file in amazon AWS
-            System.out.println(xmlContents);
-            return xmlContents;
+            String xmlContent = SriUtil.xmlNotSigned(xmlObject, SriTipoDoc.FACTURA);
+
+            Document document = signerService.signDocument(xmlContent);
+
+            //Save file in amazon AWS
+            String filepath = Util.documentPath(entity, false) + ".signed.xml";
+            url = s3Service.saveObject("fact-signer-bucket", filepath, document);
+
         } catch (Exception exception) {
-            throw new ComprobanteException(HttpStatus.INTERNAL_SERVER_ERROR, "Generar Comprobante XML - " + exception.getMessage());
+            throw new ComprobanteException(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
         }
 
-        // return entity.getId().toString();
+        entity.setDocumentUrl(url);
+        entity.setEstadoDoc(EstadoTipo.EMITIDO);
+
+        return url;
     }
 
     @Override @Transactional(readOnly = true)

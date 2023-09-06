@@ -23,6 +23,12 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 public class Comprobante {
 
+    @Column(name="fecha_emision")
+    private LocalDate fechaEmision;
+
+    @Column(name="document_url", length = 100)
+    private String documentUrl;
+
     @Column(name="numero", length = 20)
     private String name;
 
