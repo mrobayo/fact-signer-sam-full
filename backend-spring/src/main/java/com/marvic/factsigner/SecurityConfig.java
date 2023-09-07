@@ -87,7 +87,6 @@ public class SecurityConfig {
                         //authorize.anyRequest().authenticated()
                         authorize
                                 .mvcMatchers("/auth/**").permitAll()
-                                .mvcMatchers("/usuarios/**").permitAll()
                                 .anyRequest().authenticated()
 
                                 //.requestMatchers(HttpMethod.GET, "/api/**").permitAll()

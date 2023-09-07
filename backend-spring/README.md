@@ -39,7 +39,8 @@ https://github.com/awslabs/aws-advanced-jdbc-wrapper/blob/main/examples/SpringHi
 # Docker
   - https://docs.aws.amazon.com/corretto/latest/corretto-11-ug/docker-install.html
   - Build the new image `docker build -t fact-signer .` 
-  - Run the new image. `docker run fact-signer`
+  - Run the new image. `docker run -dp 8081:8081 fact-signer`
+  - Run It: `docker run -it -p 8081:8081 fact-signer`
 
   - ECR / ViewPush commands.
     1. Authentication token and authenticate your Docker client
