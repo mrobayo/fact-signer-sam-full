@@ -67,6 +67,13 @@
 			<optional>true</optional>
 		</dependency>
 
+		<!-- AWS Advanced JDBC Driver https://github.com/awslabs/aws-advanced-jdbc-wrapper -->
+		<dependency>
+			<groupId>software.amazon.jdbc</groupId>
+			<artifactId>aws-advanced-jdbc-wrapper</artifactId>
+			<version>2.2.4</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
