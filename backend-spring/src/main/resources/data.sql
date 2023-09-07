@@ -13,7 +13,8 @@ values ('EMPRESA DEMO', 'Padre Hurtado y Alejo Lascano', 'EMPRESA DEMO S.A.', 12
 
 insert into si_categoria (empresa_id, name, id) values ('1100000000001', 'BASICO', 1);
 
-insert into si_producto (categoria_id, codigo, codigo_iva, empresa_id, name, unidad_venta_id, vendido, id) values (1, '101', 2, '1100000000001', 'LAPIZ', 'UN', true, gen_random_uuid());
+--insert into si_producto (categoria_id, codigo, codigo_iva, empresa_id, name, unidad_venta_id, vendido, id) values (1, '101', 2, '1100000000001', 'LAPIZ', 'UN', true, gen_random_uuid());
+insert into si_producto (categoria_id, codigo, codigo_iva, empresa_id, name, unidad_venta_id, vendido, id) values (1, '101', 2, '1100000000001', 'LAPIZ', 'UN', true, 'c0c0a000-0000-4000-a000-000000000000');
 
 insert into si_punto_venta (direccion, empresa_id, estab, pto_emi, telefono, id) values ('.', '1100000000001', '001', '001', '2150012', '1100000000001-001-001');
 
