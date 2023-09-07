@@ -70,7 +70,7 @@ public class ClaveDeAcceso {
 	 */
 	private int generaDigitoModulo11(String cadena) {
 		int baseMultiplicador = 7;
-		//System.out.println((new StringBuilder()).append("CADENA-->")
+		// out.println((new StringBuilder()).append("CADENA-->")
 		//		.append(cadena).toString());
 		int aux[] = new int[cadena.length()];
 		int multiplicador = 2;

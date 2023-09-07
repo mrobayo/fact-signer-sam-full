@@ -59,18 +59,4 @@ public class AesCipher {
         return null;
     }
 
-//    public static void main(String[] args) {
-//        final String secretKey = "secrete";
-//
-//        String originalString = "javaguides";
-//
-//        AesCipher aesEncryptionDecryption = new AesCipher(secretKey);
-//        String encryptedString = aesEncryptionDecryption.encrypt(originalString);
-//        String decryptedString = aesEncryptionDecryption.decrypt(encryptedString);
-//
-//        System.out.println(originalString);
-//        System.out.println(encryptedString);
-//        System.out.println(decryptedString);
-//    }
-
 }

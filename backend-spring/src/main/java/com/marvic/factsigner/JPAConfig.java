@@ -22,7 +22,7 @@ public class JPAConfig {
     @Bean
     @ConfigurationProperties("spring.datasource")
     public HikariDataSource dataSourceDefault() {
-        // System.out.println(" ******  ****** DEFAULT: H2 ****** ****** ");
+        // out.println(" ******  ****** DEFAULT: H2 ****** ****** ");
         return DataSourceBuilder
                 .create() .type(HikariDataSource.class) .build();
     }
@@ -32,7 +32,7 @@ public class JPAConfig {
     @Bean
     @ConfigurationProperties("spring.prod.datasource")
     public HikariDataSource dataSourceProd() {
-        // System.out.println(" ******  ****** PROD: AWS ****** ****** ");
+        // out.println(" ******  ****** PROD: AWS ****** ****** ");
         return DataSourceBuilder
                 .create() .type(HikariDataSource.class) .build();
     }
@@ -42,7 +42,7 @@ public class JPAConfig {
     @Bean
     @ConfigurationProperties("spring.dev.datasource")
     public HikariDataSource dataSourceDev() {
-        // System.out.println(" ******  ****** DEV: DOCKER ****** ****** ");
+        // out.println(" ******  ****** DEV: DOCKER ****** ****** ");
         return DataSourceBuilder
                 .create() .type(HikariDataSource.class) .build();
     }
@@ -52,7 +52,7 @@ public class JPAConfig {
     @Bean
     @ConfigurationProperties("spring.local.datasource")
     public HikariDataSource dataSourceLocal() {
-        // System.out.println(" ******  ****** LOCAL: --- ****** ****** ");
+        // out.println(" ******  ****** LOCAL: --- ****** ****** ");
         return DataSourceBuilder
                 .create() .type(HikariDataSource.class).build();
     }
