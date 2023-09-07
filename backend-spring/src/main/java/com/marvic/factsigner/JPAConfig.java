@@ -18,12 +18,21 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 public class JPAConfig {
 
+    @Profile("default")
+    @Bean
+    @ConfigurationProperties("spring.datasource")
+    public HikariDataSource dataSourceDefault() {
+        // System.out.println(" ******  ****** DEFAULT: H2 ****** ****** ");
+        return DataSourceBuilder
+                .create() .type(HikariDataSource.class) .build();
+    }
+
     // AWS
     @Profile("prod")
     @Bean
     @ConfigurationProperties("spring.prod.datasource")
     public HikariDataSource dataSourceProd() {
-        // System.out.println(" ******  ****** PROD ****** ****** ");
+        // System.out.println(" ******  ****** PROD: AWS ****** ****** ");
         return DataSourceBuilder
                 .create() .type(HikariDataSource.class) .build();
     }
@@ -33,7 +42,7 @@ public class JPAConfig {
     @Bean
     @ConfigurationProperties("spring.dev.datasource")
     public HikariDataSource dataSourceDev() {
-        // System.out.println(" ******  ****** DEV ****** ****** ");
+        // System.out.println(" ******  ****** DEV: DOCKER ****** ****** ");
         return DataSourceBuilder
                 .create() .type(HikariDataSource.class) .build();
     }
@@ -43,7 +52,7 @@ public class JPAConfig {
     @Bean
     @ConfigurationProperties("spring.local.datasource")
     public HikariDataSource dataSourceLocal() {
-        // System.out.println(" ******  ****** LOCAL ****** ****** ");
+        // System.out.println(" ******  ****** LOCAL: --- ****** ****** ");
         return DataSourceBuilder
                 .create() .type(HikariDataSource.class).build();
     }
