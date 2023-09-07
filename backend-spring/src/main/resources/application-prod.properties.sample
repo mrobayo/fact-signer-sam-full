@@ -1,0 +1,12 @@
+# Production profile
+
+spring.prod.datasource.jdbc-url =
+spring.prod.datasource.driver-class-name: software.amazon.jdbc.Driver
+spring.prod.datasource.username =
+spring.prod.datasource.password =
+spring.prod.datasource.maximum-pool-size=20
+spring.prod.datasource.hikari.data-source-properties.wrapperPlugins = iam,failover,efm
+spring.prod.datasource.hikari.data-source-properties.iamRegion = us-east-1
+spring.prod.datasource.hikari.data-source-properties.iamExpiration = 1320
+spring.prod.datasource.hikari.exception-override-class-name =  software.amazon.jdbc.util.HikariCPSQLException
+spring.prod.datasource.hikari.max-lifetime = 1260000
