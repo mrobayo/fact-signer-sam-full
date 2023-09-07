@@ -18,18 +18,32 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 public class JPAConfig {
 
+    // AWS
     @Profile("prod")
     @Bean
     @ConfigurationProperties("spring.prod.datasource")
     public HikariDataSource dataSourceProd() {
+        // System.out.println(" ******  ****** PROD ****** ****** ");
         return DataSourceBuilder
-                .create() .type(HikariDataSource.class).build();
+                .create() .type(HikariDataSource.class) .build();
     }
 
+    // Intent for Docker
+    @Profile("dev")
+    @Bean
+    @ConfigurationProperties("spring.dev.datasource")
+    public HikariDataSource dataSourceDev() {
+        // System.out.println(" ******  ****** DEV ****** ****** ");
+        return DataSourceBuilder
+                .create() .type(HikariDataSource.class) .build();
+    }
+
+    // Local PC
     @Profile("local")
     @Bean
     @ConfigurationProperties("spring.local.datasource")
     public HikariDataSource dataSourceLocal() {
+        // System.out.println(" ******  ****** LOCAL ****** ****** ");
         return DataSourceBuilder
                 .create() .type(HikariDataSource.class).build();
     }
