@@ -5,8 +5,16 @@
  */
 package com.marvic.factsigner.payload;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.Map;
 
+@NoArgsConstructor
+@Getter
+@Setter
 public class ExceptionResponse {
 
   private Integer status;
@@ -18,48 +26,9 @@ public class ExceptionResponse {
   public ExceptionResponse(int status, Map<String, Object> errorAttributes) {
     this.setStatus(status);
     this.setPath((String) errorAttributes.get("path"));
-    this.setErrorMessage((String) errorAttributes.get("message"));
+    this.setErrorMessage((String) errorAttributes.get("error"));
     this.setTimeStamp(errorAttributes.get("timestamp").toString());
     this.setTrace((String) errorAttributes.get("trace"));
   }
 
-  public Integer getStatus() {
-    return status;
-  }
-
-  private void setStatus(Integer status) {
-    this.status = status;
-  }
-
-  public String getErrorMessage() {
-    return errorMessage;
-  }
-
-  private void setErrorMessage(String errorMessage) {
-    this.errorMessage = errorMessage;
-  }
-
-  public String getTimeStamp() {
-    return timeStamp;
-  }
-
-  private void setTimeStamp(String timeStamp) {
-    this.timeStamp = timeStamp;
-  }
-
-  public String getTrace() {
-    return trace;
-  }
-
-  private void setTrace(String trace) {
-    this.trace = trace;
-  }
-
-  public String getPath() {
-    return path;
-  }
-
-  private void setPath(String path) {
-    this.path = path;
-  }
 }
