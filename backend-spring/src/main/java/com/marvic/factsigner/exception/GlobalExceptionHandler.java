@@ -7,8 +7,11 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -68,6 +71,14 @@ public class GlobalExceptionHandler {
         errorDetails.setDetails(webRequest.getDescription(false));
 
         return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler({NoHandlerFoundException.class})
+    public ResponseEntity<ErrorDetails> handleNoHandlerFoundException(
+            NoHandlerFoundException ex, WebRequest httpServletRequest) {
+        ErrorDetails errorDetails = new ErrorDetails();
+        errorDetails.setMessage("Not found");
+        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND); // ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(apiErrorResponse);
     }
 
     @ExceptionHandler(APIException.class)
