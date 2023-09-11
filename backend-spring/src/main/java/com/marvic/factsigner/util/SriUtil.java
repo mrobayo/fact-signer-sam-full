@@ -327,9 +327,6 @@ public class SriUtil {
 		if (a != b) {
 			throw new AppException("%s != %s", a, b);
 		}
-		else {
-			//System.out.println(cadena + " OK" );
-		}
 	}
 
 	/**

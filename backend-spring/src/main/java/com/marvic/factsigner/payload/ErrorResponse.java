@@ -1,4 +1,4 @@
-package com.marvic.factsigner.exception;
+package com.marvic.factsigner.payload;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ErrorDetails {
+public class ErrorResponse {
 
     private int status;
     private String path;

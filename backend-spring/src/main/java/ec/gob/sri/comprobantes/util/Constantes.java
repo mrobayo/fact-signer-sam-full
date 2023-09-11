@@ -1,10 +1,6 @@
 package ec.gob.sri.comprobantes.util;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Properties;
 
 public class Constantes {
     public static final String JDBC_CLASS = "org.hsqldb.jdbcDriver";
@@ -58,28 +54,4 @@ public class Constantes {
     public static final int INTENTOS_CONEXION_WS = 3;
     public static final int INTENTOS_RESPUESTA_AUTORIZACION_WS = 5;
 
-    public Constantes() {
-    }
-
-    public static void cargarJDC() throws ClassNotFoundException {
-        Class.forName("org.hsqldb.jdbcDriver");
-    }
-
-    public static String obtenerUrlBD() {
-        Properties props = new Properties();
-        String home = System.getProperty("user.home");
-        System.out.println(" user.home " + home);
-        String urlBD = null;
-
-        try {
-            props.load(new FileInputStream(home + "/comprobantes.properties"));
-            urlBD = props.getProperty("database");
-            System.out.println(" obtenerUrlBD()  urlDB " + urlBD);
-            return urlBD;
-        } catch (FileNotFoundException var4) {
-            return null;
-        } catch (IOException var5) {
-            return null;
-        }
-    }
 }

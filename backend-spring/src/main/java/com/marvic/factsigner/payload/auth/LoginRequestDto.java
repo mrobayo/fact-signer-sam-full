@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginDto {
+public class LoginRequestDto {
 
     @NotBlank @Size(min = 3)
     private String username; // OrEmail

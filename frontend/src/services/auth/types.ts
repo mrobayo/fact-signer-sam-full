@@ -25,8 +25,14 @@ export type PuntoVentaType = {
     empresa: EmpresaType;
 };
 
+export interface UserProfileType {
+  login: string;
+  email: string;
+  roles: string[];
+}
+
 export interface AuthContextType {
-  user: any;
+  user: UserProfileType|null;
   puntoVenta: PuntoVentaType; // Punto de venta
   error?: string;
   signin: (user: string, password: string, empresaId: string, callback: VoidFunction) => void;

@@ -5,6 +5,7 @@ import software.amazon.awssdk.utils.IoUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.PrintStream;
 import java.util.Base64;
 
 public class TestBase64 {
@@ -14,9 +15,11 @@ public class TestBase64 {
         try (InputStream in = new FileInputStream(f)) {
             byte[] sourceBytes = IoUtils.toByteArray(in);
             String encodedString = Base64.getEncoder().encodeToString(sourceBytes);
-            System.out.println("---");
-            System.out.println(encodedString);
-            System.out.println("---");
+
+            PrintStream out = System.out;
+            out.println("---");
+            out.println(encodedString);
+            out.println("---");
         } catch(Exception e) {
             e.printStackTrace();
         }

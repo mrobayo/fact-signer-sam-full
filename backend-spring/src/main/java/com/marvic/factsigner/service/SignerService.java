@@ -131,10 +131,10 @@ public class SignerService {
 
         // Obtención del provider encargado de las labores criptográficas
         Provider provider = storeManager.getProvider(certificate);
-        // System.out.println(" #" + provider.getName() + "# " + provider.getInfo());
+        // out.println(" #" + provider.getName() + "# " + provider.getInfo());
         Provider[] providers = Security.getProviders();
         for(int i = 0; i< providers.length; i++) {
-            //System.out.println(i + ". #" + providers[i].getName() + "# " + providers[i].getInfo());
+            // out.println(i + ". #" + providers[i].getName() + "# " + providers[i].getInfo());
         }
         provider = Security.getProvider("SunRsaSign");
 

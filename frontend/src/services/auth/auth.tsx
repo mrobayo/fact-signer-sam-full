@@ -1,9 +1,12 @@
 import React from "react";
 import axios from "axios";
-import {type AuthContextType, PuntoVentaType} from './types';
+import {type AuthContextType, PuntoVentaType, UserProfileType} from './types';
+import {ApiEndpoint} from "../../constants.ts";
 
 interface AuthLoginResponse {
   accessToken: string;
+  email: string;
+  roles: string[];
   puntoVenta: PuntoVentaType;
   tokenType: string;
 }
@@ -14,7 +17,7 @@ interface AuthLoginResponse {
 export const jwtAuthProvider = {
   isAuthenticated: false,
   async signin(username: string, password: string, empresaId: string, callback: (data: AuthLoginResponse) => void) {
-    const { data } = await axios.post('http://localhost:8081/api/auth/login', {username, password, empresaId}); // console.log(user, password);
+    const { data } = await axios.post(`${ApiEndpoint}/auth/login`, {username, password, empresaId}); // console.log(user, password);
     jwtAuthProvider.isAuthenticated = true;
     callback(data); // async
   },
@@ -27,9 +30,10 @@ export const jwtAuthProvider = {
 type LoginState = Omit<AuthContextType, "signin"|"signout">;
 
 function loadAuthContext(): LoginState {
-  const user = localStorage.getItem('login');
+  let user;
   let puntoVenta;
   try {
+    user = JSON.parse(localStorage.getItem('login') ?? '');
     puntoVenta = JSON.parse(localStorage.getItem('punto') ?? '');
   } catch (_) {
     //
@@ -44,10 +48,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signin = (newUser: string, password: string, empresaId: string, loginPageCallback: VoidFunction) => {
     jwtAuthProvider.signin(newUser, password, empresaId,(data: AuthLoginResponse) => {
-      localStorage.setItem('login', newUser);
+      const user: UserProfileType = {login: newUser, email: data.email, roles: data.roles};
+      localStorage.setItem('login', JSON.stringify(user));
       localStorage.setItem('punto', JSON.stringify(data.puntoVenta));
       localStorage.setItem('token', data.accessToken);
-      setLogin({ user: newUser, puntoVenta: data.puntoVenta });
+      setLogin({ user, puntoVenta: data.puntoVenta });
       loginPageCallback();
     }).catch((error: any) => {
         setLogin({
@@ -60,8 +65,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
    const signout = (callback: VoidFunction) => {
     return jwtAuthProvider.signout(() => {
-      setLogin({ user: null, puntoVenta: {} as PuntoVentaType });
       localStorage.removeItem('login');
+      localStorage.removeItem('punto');
+      localStorage.removeItem('token');
+      setLogin({ user: null, puntoVenta: {} as PuntoVentaType });
       callback();
     });
   };

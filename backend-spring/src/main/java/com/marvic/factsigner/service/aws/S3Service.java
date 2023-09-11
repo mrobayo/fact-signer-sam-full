@@ -8,7 +8,6 @@ import es.mityc.firmaJava.libreria.utilidades.UtilidadFicheros;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
-import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
@@ -26,7 +25,7 @@ public class S3Service {
     public void init(Region awsRegion) {
         this.s3Client = S3Client.builder()
                 .region(awsRegion)
-                .credentialsProvider(ProfileCredentialsProvider.create("default"))
+                //.credentialsProvider(Credentials) //(ProfileCredentialsProvider.create("default"))
                 .build();
     }
 

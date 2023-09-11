@@ -124,6 +124,7 @@ public class TestFirma {
     }
 
     public String execute() throws ParserConfigurationException, IOException, SAXException {
+        PrintStream out = System.out;
 
         // Obtencion del gestor de claves
         IPKStoreManager storeManager = getPKStoreManager();
@@ -148,10 +149,10 @@ public class TestFirma {
 
         // Obtención del provider encargado de las labores criptográficas
         Provider provider = storeManager.getProvider(certificate);
-        System.out.println(" #" + provider.getName() + "# " + provider.getInfo());
+        out.println(" #" + provider.getName() + "# " + provider.getInfo());
         Provider[] providers = Security.getProviders();
         for(int i = 0; i< providers.length; i++) {
-            System.out.println(i + ". #" + providers[i].getName() + "# " + providers[i].getInfo());
+            out.println(i + ". #" + providers[i].getName() + "# " + providers[i].getInfo());
         }
         provider = Security.getProvider("SunRsaSign");
 
@@ -179,7 +180,6 @@ public class TestFirma {
         // Guardamos la firma a un fichero en el home del usuario
         File f = getFilePath();
         String filePath = f.getAbsolutePath();
-        //System.out.println("Firma salvada en: " + filePath);
 
         saveDocumentToFile(docSigned, f);
         return filePath;
@@ -190,11 +190,10 @@ public class TestFirma {
         List<X509Certificate> certs = null;
 
         try {
-//        	List<X509Certificate> pub = storeManager.getPublicCertificates();
-//        	System.out.println(pub.size());
-//
-//        	List<X509Certificate> tru = storeManager.getTrustCertificates();
-//        	System.out.println(tru.size());
+            // List<X509Certificate> pub = storeManager.getPublicCertificates();
+            // out.println(pub.size());
+            // List<X509Certificate> tru = storeManager.getTrustCertificates();
+            // out.println(tru.size());
 
             certs = storeManager.getSignCertificates();
 
@@ -213,12 +212,12 @@ public class TestFirma {
     }
 
     public void testFirma() {
+        PrintStream out = System.out;
         try {
             String result = execute();
-            System.out.println(result);
+            out.println(result);
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println(e);
         }
     }
 

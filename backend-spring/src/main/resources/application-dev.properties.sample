@@ -1,0 +1,7 @@
+# Development profile
+
+spring.dev.datasource.jdbc-url = jdbc:postgresql://localhost:5432/test
+spring.dev.datasource.username = admin
+spring.dev.datasource.password =
+spring.dev.datasource.maximum-pool-size=20
+
