@@ -8,8 +8,11 @@ import Drawer from "../Drawer/Drawer.tsx";
 import * as React from "react";
 import {useNavigate} from "react-router-dom";
 import SideMenuButton from "./SideMenuButton/SideMenuButton.tsx";
-import DashboardIcon from "@mui/icons-material/Dashboard";
 import {useAuth} from "../../../services/auth/useAuth.ts";
+import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined';
+import RequestQuoteOutlinedIcon from '@mui/icons-material/RequestQuoteOutlined';
+import AssignmentReturnedOutlinedIcon from '@mui/icons-material/AssignmentReturnedOutlined';
+import AssignmentReturnOutlinedIcon from '@mui/icons-material/AssignmentReturnOutlined';
 
 const SideMenu: React.FC<{
     open: boolean;
@@ -19,13 +22,16 @@ const SideMenu: React.FC<{
   const navigate = useNavigate();
 
   const mainListItems = <>
-        <SideMenuButton primary="Facturas" icon={<DashboardIcon />} onClick={() => {
+        <SideMenuButton primary="Facturas" icon={<ReceiptOutlinedIcon />} onClick={() => {
           navigate("/facturas");
         }} />
-        <SideMenuButton primary="Notas Credito" icon={<DashboardIcon />} onClick={() => {
+        <SideMenuButton primary="Retenciones" icon={<RequestQuoteOutlinedIcon />} onClick={() => {
+          navigate("/retenciones");
+        }} />
+        <SideMenuButton primary="Notas Credito" icon={<AssignmentReturnedOutlinedIcon />} onClick={() => {
           navigate("/notas-credito");
         }} />
-      <SideMenuButton primary="Notas Debito" icon={<DashboardIcon />} onClick={() => {
+      <SideMenuButton primary="Notas Debito" icon={<AssignmentReturnOutlinedIcon />} onClick={() => {
           navigate("/notas-debito");
         }} />
         {/*<SideMenuButton primary="Orders" icon={<ShoppingCartIcon />} />*/}

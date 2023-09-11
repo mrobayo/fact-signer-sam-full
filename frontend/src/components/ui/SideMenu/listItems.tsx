@@ -1,30 +1,17 @@
 import * as React from 'react';
 import ListSubheader from '@mui/material/ListSubheader';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-// import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-// import PeopleIcon from '@mui/icons-material/People';
-// import BarChartIcon from '@mui/icons-material/BarChart';
-// import LayersIcon from '@mui/icons-material/Layers';
-import AssignmentIcon from '@mui/icons-material/Assignment';
+import PointOfSaleTwoToneIcon from '@mui/icons-material/PointOfSaleTwoTone';
 import SideMenuButton from "./SideMenuButton/SideMenuButton.tsx";
-
-export const mainListItems = (
-    <React.Fragment>
-        <SideMenuButton primary="Facturas" icon={<DashboardIcon />} onClick={() => {
-
-        }} />
-        {/*<SideMenuButton primary="Orders" icon={<ShoppingCartIcon />} />*/}
-        {/*<SideMenuButton primary="Customers" icon={<PeopleIcon />} />*/}
-        {/*<SideMenuButton primary="Reports" icon={<BarChartIcon />} />*/}
-        {/*<SideMenuButton primary="Integrations" icon={<LayersIcon />} />*/}
-    </React.Fragment>
-);
+import ColorLensTwoToneIcon from '@mui/icons-material/ColorLensTwoTone';
+import RuleFolderTwoToneIcon from '@mui/icons-material/RuleFolderTwoTone';
+import PeopleAltTwoToneIcon from '@mui/icons-material/PeopleAltTwoTone';
 
 export const secondaryListItems = (
   <React.Fragment>
-      <ListSubheader component="div" inset>Settings...</ListSubheader>
-      <SideMenuButton primary="Tablero" icon={<AssignmentIcon />} />
-      {/*<SideMenuButton primary="Last quarter" icon={<AssignmentIcon />} />*/}
-      {/*<SideMenuButton primary="Year-end sale" icon={<AssignmentIcon />} />*/}
+      <ListSubheader component="div" inset> Sistema  </ListSubheader>
+      <SideMenuButton primary="Arqueo Caja" icon={<PointOfSaleTwoToneIcon />} />
+      <SideMenuButton primary="Clientes" icon={<PeopleAltTwoToneIcon />} />
+      <SideMenuButton primary="Productos" icon={<ColorLensTwoToneIcon />} />
+      <SideMenuButton primary="Administracion" icon={<RuleFolderTwoToneIcon />} />
   </React.Fragment>
 );
