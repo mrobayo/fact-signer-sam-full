@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import {type AuthContextType, PuntoVentaType, UserProfileType} from './types';
+import {ApiEndpoint} from "../../constants.ts";
 
 interface AuthLoginResponse {
   accessToken: string;
@@ -16,7 +17,7 @@ interface AuthLoginResponse {
 export const jwtAuthProvider = {
   isAuthenticated: false,
   async signin(username: string, password: string, empresaId: string, callback: (data: AuthLoginResponse) => void) {
-    const { data } = await axios.post('http://localhost:8081/auth/login', {username, password, empresaId}); // console.log(user, password);
+    const { data } = await axios.post(`${ApiEndpoint}/auth/login`, {username, password, empresaId}); // console.log(user, password);
     jwtAuthProvider.isAuthenticated = true;
     callback(data); // async
   },

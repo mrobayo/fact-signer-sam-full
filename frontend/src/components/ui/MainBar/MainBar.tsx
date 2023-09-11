@@ -21,6 +21,7 @@ import {
   bindMenu,
 } from 'material-ui-popup-state/hooks';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import {AppTitle} from "../../../constants.ts";
 
 
 const MainBar: React.FC<{
@@ -29,7 +30,7 @@ const MainBar: React.FC<{
 }> = ({ open, toggleDrawer }) => {
   const auth = useAuth();
   const navigate = useNavigate();
-  const appTitle = import.meta.env.VITE_APP_TITLE;
+  const appTitle = AppTitle;
   const { puntoVenta} = auth;
   const { empresa } = puntoVenta ?? {};
 
