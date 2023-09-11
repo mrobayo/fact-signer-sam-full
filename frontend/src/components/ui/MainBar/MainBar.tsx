@@ -1,6 +1,7 @@
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
+import BugReportIcon from '@mui/icons-material/BugReportTwoTone';
 import Typography from "@mui/material/Typography";
 import Badge from "@mui/material/Badge";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -12,14 +13,15 @@ import {useNavigate} from "react-router-dom";
 import PopupState from "material-ui-popup-state";
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import {blueGrey} from '@mui/material/colors';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import Tooltip from '@mui/material/Tooltip';
 
 import {
   bindTrigger,
   bindMenu,
 } from 'material-ui-popup-state/hooks';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import Avatar from "@mui/material/Avatar";
+
 
 const MainBar: React.FC<{
     open: boolean;
@@ -51,6 +53,7 @@ const MainBar: React.FC<{
           >
             <MenuIcon />
           </IconButton>
+
           <Typography
             component="h1"
             variant="h6"
@@ -58,19 +61,25 @@ const MainBar: React.FC<{
             noWrap
             sx={{ flexGrow: 1 }}
           >
-              {empresa?.name ?? appTitle} - <small>[{empresa?.ambiente}]</small>
+              {empresa?.name ?? appTitle}
           </Typography>
-          <Avatar sx={{ bgcolor: blueGrey[900] }} variant="square">
-            {puntoVenta?.estab}
-          </Avatar> -
-          <Avatar sx={{ bgcolor: blueGrey[900] }} variant="square">
-            {puntoVenta?.ptoEmi}
-          </Avatar>
-          <IconButton color="inherit">
-            <Badge badgeContent={0} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
+
+          {empresa?.ambiente &&
+            <Tooltip title={`Ambiente ${empresa?.ambiente}`}>
+              <BugReportIcon color="disabled" fontSize="large" />
+            </Tooltip>
+          }
+
+          {puntoVenta?.ptoEmi &&
+            <>{puntoVenta?.estab} - {puntoVenta?.ptoEmi}</>
+          }
+
+          {auth.user &&
+            <IconButton color="inherit">
+              <Badge badgeContent={0} color="secondary"><NotificationsIcon /></Badge>
+            </IconButton>
+          }
+
           {!auth.user &&
             <Button
               onClick={() => { navigate("/login"); }}
@@ -82,30 +91,25 @@ const MainBar: React.FC<{
               Login
             </Button>
           }
+
           {auth.user &&
             (<>
               <PopupState variant="popover" popupId="main-session-popup-menu">
                 {(popupState) => (
                   <React.Fragment>
+
                     <Button
                       variant="text"
-                      color="secondary" {...bindTrigger(popupState)}
+                      color="inherit"
+                      {...bindTrigger(popupState)}
+                      startIcon={<AccountCircle />}
                       endIcon={<ArrowDropDownIcon/>}
                     >
-                      {auth.user}
+                       {auth.user?.login}
                     </Button>
+
                     <Menu {...bindMenu(popupState)}>
-                      {/*{auth.puntoVenta && (*/}
-                      {/*  <MenuItem*/}
-                      {/*    data-test-id={`P-${auth.puntoVenta.empresaId}`}*/}
-                      {/*    key={`P-${auth.puntoVenta.empresaId}`}*/}
-                      {/*    onClick={() => {*/}
-                      {/*      console.log('punto venta...');*/}
-                      {/*  }}>*/}
-                      {/*    {auth.puntoVenta.empresaId}*/}
-                      {/*  </MenuItem>*/}
-                      {/*)}*/}
-                      {/*<MenuItem onClick={popupState.close}>My account</MenuItem>*/}
+                      <MenuItem disabled>{auth.user?.roles?.join(', ')}</MenuItem>
                       <MenuItem onClick={() => {
                         popupState.close();
                         auth.signout(() => navigate("/"));
