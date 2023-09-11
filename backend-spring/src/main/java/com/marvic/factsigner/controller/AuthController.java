@@ -31,10 +31,10 @@ public class AuthController {
 
     @PostMapping(value = "/login")
     public ResponseEntity<JWTAuthResponse> login(@RequestBody @Valid LoginDto loginDto) {
-        JWTAuthResponse token = authService.login(loginDto);
-        PuntoVentaDTO puntoVenta = puntoVentaService.findPuntoVentaAutorizado(token.getUsuarioId(), loginDto.getEmpresaId());
-        token.setPuntoVenta(puntoVenta);
-        return ResponseEntity.ok(token);
+        JWTAuthResponse response = authService.login(loginDto);
+        PuntoVentaDTO puntoVenta = puntoVentaService.findPuntoVentaAutorizado(response.getUsuarioId(), loginDto.getEmpresaId());
+        response.setPuntoVenta(puntoVenta);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping(value = {"/register", "/signup"})

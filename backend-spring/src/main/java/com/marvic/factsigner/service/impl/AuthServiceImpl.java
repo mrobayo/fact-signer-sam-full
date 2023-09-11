@@ -12,6 +12,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +38,15 @@ public class AuthServiceImpl implements AuthService  {
         String jwtToken = jwtTokenProvider.generateToken(authentication);
 
         CustomUser principal = (CustomUser) authentication.getPrincipal();
-        return new JWTAuthResponse(principal.getUsuarioId(), jwtToken, null);
+
+        String[] roles = null;
+        if (principal.getAuthorities() != null) {
+            roles = principal.getAuthorities()
+                    .stream().map(GrantedAuthority::getAuthority)
+                    .toArray(String[]::new);
+        }
+
+        return new JWTAuthResponse(principal.getUsuarioId(), jwtToken, null, principal.getEmail(), roles);
     }
 
     @Override

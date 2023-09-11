@@ -18,4 +18,6 @@ public class JWTAuthResponse {
 
     // Listado de puntos de venta que el usuario puede usar
     private PuntoVentaDTO puntoVenta;
+    private String email;
+    private String[] roles;
 }
