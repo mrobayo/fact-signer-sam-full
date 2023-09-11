@@ -10,6 +10,10 @@
 // export * from './mergeRefs';
 export * from './useEvent';
 
+export * from './axiosUtil';
+
+export * from './getAge';
+
 //export {
     // escapePath,
     // FieldTitle,

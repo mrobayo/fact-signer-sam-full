@@ -30,13 +30,11 @@ const SideMenu: React.FC<{
 
   const addMenu = (label: string, icon: React.ReactNode, path: string) => {
     return (
-      <ListItemButton onClick={() => navigate(path)}>
-            <ListItemIcon>
-                {icon}
-            </ListItemIcon>
-            <ListItemText primary={label} />
-        </ListItemButton>
-      );
+      <ListItemButton key={label} onClick={() => navigate(path)}>
+        <ListItemIcon>{icon}</ListItemIcon>
+        <ListItemText primary={label} />
+      </ListItemButton>
+    );
   }
 
   const mainListItems = [
@@ -51,7 +49,7 @@ const SideMenu: React.FC<{
         // <SideMenuButton primary="Integrations" icon={<LayersIcon />} />
 
   const secondaryListItems = [
-    <ListSubheader component="div" inset>Sistema</ListSubheader>,
+    <ListSubheader key="Sistema" component="div" inset>Sistema</ListSubheader>,
       addMenu("Arqueo Caja", <PointOfSaleTwoToneIcon />, "/arqueo"),
       addMenu("Clientes", <PeopleAltTwoToneIcon />, "/clientes"),
       addMenu("Productos", <ColorLensTwoToneIcon />, "/productos"),
