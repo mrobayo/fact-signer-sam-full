@@ -66,18 +66,22 @@ const MainBar: React.FC<{
 
           {empresa?.ambiente &&
             <Tooltip title={`Ambiente ${empresa?.ambiente}`}>
-              <BugReportIcon color="disabled" fontSize="large" />
+              <BugReportIcon color="disabled" fontSize="large" sx={{ mx: 2 }} />
             </Tooltip>
           }
 
           {puntoVenta?.ptoEmi &&
-            <>{puntoVenta?.estab} - {puntoVenta?.ptoEmi}</>
+            <Tooltip title="Punto de Venta">
+              <span>{puntoVenta?.estab}-{puntoVenta?.ptoEmi}</span>
+            </Tooltip>
           }
 
           {auth.user &&
-            <IconButton color="inherit">
-              <Badge badgeContent={0} color="secondary"><NotificationsIcon /></Badge>
-            </IconButton>
+            <Tooltip title={`Notificationes`}>
+              <IconButton color="inherit" sx={{ mx: 1 }}>
+                <Badge badgeContent={0} color="secondary"><NotificationsIcon /></Badge>
+              </IconButton>
+            </Tooltip>
           }
 
           {!auth.user &&
