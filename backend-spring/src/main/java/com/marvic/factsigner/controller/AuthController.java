@@ -1,7 +1,7 @@
 package com.marvic.factsigner.controller;
 
 import com.marvic.factsigner.payload.auth.JWTAuthResponse;
-import com.marvic.factsigner.payload.auth.LoginDto;
+import com.marvic.factsigner.payload.auth.LoginRequestDto;
 import com.marvic.factsigner.payload.auth.RegisterDto;
 import com.marvic.factsigner.payload.sistema.PuntoVentaDTO;
 import com.marvic.factsigner.service.sistema.AuthService;
@@ -30,7 +30,7 @@ public class AuthController {
     }
 
     @PostMapping(value = "/login")
-    public ResponseEntity<JWTAuthResponse> login(@RequestBody @Valid LoginDto loginDto) {
+    public ResponseEntity<JWTAuthResponse> login(@RequestBody @Valid LoginRequestDto loginDto) {
         JWTAuthResponse response = authService.login(loginDto);
         PuntoVentaDTO puntoVenta = puntoVentaService.findPuntoVentaAutorizado(response.getUsuarioId(), loginDto.getEmpresaId());
         response.setPuntoVenta(puntoVenta);

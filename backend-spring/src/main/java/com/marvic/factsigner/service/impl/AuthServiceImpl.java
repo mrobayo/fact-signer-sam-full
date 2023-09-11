@@ -1,7 +1,7 @@
 package com.marvic.factsigner.service.impl;
 
 import com.marvic.factsigner.payload.auth.JWTAuthResponse;
-import com.marvic.factsigner.payload.auth.LoginDto;
+import com.marvic.factsigner.payload.auth.LoginRequestDto;
 import com.marvic.factsigner.payload.auth.RegisterDto;
 import com.marvic.factsigner.security.CustomUser;
 import com.marvic.factsigner.security.JwtTokenProvider;
@@ -31,7 +31,7 @@ public class AuthServiceImpl implements AuthService  {
     }
 
     @Override
-    public JWTAuthResponse login(LoginDto loginDto) {
+    public JWTAuthResponse login(LoginRequestDto loginDto) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 loginDto.getUsername(), loginDto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
