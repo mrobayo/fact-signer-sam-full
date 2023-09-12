@@ -4,14 +4,19 @@ import com.marvic.factsigner.exception.ResourceExistsException;
 import com.marvic.factsigner.exception.ResourceNotFoundException;
 import com.marvic.factsigner.model.sistema.Cliente;
 import com.marvic.factsigner.model.sistema.extra.Grupo;
+import com.marvic.factsigner.payload.PageResponse;
 import com.marvic.factsigner.payload.sistema.ClienteDTO;
 import com.marvic.factsigner.repository.ClienteRepository;
 import com.marvic.factsigner.repository.GrupoRepository;
 import com.marvic.factsigner.service.sistema.ClienteService;
+import com.marvic.factsigner.util.PageUtil;
 import com.marvic.factsigner.util.Utils;
 import ec.gob.sri.types.SriEnumIdentidad;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,8 +46,9 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public List<ClienteDTO> getAll() {
-        return repository.findAll().stream().map(this::mapToDTO).collect(Collectors.toList());
+    public PageResponse<ClienteDTO> getAll(Pageable paging) {
+        Page<Cliente> page = repository.findAll(paging);
+        return PageUtil.mapPage(page, this::mapToDTO);
     }
 
     @Override

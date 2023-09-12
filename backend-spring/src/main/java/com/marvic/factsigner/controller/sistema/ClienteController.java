@@ -1,7 +1,9 @@
 package com.marvic.factsigner.controller.sistema;
 
+import com.marvic.factsigner.payload.PageResponse;
 import com.marvic.factsigner.payload.sistema.ClienteDTO;
 import com.marvic.factsigner.service.sistema.ClienteService;
+import com.marvic.factsigner.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +26,11 @@ public class ClienteController {
     }
 
     @GetMapping
-    public List<ClienteDTO> getAll() {
-        List<ClienteDTO> all = service.getAll();
-        return all;
+    public PageResponse<ClienteDTO> getAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "id,desc") String[] sort) {
+        return service.getAll(PageUtil.pagingAndSort(page, size, sort));
     }
 
     @PostMapping

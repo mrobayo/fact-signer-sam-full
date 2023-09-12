@@ -1,6 +1,8 @@
 package com.marvic.factsigner.service.sistema;
 
+import com.marvic.factsigner.payload.PageResponse;
 import com.marvic.factsigner.payload.sistema.ClienteDTO;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -8,7 +10,7 @@ public interface ClienteService {
 
     ClienteDTO getOne(String id);
 
-    List<ClienteDTO> getAll();
+    PageResponse<ClienteDTO> getAll(Pageable paging);
 
     ClienteDTO create(ClienteDTO dto);
 

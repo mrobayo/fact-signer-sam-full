@@ -34,6 +34,8 @@ public class ClienteDTO {
     @NotBlank @Size(min=2, max=40)
     private String apellidos;
 
+    private LocalDate birthday;
+
     @NotBlank
     private String telefono;
 
