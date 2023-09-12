@@ -24,6 +24,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import AddIcon from '@mui/icons-material/AddBoxRounded';
 import {ClienteType} from "./cliente.types.ts";
+import PeopleAltTwoToneIcon from "@mui/icons-material/PeopleAltTwoTone";
 
 function CustomToolbar() {
   return (
@@ -44,7 +45,7 @@ function CustomToolbar() {
 const Clientes: React.FC = () => {
   const [page, setPage] = useState(0);
   const { isLoading, data  } = useQuery<PageType<ClienteType>, Error>({
-    queryKey: ['clientes'],
+    queryKey: ['clientes', page],
     queryFn: () => clienteService.get(page, PageSize, []),
     keepPreviousData: true,
     staleTime: 30000,
@@ -131,9 +132,9 @@ const Clientes: React.FC = () => {
 
   return (
     <div>
-      <Title>Clientes</Title>
+      <Title><PeopleAltTwoToneIcon sx={{ m: 2, mb: '-4px' }} /> Clientes</Title>
 
-      <Box sx={{ height: 400, width: '100%', backgroundColor: 'white' }}>
+      <Box sx={{ height: 450, width: '100%', backgroundColor: 'white' }}>
         <DataGrid
           //apiRef={apiRef}
           rows={data?.content ?? []}
