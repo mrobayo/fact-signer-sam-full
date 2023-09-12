@@ -1,5 +1,5 @@
 import { AxiosInstance } from 'axios';
-import { createAxiosService } from "../util";
+import {buildQueryByPage, createAxiosService} from "../util";
 
 class ClienteService {
   private service: AxiosInstance;
@@ -8,9 +8,8 @@ class ClienteService {
     this.service = createAxiosService('/clientes');
   }
 
-  async get() {
-    const { data } = await this.service.get('?page=1');
-    console.log(data);
+  async get(page: number, size: number, sort: string[]) {
+    const { data } = await this.service.get(buildQueryByPage(page, size, sort));
     return data;
   }
 

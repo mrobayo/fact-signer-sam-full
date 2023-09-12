@@ -14,6 +14,8 @@ export * from './axiosUtil';
 
 export * from './getAge';
 
+export * from './buildQueryByPage';
+
 //export {
     // escapePath,
     // FieldTitle,

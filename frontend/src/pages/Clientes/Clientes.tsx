@@ -1,11 +1,20 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import withAuth from "../../services/auth/withAuth.tsx";
 import Box from '@mui/material/Box';
 
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import {
+  useQuery,
+} from '@tanstack/react-query';
+import {
+  DataGrid,
+  GridColDef,
+  GridPaginationModel,
+  GridValueGetterParams,
+} from '@mui/x-data-grid';
 import {Title} from "../../components/ui";
 import clienteService from "../../services/clienteService.ts";
 import {getAge} from "../../util";
+import {PageSize} from "../../constants.ts";
 
 const columns: GridColDef[] = [
   //{ field: 'id', headerName: 'ID', width: 90 },
@@ -41,31 +50,63 @@ const columns: GridColDef[] = [
 ];
 
 const Clientes: React.FC = () => {
-  const [data, setData] = useState<any[]>([]);
-  const load = async () => {
-    const data1 = await clienteService.get();
-    console.log('data', data1);
-    setData(data1);
-  }
-  useEffect(() => {
-    load();
-  }, []);
+  const [page, setPage] = useState(0);
+  const { isLoading, error, data, isPreviousData } = useQuery({
+    queryKey: ['clientes', page],
+    queryFn: async () => {
+      return await clienteService.get(page, PageSize, []);
+    },
+    keepPreviousData: true,
+    staleTime: 30000,
+  }, [page]);
+  //const apiRef = useGridApiRef();
+
+  if (isLoading) return 'Loading...';
+  if (error) return 'An error has occurred.';
+
+  console.log('isPreviousData', isPreviousData);
 
   return (
     <div>
       <Title>Clientes</Title>
       <Box sx={{ height: 400, width: '100%', backgroundColor: 'white' }}>
-      <DataGrid
-        rows={data}
-        columns={columns}
-        initialState={{
-          pagination: { paginationModel: { pageSize: 5, }, },
-        }}
-        pageSizeOptions={[5]}
-        checkboxSelection
-        disableRowSelectionOnClick
-      />
-    </Box>
+        <DataGrid
+          //apiRef={apiRef}
+          rows={data?.content ?? []}
+          columns={columns}
+          initialState={{
+            pagination: { paginationModel: { pageSize: PageSize, }, },
+          }}
+          onPaginationModelChange={(model: GridPaginationModel) => {
+            setPage(model.page);
+          }}
+          paginationModel={{ page, pageSize: PageSize}}
+          paginationMode="server"
+          pageSizeOptions={[PageSize]}
+          rowCount={data?.totalElements ?? 0}
+          checkboxSelection
+          disableRowSelectionOnClick
+        />
+
+        {/*<DataGrid*/}
+        {/*  rows={data?.content ?? []}*/}
+        {/*  columns={columns}*/}
+        {/*  // initialState={{*/}
+        {/*  //   pagination: { paginationModel: { pageSize: PageSize, }, },*/}
+        {/*  // }}*/}
+        {/*  pagination*/}
+        {/*  // pageSize={PageSize}*/}
+        {/*  //rowsPerPageOptions={[PageSize]}*/}
+        {/*  rowCount={data?.totalElements ?? 0}*/}
+        {/*  paginationMode="server"*/}
+        {/*  //onPageChange={handlePageChange}*/}
+        {/*  //page={page}*/}
+        {/*  pageSizeOptions={[PageSize]}*/}
+        {/*  checkboxSelection*/}
+        {/*  disableRowSelectionOnClick*/}
+        {/*  loading={isLoading}*/}
+        {/*/>*/}
+      </Box>
     </div>
   )
 };
