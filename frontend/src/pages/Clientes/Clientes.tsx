@@ -25,8 +25,10 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import AddIcon from '@mui/icons-material/AddBoxRounded';
 import {ClienteType} from "./cliente.types.ts";
 import PeopleAltTwoToneIcon from "@mui/icons-material/PeopleAltTwoTone";
+import {useNavigate} from "react-router-dom";
 
-function CustomToolbar() {
+function ClienteToolbar() {
+  const navigate = useNavigate();
   return (
     <GridToolbarContainer sx={{ justifyContent: 'flex-end' }}>
       {/*<GridToolbarColumnsButton />*/}
@@ -35,7 +37,7 @@ function CustomToolbar() {
       <GridToolbarExport />
       <span><IconButton
         color="info"
-        onClick={() => console.log()}>
+        onClick={() => navigate('/clientes/new')}>
         <AddIcon />
       </IconButton></span>
     </GridToolbarContainer>
@@ -153,7 +155,7 @@ const Clientes: React.FC = () => {
           disableRowSelectionOnClick
           loading={isLoading}
           slots={{
-            toolbar: CustomToolbar,
+            toolbar: ClienteToolbar,
           }}
         />
 
