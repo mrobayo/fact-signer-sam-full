@@ -51,7 +51,7 @@ const columns: GridColDef[] = [
 
 const Clientes: React.FC = () => {
   const [page, setPage] = useState(0);
-  const { isLoading, error, data, isPreviousData } = useQuery({
+  const { isLoading, data  } = useQuery({ //, error
     queryKey: ['clientes', page],
     queryFn: async () => {
       return await clienteService.get(page, PageSize, []);
@@ -61,10 +61,7 @@ const Clientes: React.FC = () => {
   }, [page]);
   //const apiRef = useGridApiRef();
 
-  if (isLoading) return 'Loading...';
-  if (error) return 'An error has occurred.';
-
-  console.log('isPreviousData', isPreviousData);
+  // if (error) return 'An error has occurred.';
 
   return (
     <div>
@@ -86,6 +83,7 @@ const Clientes: React.FC = () => {
           rowCount={data?.totalElements ?? 0}
           checkboxSelection
           disableRowSelectionOnClick
+          loading={isLoading}
         />
 
         {/*<DataGrid*/}
