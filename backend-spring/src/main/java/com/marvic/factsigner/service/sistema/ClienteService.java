@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface ClienteService {
 
+    void addRandom(int number);
+
     ClienteDTO getOne(String id);
 
     PageResponse<ClienteDTO> getAll(Pageable paging);

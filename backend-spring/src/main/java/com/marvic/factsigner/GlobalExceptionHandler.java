@@ -22,6 +22,13 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+//    @ResponseBody
+//    @ExceptionHandler(EmployeeNotFoundException.class)
+//    @ResponseStatus(HttpStatus.NOT_FOUND)
+//    String employeeNotFoundHandler(EmployeeNotFoundException ex) {
+//        return ex.getMessage();
+//    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGlobalException(Exception exception,
                                                                WebRequest webRequest){

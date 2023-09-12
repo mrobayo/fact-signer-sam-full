@@ -21,7 +21,7 @@ public final class PageUtil {
     }
 
     /**
-     * ?page=1&size=5&sort=published,desc&sort=title,as
+     * ?page=1&size=5&sort=published,desc&sort=title,asc
      */
     public static Pageable pagingAndSort(int page, int size, String[] sort) {
         List<Order> orders = new ArrayList<>();

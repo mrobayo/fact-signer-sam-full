@@ -19,12 +19,21 @@ public class ClienteController {
     @Autowired
     private ClienteService service;
 
+    @GetMapping("/random")
+    public ResponseEntity<String> random(@RequestParam("num") int num) {
+        service.addRandom(num);
+        return ResponseEntity.ok("ok");
+    }
+
     @GetMapping("{id}")
     public ResponseEntity<ClienteDTO> getOne(@PathVariable("id") String id) {
         ClienteDTO dto = service.getOne(id);
         return ResponseEntity.ok(dto);
     }
 
+    /**
+     * ?page=1&size=5&sort=published,desc&sort=title,asc
+     */
     @GetMapping
     public PageResponse<ClienteDTO> getAll(
             @RequestParam(defaultValue = "0") int page,

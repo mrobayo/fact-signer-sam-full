@@ -11,12 +11,12 @@ import com.marvic.factsigner.repository.GrupoRepository;
 import com.marvic.factsigner.service.sistema.ClienteService;
 import com.marvic.factsigner.util.PageUtil;
 import com.marvic.factsigner.util.Utils;
+import com.marvic.sample.DataFiller;
 import ec.gob.sri.types.SriEnumIdentidad;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -96,6 +96,15 @@ public class ClienteServiceImpl implements ClienteService {
 
         Cliente saved = repository.save(entity);
         return mapToDTO(saved);
+    }
+
+    public void addRandom(int number) {
+        Grupo grupo = grupoRepository.findById("PARTICULAR").get();
+        for(int i = 1; i <= number; i++) {
+            Cliente c = DataFiller.getCliente();
+            c.setGrupo(grupo);
+            repository.save(c);
+        }
     }
 
     private Cliente mapToEntity(ClienteDTO dto) {
