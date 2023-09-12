@@ -5,7 +5,7 @@ class FacturaService {
   private service; //: axios.AxiosInstance;
 
   constructor() {
-    this.service = createAxiosService();
+    this.service = createAxiosService('facturas');
   }
 
   async get(url: string, config?: AxiosRequestConfig<any> | undefined) {

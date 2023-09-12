@@ -17,12 +17,13 @@ import {
 } from '@mui/x-data-grid';
 import {Title} from "../../components/ui";
 import clienteService from "../../services/clienteService.ts";
-import {getAge} from "../../util";
+import {getAge, PageType} from "../../util";
 import {PageSize} from "../../constants.ts";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import AddIcon from '@mui/icons-material/AddBoxRounded';
+import {ClienteType} from "./cliente.types.ts";
 
 function CustomToolbar() {
   return (
@@ -42,14 +43,12 @@ function CustomToolbar() {
 
 const Clientes: React.FC = () => {
   const [page, setPage] = useState(0);
-  const { isLoading, data  } = useQuery({ //, error
-    queryKey: ['clientes', page],
-    queryFn: async () => {
-      return await clienteService.get(page, PageSize, []);
-    },
+  const { isLoading, data  } = useQuery<PageType<ClienteType>, Error>({
+    queryKey: ['clientes'],
+    queryFn: () => clienteService.get(page, PageSize, []),
     keepPreviousData: true,
     staleTime: 30000,
-  }, [page]);
+  });
   //const apiRef = useGridApiRef();
 
   const handleEditClick = (id: GridRowId) => () => {
