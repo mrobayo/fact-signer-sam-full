@@ -1,6 +1,26 @@
 import { AxiosInstance } from 'axios';
 import {buildQueryByPage, createAxiosService, PageType} from "../util";
-import {ClienteType} from "../pages/Clientes/cliente.types.ts";
+
+export type ClienteType = {
+  id: string;
+  name: string;
+  activo: boolean;
+  tipo: string;
+  identidad: string;
+  nombres: string;
+  apellidos: string;
+  birthday: Date;
+  telefono: string;
+  email: string;
+  direccion: string;
+  pais: string;
+  ciudad: string;
+  observacion: string;
+  ultimaVenta: string;
+  contacto: string;
+  aseguradora: boolean;
+  grupoId: string;
+};
 
 class ClienteService {
   private service: AxiosInstance;

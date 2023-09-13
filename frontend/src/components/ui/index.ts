@@ -1,3 +1,3 @@
-import Title from './Title/Title';
+export { Title } from './Title/Title';
+export { GridItem } from './GridItem/GridItem';
 
-export { Title };

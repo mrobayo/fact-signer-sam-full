@@ -16,6 +16,10 @@ export * from './getAge';
 
 export * from './buildQueryByPage';
 
+export * from './useRouterQuery';
+
+export * as yupLocaleEs from './yupLocaleEs';
+
 //export {
     // escapePath,
     // FieldTitle,

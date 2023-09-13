@@ -23,9 +23,9 @@ import IconButton from "@mui/material/IconButton";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import AddIcon from '@mui/icons-material/AddBoxRounded';
-import {ClienteType} from "./cliente.types.ts";
 import PeopleAltTwoToneIcon from "@mui/icons-material/PeopleAltTwoTone";
 import {useNavigate} from "react-router-dom";
+import {ClienteType} from "../../services/clienteService";
 
 function ClienteToolbar() {
   const navigate = useNavigate();

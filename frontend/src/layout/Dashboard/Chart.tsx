@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Title from '../../components/ui/Title/Title.tsx';
+import {Title} from '../../components/ui';
 
 export default function Chart() {
 
