@@ -32,13 +32,22 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() ->
                         new UsernameNotFoundException("User not found with usuarioname or email: "+ usernameOrEmail));
 
+        // Add roles
         List<String> roles = Collections.emptyList();
         if (isNotEmpty(usuario.getRoles())) {
             roles = Arrays.asList(usuario.getRoles().split(","));
         }
-
         Set<GrantedAuthority> authorities = roles.stream()
                 .map(SimpleGrantedAuthority::new).collect(Collectors.toSet());
+
+        // Add empresas
+        List<String> empresas = Collections.emptyList();
+        if (isNotEmpty(usuario.getEmpresas())) {
+            empresas = Arrays.asList(usuario.getEmpresas().split(","));
+        }
+        empresas.forEach((empresa) -> {
+            authorities.add(new SimpleGrantedAuthority(String.format("ROLE_%s", empresa)));
+        });
 
         CustomUser user = new CustomUser(
                 usuario.getId(),

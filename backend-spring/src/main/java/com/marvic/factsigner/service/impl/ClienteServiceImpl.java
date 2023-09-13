@@ -64,6 +64,7 @@ public class ClienteServiceImpl implements ClienteService {
                 .ifPresent((c) -> {throw new ResourceExistsException(dto.getName());});
 
         Cliente entity = mapToEntity(dto);
+        buildName(entity);
 
         entity.setTipo(tipo);
         entity.setId(null);
@@ -92,6 +93,8 @@ public class ClienteServiceImpl implements ClienteService {
         Cliente entity = repository.findById(uuid).orElseThrow(() -> new ResourceNotFoundException("not found"));
 
         entity.setName(dto.getName());
+        buildName(entity);
+
         // entity.setActivo(dto.isActivo());
 
         Cliente saved = repository.save(entity);
@@ -113,6 +116,13 @@ public class ClienteServiceImpl implements ClienteService {
 
     private ClienteDTO mapToDTO(Cliente model){
         return modelMapper.map(model, ClienteDTO.class);
+    }
+
+    private static void buildName(Cliente entity) {
+        if (StringUtils.isBlank(entity.getName())) {
+            String name = StringUtils.trim(String.format("%s %s", entity.getNombres(), entity.getApellidos()));
+            entity.setName(name);
+        }
     }
 
 }

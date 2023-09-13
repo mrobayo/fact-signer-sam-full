@@ -10,11 +10,13 @@ import com.marvic.factsigner.model.sistema.types.ProductoTipo;
 
 import com.marvic.factsigner.payload.sistema.ProductoDTO;
 import com.marvic.factsigner.repository.*;
+import com.marvic.factsigner.security.CustomUser;
 import com.marvic.factsigner.service.sistema.ProductoService;
 import com.marvic.factsigner.util.Utils;
 
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,8 +52,8 @@ public class ProductoServiceImpl implements ProductoService {
     }
 
     @Override
-    public List<ProductoDTO> getAll(String empresaId) {
-        return productoRepository.findAllByEmpresaId(empresaId).stream().map(this::mapToDTO).collect(Collectors.toList());
+    public List<ProductoDTO> getAll(String empresaId, Pageable paging) {
+        return productoRepository.findAllByEmpresaId(empresaId, paging).stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
     @Override
