@@ -96,7 +96,7 @@ const EditCliente: React.FC = () => {
 
           <GridItem sm={5}>{buildTextField('grupoId', {
             select: true, SelectProps: { native: true },
-            children: gruposCliente?.map((option) => (
+            children: (gruposCliente ?? [{id: '', name:'---'}]).map((option) => (
               <option key={option.id} value={option.id}>{option.name}</option>
             ))
           })}</GridItem>
@@ -111,14 +111,15 @@ const EditCliente: React.FC = () => {
           <GridItem sm={12}>{buildTextField('contacto')}</GridItem>
           <GridItem sm={12}>{buildTextField('observacion', {multiline: true, rows: 4})}</GridItem>
 
-
-          <GridItem md={12}>
+          <GridItem>
+            <Grid container direction="row" justifyContent="space-between" alignItems="center">
             <Button onClick={() => navigate(-1)}>Cancel</Button>
             <Button variant="contained"
                 onClick={() => { formRef?.current?.requestSubmit(); }}
                 //disabled={isLoading || isSaving || !isEmpty(errorLoading)}
                 //startIcon={isSaving && <CircularProgress size={16}/>}
             >Submit</Button>
+            </Grid>
           </GridItem>
         </Grid>
         </Paper>
