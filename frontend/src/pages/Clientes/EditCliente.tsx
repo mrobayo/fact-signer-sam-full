@@ -2,12 +2,13 @@ import React, {useEffect, useRef} from 'react';
 import withAuth from "../../services/auth/withAuth.tsx";
 import Box from '@mui/material/Box';
 import {useParams, useNavigate} from "react-router-dom";
-//import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {GridItem, Title} from "../../components/ui";
 import PeopleAltTwoToneIcon from "@mui/icons-material/PeopleAltTwoTone";
 import {useRouterQuery} from "../../util";
 import {useForm, Controller} from "react-hook-form";
 import isEmpty from "lodash/isEmpty";
+import { useMutation } from '@tanstack/react-query';
+
 import {clienteSchema, getClienteLabel} from "./cliente.types.ts";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -19,7 +20,7 @@ import {TextFieldProps} from "@mui/material/TextField/TextField";
 import {DateField} from "@mui/x-date-pickers";
 import {TipoIdentidad} from "../tarifario.ts";
 import {useGrupos} from "../../services/grupo/useGrupos";
-import {clienteEmpty, ClienteType} from "../../services/cliente/clienteService.ts";
+import clienteService, {clienteEmpty, ClienteType} from "../../services/cliente/clienteService.ts";
 import {PaisesIso2} from "../../util/paisesIso.ts";
 // import {useSaveCliente} from "../../services/cliente/useSaveCliente.ts";
 import {useGetCliente} from "../../services/cliente/useGetCliente.ts";
@@ -39,7 +40,12 @@ const EditCliente: React.FC = () => {
     } = useForm<ClienteType>({resolver: yupResolver(clienteSchema)});
   const formRef = useRef<HTMLFormElement>(null);
 
+  // const queryClient = useQueryClient();
   const { data: cliente } = useGetCliente(id);
+  const { mutate: saveCliente } = useMutation({
+      mutationFn: (body: ClienteType) => clienteService.create(body),
+    }
+  );
 
   useEffect(() => {
     const birthday = cliente?.birthday && dayjs(cliente.birthday);
@@ -48,6 +54,7 @@ const EditCliente: React.FC = () => {
 
   const onFormSubmit = handleSubmit((data) => {
     console.log('submit...', data);
+    saveCliente(data);
     navigate('/clientes');
   })
   const isReadOnly = false;

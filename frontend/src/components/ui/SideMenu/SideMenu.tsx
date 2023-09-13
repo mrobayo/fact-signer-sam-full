@@ -40,6 +40,7 @@ const SideMenu: React.FC<{
   const mainListItems = [
     addMenu("Facturas", <ReceiptOutlinedIcon />, "/facturas"),
     addMenu("Retenciones", <RequestQuoteOutlinedIcon />, "/facturas"),
+    addMenu("Arqueo Caja", <PointOfSaleTwoToneIcon />, "/arqueo"),
     // addMenu("Notas Credito", <AssignmentReturnedOutlinedIcon />, "/notas-credito"),
     // addMenu("Notas Debito", <AssignmentReturnOutlinedIcon />, "/notas-debito"),
   ];
@@ -50,7 +51,6 @@ const SideMenu: React.FC<{
 
   const secondaryListItems = [
     <ListSubheader key="Sistema" component="div" inset>Sistema</ListSubheader>,
-      addMenu("Arqueo Caja", <PointOfSaleTwoToneIcon />, "/arqueo"),
       addMenu("Clientes", <PeopleAltTwoToneIcon />, "/clientes"),
       addMenu("Productos", <ColorLensTwoToneIcon />, "/productos"),
       addMenu("Administración", <RuleFolderTwoToneIcon />, "/admin")

@@ -58,7 +58,7 @@ class ClienteService {
       return data;
     }
     else {
-      return Promise.resolve(clienteEmpty());
+      return clienteEmpty();
     }
   }
 
@@ -68,7 +68,9 @@ class ClienteService {
   }
 
   async create(body: ClienteType): Promise<ClienteType> {
-    return await this.service.post('', body);
+    console.log('post....', this.service);
+    console.log('post....', this.service.post);
+    return await this.service.post('/', body);
   }
 
   async update(id: string, body: ClienteType): Promise<ClienteType> {

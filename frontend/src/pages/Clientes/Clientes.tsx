@@ -123,6 +123,7 @@ const Clientes: React.FC = () => {
                 label="Delete"
                 onClick={handleDeleteClick(id)}
                 color="inherit"
+                disabled
               />,
             ];
           }
