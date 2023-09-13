@@ -30,18 +30,17 @@ const SideMenu: React.FC<{
 
   const addMenu = (label: string, icon: React.ReactNode, path: string) => {
     return (
-      <ListItemButton onClick={() => navigate(path)}>
-            <ListItemIcon>
-                {icon}
-            </ListItemIcon>
-            <ListItemText primary={label} />
-        </ListItemButton>
-      );
+      <ListItemButton key={label} onClick={() => navigate(path)}>
+        <ListItemIcon>{icon}</ListItemIcon>
+        <ListItemText primary={label} />
+      </ListItemButton>
+    );
   }
 
   const mainListItems = [
     addMenu("Facturas", <ReceiptOutlinedIcon />, "/facturas"),
     addMenu("Retenciones", <RequestQuoteOutlinedIcon />, "/facturas"),
+    addMenu("Arqueo Caja", <PointOfSaleTwoToneIcon />, "/arqueo"),
     // addMenu("Notas Credito", <AssignmentReturnedOutlinedIcon />, "/notas-credito"),
     // addMenu("Notas Debito", <AssignmentReturnOutlinedIcon />, "/notas-debito"),
   ];
@@ -51,8 +50,7 @@ const SideMenu: React.FC<{
         // <SideMenuButton primary="Integrations" icon={<LayersIcon />} />
 
   const secondaryListItems = [
-    <ListSubheader component="div" inset>Sistema</ListSubheader>,
-      addMenu("Arqueo Caja", <PointOfSaleTwoToneIcon />, "/arqueo"),
+    <ListSubheader key="Sistema" component="div" inset>Sistema</ListSubheader>,
       addMenu("Clientes", <PeopleAltTwoToneIcon />, "/clientes"),
       addMenu("Productos", <ColorLensTwoToneIcon />, "/productos"),
       addMenu("Administración", <RuleFolderTwoToneIcon />, "/admin")

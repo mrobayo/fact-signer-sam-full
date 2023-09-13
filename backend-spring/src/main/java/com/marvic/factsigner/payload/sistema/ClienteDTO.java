@@ -17,7 +17,7 @@ public class ClienteDTO {
 
     private String id;
 
-    @NotBlank @Size(min=2, max=100)
+    @Size(max=100)
     private String name;
 
     private boolean activo;
@@ -33,6 +33,8 @@ public class ClienteDTO {
 
     @NotBlank @Size(min=2, max=40)
     private String apellidos;
+
+    private LocalDate birthday;
 
     @NotBlank
     private String telefono;
@@ -54,7 +56,7 @@ public class ClienteDTO {
 
     private LocalDate ultimaVenta;
 
-    @NotBlank @Size(max=100)
+    @Size(max=100)
     private String contacto;
 
     @NotNull

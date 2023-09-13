@@ -50,3 +50,11 @@ export const FORMAS_PAGO = [
   { codigo: "20", label: "OTROS CON UTILIZACION DEL SISTEMA FINANCIERO"},
   { codigo: "21", label: "ENDOSO DE TITULOS"}
 ];
+
+export const TipoIdentidad = [
+  { value: "RUC", label: "RUC", codigo: '04'},
+  { value: "CED", label: "CED", codigo: '05'},
+  { value: "PAS", label: "PAS", codigo: '06'},
+  { value: "FIN", label: "C.FINAL", codigo: '07'},
+  { value: "EXT", label: "ID.EXT", codigo: '08'},
+];

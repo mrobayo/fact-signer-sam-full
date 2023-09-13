@@ -94,12 +94,16 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         // Allowed
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173/"));
+        configuration.setAllowedOrigins(Arrays.asList(
+                "http://localhost:5173",
+                "https://pico-espada.surge.sh",
+                "https://www.picoespada.click"
+        ));
         configuration.setAllowedMethods(Arrays.asList("GET","POST"));
         configuration.setAllowCredentials(true);
 
         //the below three lines will add the relevant CORS response headers
-        configuration.addAllowedOrigin("http://localhost:5173/");
+        // configuration.addAllowedOrigin("http://localhost:5173/");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

@@ -55,6 +55,9 @@ public class Cliente {
     @Column(nullable = false, length = 40)
     private String apellidos;
 
+    @Column
+    private LocalDate birthday;
+
     @Column(nullable = false, length = 60)
     private String telefono;
 

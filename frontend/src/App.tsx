@@ -11,6 +11,9 @@ import Productos, {EditProducto} from "./pages/Productos";
 import Admin from "./pages/Admin";
 import Arqueo from "./pages/Arqueo";
 
+// import { activeYupLocale } from "./util";
+// activeYupLocale();
+
 function App() {
   return (
       <Routes>

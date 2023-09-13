@@ -97,12 +97,6 @@
 			<scope>test</scope>
 		</dependency>
 
-<!--		<dependency>-->
-<!--			<groupId>org.springframework.boot</groupId>-->
-<!--			<artifactId>spring-boot-starter-data-rest</artifactId>-->
-<!--		</dependency>-->
-
-
 		<!-- https://mvnrepository.com/artifact/org.modelmapper/modelmapper -->
 		<dependency>
 			<groupId>org.modelmapper</groupId>
@@ -270,6 +264,11 @@
 			<version>1.1</version>
 		</dependency>
 
+		<dependency>
+			<groupId>net.datafaker</groupId>
+			<artifactId>datafaker</artifactId>
+			<version>1.8.1</version>
+		</dependency>
 
 	</dependencies>
 

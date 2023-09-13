@@ -4,14 +4,19 @@ import com.marvic.factsigner.exception.ResourceExistsException;
 import com.marvic.factsigner.exception.ResourceNotFoundException;
 import com.marvic.factsigner.model.sistema.Cliente;
 import com.marvic.factsigner.model.sistema.extra.Grupo;
+import com.marvic.factsigner.payload.PageResponse;
 import com.marvic.factsigner.payload.sistema.ClienteDTO;
 import com.marvic.factsigner.repository.ClienteRepository;
 import com.marvic.factsigner.repository.GrupoRepository;
 import com.marvic.factsigner.service.sistema.ClienteService;
+import com.marvic.factsigner.util.PageUtil;
 import com.marvic.factsigner.util.Utils;
+import com.marvic.sample.DataFiller;
 import ec.gob.sri.types.SriEnumIdentidad;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,8 +46,9 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public List<ClienteDTO> getAll() {
-        return repository.findAll().stream().map(this::mapToDTO).collect(Collectors.toList());
+    public PageResponse<ClienteDTO> getAll(Pageable paging) {
+        Page<Cliente> page = repository.findAll(paging);
+        return PageUtil.mapPage(page, this::mapToDTO);
     }
 
     @Override
@@ -58,6 +64,7 @@ public class ClienteServiceImpl implements ClienteService {
                 .ifPresent((c) -> {throw new ResourceExistsException(dto.getName());});
 
         Cliente entity = mapToEntity(dto);
+        buildName(entity);
 
         entity.setTipo(tipo);
         entity.setId(null);
@@ -86,10 +93,21 @@ public class ClienteServiceImpl implements ClienteService {
         Cliente entity = repository.findById(uuid).orElseThrow(() -> new ResourceNotFoundException("not found"));
 
         entity.setName(dto.getName());
+        buildName(entity);
+
         // entity.setActivo(dto.isActivo());
 
         Cliente saved = repository.save(entity);
         return mapToDTO(saved);
+    }
+
+    public void addRandom(int number) {
+        Grupo grupo = grupoRepository.findById("PARTICULAR").get();
+        for(int i = 1; i <= number; i++) {
+            Cliente c = DataFiller.getCliente();
+            c.setGrupo(grupo);
+            repository.save(c);
+        }
     }
 
     private Cliente mapToEntity(ClienteDTO dto) {
@@ -98,6 +116,13 @@ public class ClienteServiceImpl implements ClienteService {
 
     private ClienteDTO mapToDTO(Cliente model){
         return modelMapper.map(model, ClienteDTO.class);
+    }
+
+    private static void buildName(Cliente entity) {
+        if (StringUtils.isBlank(entity.getName())) {
+            String name = StringUtils.trim(String.format("%s %s", entity.getNombres(), entity.getApellidos()));
+            entity.setName(name);
+        }
     }
 
 }
