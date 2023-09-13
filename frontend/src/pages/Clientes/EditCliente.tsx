@@ -36,7 +36,8 @@ const EditCliente: React.FC = () => {
     const formRef = useRef<HTMLFormElement>(null);
 
   const onFormSubmit = handleSubmit((data) => {
-    console.log('submit...', data)
+    console.log('submit...', data);
+    navigate('/clientes');
   })
   const isReadOnly = false;
 
@@ -86,7 +87,7 @@ const EditCliente: React.FC = () => {
               render={({ field }) =>
                 <DateField label="Fecha Nacimiento"
                   helperText={errors.birthday?.message}
-                  sx={{ width: '100%' }} {...field} />
+                  fullWidth {...field} />
               }
             />
           </GridItem>
