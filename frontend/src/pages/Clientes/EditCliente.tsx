@@ -1,7 +1,8 @@
-import React, {useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import withAuth from "../../services/auth/withAuth.tsx";
 import Box from '@mui/material/Box';
 import {useParams, useNavigate} from "react-router-dom";
+//import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {GridItem, Title} from "../../components/ui";
 import PeopleAltTwoToneIcon from "@mui/icons-material/PeopleAltTwoTone";
 import {useRouterQuery} from "../../util";
@@ -18,8 +19,11 @@ import {TextFieldProps} from "@mui/material/TextField/TextField";
 import {DateField} from "@mui/x-date-pickers";
 import {TipoIdentidad} from "../tarifario.ts";
 import {useGrupos} from "../../services/grupo/useGrupos";
-import {ClienteType} from "../../services/clienteService";
+import {clienteEmpty, ClienteType} from "../../services/cliente/clienteService.ts";
 import {PaisesIso2} from "../../util/paisesIso.ts";
+// import {useSaveCliente} from "../../services/cliente/useSaveCliente.ts";
+import {useGetCliente} from "../../services/cliente/useGetCliente.ts";
+import dayjs from "dayjs";
 
 const EditCliente: React.FC = () => {
   const { id } = useParams();
@@ -29,11 +33,18 @@ const EditCliente: React.FC = () => {
   const {
       control,
       register,
-      // reset,
+      reset,
       handleSubmit,
       formState: { errors }
     } = useForm<ClienteType>({resolver: yupResolver(clienteSchema)});
-    const formRef = useRef<HTMLFormElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const { data: cliente } = useGetCliente(id);
+
+  useEffect(() => {
+    const birthday = cliente?.birthday && dayjs(cliente.birthday);
+    reset(cliente != null ? {...cliente, birthday} : clienteEmpty());
+  }, [cliente, reset]);
 
   const onFormSubmit = handleSubmit((data) => {
     console.log('submit...', data);
@@ -49,6 +60,7 @@ const EditCliente: React.FC = () => {
               error={!isEmpty(errors[name])}
               helperText={errors[name]?.message}
               disabled={isReadOnly}
+              InputLabelProps={{disableAnimation: true, shrink: true}}
               fullWidth
               {...textFieldProps}
               {...register(name)}
@@ -57,7 +69,7 @@ const EditCliente: React.FC = () => {
 
   return (
     <div>
-      <Title><PeopleAltTwoToneIcon sx={{ m: 2, mb: '-4px' }} /> Cliente {isNew ? 'Nuevo' : id}</Title>
+      <Title><PeopleAltTwoToneIcon sx={{ m: 2, mb: '-4px' }} /> Cliente <b>{isNew ? 'Nuevo' : cliente?.name}</b></Title>
       <Box
         component="form"
         ref={formRef} noValidate autoComplete="off" onSubmit={onFormSubmit}

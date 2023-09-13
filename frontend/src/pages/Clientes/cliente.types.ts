@@ -2,7 +2,7 @@ import * as Yup from "yup";
 import {ObjectSchema} from "yup";
 import { yupLocaleEs } from '../../util';
 import {capitalize} from "lodash";
-import {ClienteType} from "../../services/clienteService";
+import {ClienteType} from "../../services/cliente/clienteService.ts";
 Yup.setLocale(yupLocaleEs);
 
 export const clienteSchema = Yup.object().shape({

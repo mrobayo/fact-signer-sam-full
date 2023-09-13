@@ -16,7 +16,7 @@ import {
   GridRowId,
 } from '@mui/x-data-grid';
 import {Title} from "../../components/ui";
-import clienteService from "../../services/clienteService.ts";
+import clienteService from "../../services/cliente/clienteService.ts";
 import {getAge, PageType} from "../../util";
 import {PageSize} from "../../constants.ts";
 import IconButton from "@mui/material/IconButton";
@@ -25,7 +25,7 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import AddIcon from '@mui/icons-material/AddBoxRounded';
 import PeopleAltTwoToneIcon from "@mui/icons-material/PeopleAltTwoTone";
 import {useNavigate} from "react-router-dom";
-import {ClienteType} from "../../services/clienteService";
+import {ClienteType} from "../../services/cliente/clienteService.ts";
 
 function ClienteToolbar() {
   const navigate = useNavigate();
@@ -45,6 +45,7 @@ function ClienteToolbar() {
 }
 
 const Clientes: React.FC = () => {
+  const navigate = useNavigate();
   const [page, setPage] = useState(0);
   const { isLoading, data  } = useQuery<PageType<ClienteType>, Error>({
     queryKey: ['clientes', page],
@@ -56,7 +57,7 @@ const Clientes: React.FC = () => {
 
   const handleEditClick = (id: GridRowId) => () => {
     console.log('editing', data?.content?.find((row) => row.id === id));
-    //setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+    navigate(`/clientes/edit/${id}`);
   };
 
   // const handleSaveClick = (id: GridRowId) => () => {
