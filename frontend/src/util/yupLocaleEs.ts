@@ -3,6 +3,7 @@ import { printValue } from 'yup';
 const mixed = {
   default: "${path} no es válido.",
   required: "${path} obligatorio",
+  notNull: "${path} no puede ser null",
   oneOf: "${path} debe ser uno de los siguientes valores: ${values}",
   notOneOf: "${path} no debe ser uno de los siguientes valores: ${values}",
   notType: ({ path, type, value, originalValue }: { path: string, type: string, value: any, originalValue: any }) => {
@@ -62,7 +63,6 @@ const array = {
   min: "${path} campo debe tener al menos ${min} elementos",
   max: "${path} campo debe tener menos de o igual a ${max} elementos"
 }
-
 export {
     mixed,
     string,

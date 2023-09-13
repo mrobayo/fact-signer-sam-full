@@ -14,16 +14,16 @@ export const clienteSchema = Yup.object().shape({
   nombres: Yup.string().required(),
   apellidos: Yup.string().required(),
   birthday: Yup.date()
-    .min(new Date('1920-01-01'), 'Fecha debe ser mayor 01/01/1920')
-    .max(new Date(), 'Fecha Nacimiento mayor a Hoy es invalida')
-    .required('Fecha Nacimiento es obligatorio'),
+    .min(new Date('1900-01-01'), 'Fecha Nacimiento es invalida')
+    .max(new Date(), 'Fecha Nacimiento es invalida')
+    .nullable(),
   telefono: Yup.string().required(),
   email: Yup.string().required().email(),
   direccion: Yup.string().required(),
   pais: Yup.string().required(),
   ciudad: Yup.string().required(),
-  observacion: Yup.string(),
-  contacto: Yup.string(),
+  observacion: Yup.string().nullable(),
+  contacto: Yup.string().nullable(),
   grupoId: Yup.string().required()
 }) as ObjectSchema<ClienteType>;
 
