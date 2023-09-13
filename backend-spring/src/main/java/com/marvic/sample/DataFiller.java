@@ -1,10 +1,14 @@
 package com.marvic.sample;
 
 import com.marvic.factsigner.model.sistema.Cliente;
+import com.marvic.factsigner.model.sistema.Producto;
+import com.marvic.factsigner.model.sistema.types.ProductoTipo;
+import com.marvic.factsigner.model.sistema.types.StockTipo;
 import ec.gob.sri.types.SriEnumIdentidad;
 import net.datafaker.Faker;
 import net.datafaker.providers.base.Address;
 import net.datafaker.providers.base.Name;
+import org.springframework.security.core.parameters.P;
 
 import java.util.Locale;
 
@@ -38,4 +42,18 @@ public final class DataFiller {
         return c;
     }
 
+    public static Producto getProducto() {
+        Producto p = new Producto();
+
+        p.setName(faker.worldOfWarcraft().quotes());
+        p.setTipo(ProductoTipo.BIEN);
+        p.setActivo(true);
+        p.setCodigo(faker.code().ean8());
+        p.setCodigoIva(2);
+        p.setControl(StockTipo.ALMACENABLE);
+        p.setVendido(true);
+        p.setComprado(true);
+
+        return p;
+    }
 }

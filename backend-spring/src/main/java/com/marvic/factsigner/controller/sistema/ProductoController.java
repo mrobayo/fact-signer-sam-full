@@ -22,6 +22,12 @@ public class ProductoController {
     @Autowired
     private ProductoService service;
 
+    @GetMapping("/random")
+    public ResponseEntity<String> random(@RequestParam("num") int num) {
+        service.addRandom(num);
+        return ResponseEntity.ok("ok");
+    }
+
     @GetMapping("{id}")
     public ResponseEntity<ProductoDTO> getOne(@PathVariable("id") String id) {
         ProductoDTO dto = service.getOne(id);

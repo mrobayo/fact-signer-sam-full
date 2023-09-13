@@ -3,8 +3,11 @@ package com.marvic.factsigner.service.impl;
 import com.marvic.factsigner.exception.ResourceExistsException;
 import com.marvic.factsigner.exception.ResourceNotFoundException;
 
+import com.marvic.factsigner.model.sistema.Cliente;
+import com.marvic.factsigner.model.sistema.Empresa;
 import com.marvic.factsigner.model.sistema.Producto;
 import com.marvic.factsigner.model.sistema.extra.Categoria;
+import com.marvic.factsigner.model.sistema.extra.Grupo;
 import com.marvic.factsigner.model.sistema.extra.Unidad;
 import com.marvic.factsigner.model.sistema.types.ProductoTipo;
 
@@ -14,6 +17,7 @@ import com.marvic.factsigner.security.CustomUser;
 import com.marvic.factsigner.service.sistema.ProductoService;
 import com.marvic.factsigner.util.Utils;
 
+import com.marvic.sample.DataFiller;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Pageable;
@@ -97,6 +101,22 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     public ProductoDTO update(ProductoDTO dto, String id) {
         return null;
+    }
+
+    @Override
+    public void addRandom(int num) {
+        Empresa empresa = new Empresa();
+        empresa.setId("1100000000001");
+        Unidad unidad = new Unidad();
+        unidad.setId("UN");
+        Categoria categoria = categoriaRepository.findByNameAndEmpresaId("BASICO", "1100000000001").get();
+        for(int i = 1; i <= num; i++) {
+            Producto c = DataFiller.getProducto();
+            c.setCategoria(categoria);
+            c.setUnidadVenta(unidad);
+            c.setEmpresa(empresa);
+            productoRepository.save(c);
+        }
     }
 
     private Producto mapToEntity(ProductoDTO dto) {

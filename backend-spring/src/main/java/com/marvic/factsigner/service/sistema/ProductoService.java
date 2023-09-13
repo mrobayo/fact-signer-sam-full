@@ -17,4 +17,6 @@ public interface ProductoService {
     void delete(String id);
 
     ProductoDTO update(ProductoDTO dto, String id);
+
+    void addRandom(int num);
 }
