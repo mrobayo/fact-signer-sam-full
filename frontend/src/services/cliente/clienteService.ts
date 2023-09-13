@@ -68,8 +68,6 @@ class ClienteService {
   }
 
   async create(body: ClienteType): Promise<ClienteType> {
-    console.log('post....', this.service);
-    console.log('post....', this.service.post);
     return await this.service.post('/', body);
   }
 

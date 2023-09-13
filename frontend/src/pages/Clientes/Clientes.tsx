@@ -56,7 +56,6 @@ const Clientes: React.FC = () => {
   //const apiRef = useGridApiRef();
 
   const handleEditClick = (id: GridRowId) => () => {
-    console.log('editing', data?.content?.find((row) => row.id === id));
     navigate(`/clientes/edit/${id}`);
   };
 

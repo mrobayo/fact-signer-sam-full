@@ -1,5 +1,6 @@
 package com.marvic.factsigner.service.sistema;
 
+import com.marvic.factsigner.payload.PageResponse;
 import com.marvic.factsigner.payload.sistema.ProductoDTO;
 import com.marvic.factsigner.security.CustomUser;
 import org.springframework.data.domain.Pageable;
@@ -10,7 +11,7 @@ public interface ProductoService {
 
     ProductoDTO getOne(String id);
 
-    List<ProductoDTO> getAll(String empresaId, Pageable paging);
+    PageResponse<ProductoDTO> getAll(String empresaId, Pageable paging);
 
     ProductoDTO create(ProductoDTO dto);
 

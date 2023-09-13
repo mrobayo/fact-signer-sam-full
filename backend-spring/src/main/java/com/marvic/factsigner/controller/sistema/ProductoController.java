@@ -1,5 +1,6 @@
 package com.marvic.factsigner.controller.sistema;
 
+import com.marvic.factsigner.payload.PageResponse;
 import com.marvic.factsigner.payload.sistema.ProductoDTO;
 import com.marvic.factsigner.security.CustomUser;
 import com.marvic.factsigner.service.sistema.ProductoService;
@@ -35,7 +36,7 @@ public class ProductoController {
     }
 
     @GetMapping
-    public List<ProductoDTO> getAll(
+    public PageResponse<ProductoDTO> getAll(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
             @RequestParam(defaultValue = "id,desc") String[] sort,
@@ -44,8 +45,7 @@ public class ProductoController {
         if (SecurityHelper.isNotPermitted(user, empresaId)) {
             throw new AccessDeniedException(String.format("%s no autorizado a consultar %s", user.getUsuarioId(), empresaId));
         }
-        List<ProductoDTO> all = service.getAll(empresaId, PageUtil.pagingAndSort(page, size, sort));
-        return all;
+        return service.getAll(empresaId, PageUtil.pagingAndSort(page, size, sort));
     }
 
     @PostMapping
