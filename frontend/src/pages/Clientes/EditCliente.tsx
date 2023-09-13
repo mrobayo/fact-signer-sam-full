@@ -19,6 +19,7 @@ import {DateField} from "@mui/x-date-pickers";
 import {TipoIdentidad} from "../tarifario.ts";
 import {useGrupos} from "../../services/grupo/useGrupos";
 import {ClienteType} from "../../services/clienteService";
+import {PaisesIso2} from "../../util/paisesIso.ts";
 
 const EditCliente: React.FC = () => {
   const { id } = useParams();
@@ -99,29 +100,17 @@ const EditCliente: React.FC = () => {
               <option key={option.id} value={option.id}>{option.name}</option>
             ))
           })}</GridItem>
-          <GridItem sm={3}>{buildTextField('pais')}</GridItem>
+          <GridItem sm={3}>{buildTextField('pais', {
+            select: true, SelectProps: { native: true },
+            children: PaisesIso2.map((option) => (
+              <option key={option.id} value={option.id}>{option.name}</option>
+            ))
+          })}</GridItem>
           <GridItem sm={4}>{buildTextField('ciudad')}</GridItem>
 
           <GridItem sm={12}>{buildTextField('contacto')}</GridItem>
           <GridItem sm={12}>{buildTextField('observacion', {multiline: true, rows: 4})}</GridItem>
 
-          {/*<GridItem md={4}>{buildTextField('nombres')}</GridItem>*/}
-          {/*<GridItem md={4}>{buildTextField('apellidos')}</GridItem>*/}
-          {/*<GridItem md={1}>{buildTextField('tipo')}</GridItem>*/}
-          {/*<GridItem md={3}>{buildTextField('identidad')}</GridItem>*/}
-
-          {/*<GridItem md={3}>{buildTextField('telefono')}</GridItem>*/}
-          {/*<GridItem md={6}>{buildTextField('email')}</GridItem>*/}
-          {/*<GridItem md={3}>*/}
-          {/*  <DatePicker label="Fecha Nacimiento" />*/}
-          {/*</GridItem>*/}
-          {/*<GridItem md={6}>{buildTextField('direccion')}</GridItem>*/}
-          {/*<GridItem md={2}>{buildTextField('pais')}</GridItem>*/}
-          {/*<GridItem md={4}>{buildTextField('ciudad')}</GridItem>*/}
-
-          {/*<GridItem md={6}>{buildTextField('observacion', {multiline: true, rows: 4})}</GridItem>*/}
-          {/*<GridItem md={6}>{buildTextField('contacto')}</GridItem>*/}
-          {/*<GridItem md={6}>{buildTextField('grupoId')}</GridItem>*/}
 
           <GridItem md={12}>
             <Button onClick={() => navigate(-1)}>Cancel</Button>
