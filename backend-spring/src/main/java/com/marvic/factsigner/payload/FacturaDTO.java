@@ -48,6 +48,8 @@ public class FacturaDTO extends ComprobanteDTO {
     @NotBlank @Size(max=40)
     private String compradorId;
 
+    private String compradorName;
+
     @NotNull
     private List<DetalleFacturaDTO> detalles;
 

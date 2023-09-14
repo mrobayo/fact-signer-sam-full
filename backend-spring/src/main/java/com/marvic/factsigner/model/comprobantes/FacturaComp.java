@@ -84,7 +84,7 @@ public class FacturaComp extends Comprobante {
     @JoinColumn(name="comprador_id", nullable = false)
     private Cliente comprador;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name="ct_factura_detalles")
     @OrderColumn(name = "linea")
     private List<DetalleFactura> detalles;

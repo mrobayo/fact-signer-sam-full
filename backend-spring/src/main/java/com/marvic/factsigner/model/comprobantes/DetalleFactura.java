@@ -19,27 +19,21 @@ import java.util.Map;
 @Embeddable
 public class DetalleFactura {
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "factura_detalle_id_seq")
-//    @SequenceGenerator(name = "factura_detalle_id_seq", sequenceName = "factura_detalle_id_seq", initialValue = 10001)
-//    private Integer id;
-
     @Column(name="linea", nullable = false, insertable = false, updatable = false)
     private Integer linea;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "factura_id", nullable = false)
-//    private Factura factura;
-
     @Column(name = "codigo_principal", length = 20, nullable = false)
     private String codigoPrincipal;
+
     @Column(name = "codigo_auxiliar", length = 20)
     private String codigoAuxiliar;
+
     @Column(length = 300, nullable = false)
     private String descripcion;
 
     @Column(precision = 18, scale = 6, nullable = false)
     private BigDecimal cantidad;
+
     @Column(precision = 18, scale = 6, nullable = false)
     private BigDecimal precioUnitario;
 
@@ -49,8 +43,7 @@ public class DetalleFactura {
     @Column(precision = 14, scale = 2, nullable = false)
     private BigDecimal precioTotalSinImpuesto;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "producto_id")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "producto_id")
     private Producto item;
 
     // ICE
@@ -63,18 +56,6 @@ public class DetalleFactura {
     })
     Impuesto ice;
 
-//    @Column(name = "codigo_ice")
-//    private Integer codigoIce;
-//
-//    @Column(name = "tarifa_ice")
-//    private BigDecimal tarifaIce;
-//
-//    @Column(name = "base_imponible_ice", precision = 14, scale = 2)
-//    private BigDecimal baseImponibleIce;
-//
-//    @Column(name = "valor_ice", precision = 14, scale = 2)
-//    private BigDecimal valorIce;
-
     // IVA
     @Embedded
     @AttributeOverrides({
@@ -85,22 +66,17 @@ public class DetalleFactura {
     })
     Impuesto iva;
 
-//    @Column(name = "codigo_iva")
-//    private Integer codigoIva;
-//
-//    @Column(name = "tarifa_iva")
-//    private BigDecimal tarifaIva;
-//
-//    @Column(name = "base_imponible_iva", precision = 14, scale = 2)
-//    private BigDecimal baseImponibleIva;
-//
-//    @Column(name = "valor_iva", precision = 14, scale = 2)
-//    private BigDecimal valorIva;
-
     // Detalles adicionales
-
     @Convert(converter = HashMapConverter.class)
     @Column(name="detalles_adicionales", length = 4000)
     private Map<String, String> detallesAdicionales;
 
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "factura_detalle_id_seq")
+//    @SequenceGenerator(name = "factura_detalle_id_seq", sequenceName = "factura_detalle_id_seq", initialValue = 10001)
+//    private Integer id;
+
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "factura_id", nullable = false)
+//    private Factura factura;
 }

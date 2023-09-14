@@ -1,6 +1,8 @@
 package com.marvic.factsigner.service;
 
 import com.marvic.factsigner.payload.FacturaDTO;
+import com.marvic.factsigner.payload.PageResponse;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 
 import java.time.LocalDate;
@@ -20,7 +22,7 @@ public interface FacturaService {
 
     FacturaDTO getOne(String id);
 
-    List<FacturaDTO> getAllByEmpresaId(String empresaId);
+    PageResponse<FacturaDTO> getAllByEmpresaId(String empresaId, Pageable paging);
 
     // List<FacturaDTO> getAllByPuntoVentaId(String puntoVentaId);
 
