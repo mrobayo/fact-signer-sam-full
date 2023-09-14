@@ -64,4 +64,6 @@ public class FacturaDTO extends ComprobanteDTO {
     @NotNull
     private TotalImpuesto totalIce;
 
+    private String observacion;
+
 }

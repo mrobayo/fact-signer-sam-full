@@ -164,4 +164,7 @@ public class Comprobante {
     @JoinColumn(name="punto_venta_id", nullable = false)
     private PuntoVenta puntoVenta;
 
+    @Column(length = 300)
+    private String observacion;
+
 }
