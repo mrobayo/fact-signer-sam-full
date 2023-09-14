@@ -16,7 +16,6 @@ import {
   GridRowId,
 } from '@mui/x-data-grid';
 import {Title} from "../../components/ui";
-import clienteService from "../../services/cliente/clienteService.ts";
 import {getAge, PageType} from "../../util";
 import {PageSize} from "../../constants.ts";
 import IconButton from "@mui/material/IconButton";
@@ -25,7 +24,7 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import AddIcon from '@mui/icons-material/AddBoxRounded';
 import PeopleAltTwoToneIcon from "@mui/icons-material/PeopleAltTwoTone";
 import {useNavigate} from "react-router-dom";
-import {ClienteType} from "../../services/cliente/clienteService.ts";
+import {clienteService, type ClienteType} from "../../services";
 
 function ClienteToolbar() {
   const navigate = useNavigate();

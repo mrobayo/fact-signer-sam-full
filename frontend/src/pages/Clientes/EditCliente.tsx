@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import withAuth from "../../services/auth/withAuth.tsx";
 import Box from '@mui/material/Box';
 import {useParams, useNavigate} from "react-router-dom";
@@ -25,11 +25,15 @@ import {PaisesIso2} from "../../util/paisesIso.ts";
 // import {useSaveCliente} from "../../services/cliente/useSaveCliente.ts";
 import {useGetCliente} from "../../services/cliente/useGetCliente.ts";
 import dayjs from "dayjs";
+import IconButton from "@mui/material/IconButton";
+import LockIcon from '@mui/icons-material/Lock';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
 
 const EditCliente: React.FC = () => {
   const { id } = useParams();
   const { isNew } = useRouterQuery();
   const navigate = useNavigate();
+  const [isReadMode, setReadMode] = useState(!isNew);
   const { data: gruposCliente } = useGrupos();
   const {
       control,
@@ -57,7 +61,6 @@ const EditCliente: React.FC = () => {
     saveCliente(data);
     navigate('/clientes');
   })
-  const isReadOnly = false;
 
   const buildTextField = (name: keyof ClienteType, textFieldProps?: TextFieldProps) => {
     const label = getClienteLabel(name);
@@ -66,7 +69,7 @@ const EditCliente: React.FC = () => {
               label={label}
               error={!isEmpty(errors[name])}
               helperText={errors[name]?.message}
-              disabled={isReadOnly}
+              disabled={isReadMode}
               InputLabelProps={{disableAnimation: true, shrink: true}}
               fullWidth
               {...textFieldProps}
@@ -76,7 +79,10 @@ const EditCliente: React.FC = () => {
 
   return (
     <div>
-      <Title><PeopleAltTwoToneIcon sx={{ m: 2, mb: '-4px' }} /> Cliente <b>{isNew ? 'Nuevo' : cliente?.name}</b></Title>
+      <Title>
+        <PeopleAltTwoToneIcon sx={{ m: 2, mb: '-4px' }} /> Cliente <b>{isNew ? 'Nuevo' : cliente?.name}</b>
+        <IconButton onClick={() => setReadMode(!isReadMode)} sx={{ float: 'right' }}>{isReadMode ? <LockIcon /> : <LockOpenIcon />}</IconButton>
+      </Title>
       <Box
         component="form"
         ref={formRef} noValidate autoComplete="off" onSubmit={onFormSubmit}
@@ -104,9 +110,12 @@ const EditCliente: React.FC = () => {
               name="birthday"
               control={control}
               render={({ field }) =>
-                <DateField label="Fecha Nacimiento"
+                <DateField
+                  label="Fecha Nacimiento"
+                  disabled={isReadMode}
                   helperText={errors.birthday?.message}
-                  fullWidth {...field} />
+                  fullWidth {...field}
+                />
               }
             />
           </GridItem>
@@ -136,7 +145,8 @@ const EditCliente: React.FC = () => {
             <Button onClick={() => navigate(-1)}>Cancel</Button>
             <Button variant="contained"
                 onClick={() => { formRef?.current?.requestSubmit(); }}
-                //disabled={isLoading || isSaving || !isEmpty(errorLoading)}
+                disabled={isReadMode}
+                //{isLoading || isSaving || !isEmpty(errorLoading)}
                 //startIcon={isSaving && <CircularProgress size={16}/>}
             >Submit</Button>
             </Grid>
