@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import withAuth from "../../services/auth/withAuth.tsx";
 import Box from '@mui/material/Box';
 import {useParams, useNavigate} from "react-router-dom";
-import {GridItem, Title} from "../../components/ui";
+import {GridItem} from "../../components/ui";
 import PeopleAltTwoToneIcon from "@mui/icons-material/PeopleAltTwoTone";
 import {useRouterQuery} from "../../util";
 import {useForm, Controller} from "react-hook-form";
@@ -22,12 +22,16 @@ import {TipoIdentidad} from "../tarifario.ts";
 import {useGrupos} from "../../services/grupo/useGrupos";
 import clienteService, {clienteEmpty, ClienteType} from "../../services/cliente/clienteService.ts";
 import {PaisesIso2} from "../../util/paisesIso.ts";
-// import {useSaveCliente} from "../../services/cliente/useSaveCliente.ts";
-import {useGetCliente} from "../../services/cliente/useGetCliente.ts";
+
+import {useGetCliente} from "../../services";
 import dayjs from "dayjs";
 import IconButton from "@mui/material/IconButton";
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
+import RequestQuoteOutlinedIcon from '@mui/icons-material/RequestQuoteOutlined';
+
+import TopToolbar from "../../components/ui/TopToolbar/TopToolbar.tsx";
+import {ToolbarTitle} from "../../components/ui/ToolbarTitle/ToolbarTitle.tsx";
 
 const EditCliente: React.FC = () => {
   const { id } = useParams();
@@ -44,7 +48,6 @@ const EditCliente: React.FC = () => {
     } = useForm<ClienteType>({resolver: yupResolver(clienteSchema)});
   const formRef = useRef<HTMLFormElement>(null);
 
-  // const queryClient = useQueryClient();
   const { data: cliente } = useGetCliente(id);
   const { mutate: saveCliente } = useMutation({
       mutationFn: (body: ClienteType) => clienteService.create(body),
@@ -79,10 +82,21 @@ const EditCliente: React.FC = () => {
 
   return (
     <div>
-      <Title>
-        <PeopleAltTwoToneIcon sx={{ m: 2, mb: '-4px' }} /> Cliente <b>{isNew ? 'Nuevo' : cliente?.name}</b>
-        <IconButton onClick={() => setReadMode(!isReadMode)} sx={{ float: 'right' }}>{isReadMode ? <LockIcon /> : <LockOpenIcon />}</IconButton>
-      </Title>
+
+        <TopToolbar>
+          <ToolbarTitle Icon={PeopleAltTwoToneIcon} disabled={!cliente?.activo}>
+            Cliente <b>{isNew ? 'Nuevo' : cliente?.name}</b>
+          </ToolbarTitle>
+
+          {!isNew && <IconButton onClick={() => navigate(`/facturas/new?clienteId=${cliente?.id}`)} disabled={!cliente?.activo}>
+            <RequestQuoteOutlinedIcon />
+          </IconButton>}
+
+          {!isNew && <IconButton onClick={() => setReadMode(!isReadMode)}>
+            {isReadMode ? <LockIcon /> : <LockOpenIcon />}
+          </IconButton>}
+        </TopToolbar>
+
       <Box
         component="form"
         ref={formRef} noValidate autoComplete="off" onSubmit={onFormSubmit}

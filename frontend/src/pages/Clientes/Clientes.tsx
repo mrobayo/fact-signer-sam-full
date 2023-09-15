@@ -9,6 +9,7 @@ import {
   DataGrid,
   GridColDef,
   GridPaginationModel,
+  GridCellParams,
   GridValueGetterParams,
   GridToolbarContainer,
   GridToolbarExport,
@@ -19,9 +20,11 @@ import {Title} from "../../components/ui";
 import {getAge, PageType} from "../../util";
 import {PageSize} from "../../constants.ts";
 import IconButton from "@mui/material/IconButton";
-import EditIcon from '@mui/icons-material/Edit';
+
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import AddIcon from '@mui/icons-material/AddBoxRounded';
+//import PreviewIcon from '@mui/icons-material/Preview';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import PeopleAltTwoToneIcon from "@mui/icons-material/PeopleAltTwoTone";
 import {useNavigate} from "react-router-dom";
 import {clienteService, type ClienteType} from "../../services";
@@ -81,6 +84,8 @@ const Clientes: React.FC = () => {
           headerName: 'Nombres Apellidos',
           flex: 1,
           minWidth: 200,
+
+          //valueGetter: (params: GridValueGetterParams) => (params.row.birthday)
         },
         {
           field: 'edad',
@@ -110,15 +115,15 @@ const Clientes: React.FC = () => {
             //const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
             return [
               <GridActionsCellItem
-                icon={<EditIcon/>}
-                label="Edit"
+                icon={<ModeEditIcon />}
+                label="Ver"
                 className="textPrimary"
                 onClick={handleEditClick(id)}
                 color="inherit"
               />,
               <GridActionsCellItem
                 icon={<DeleteIcon/>}
-                label="Delete"
+                label="Eliminar"
                 onClick={handleDeleteClick(id)}
                 color="inherit"
                 disabled
@@ -136,7 +141,7 @@ const Clientes: React.FC = () => {
     <div>
       <Title><PeopleAltTwoToneIcon sx={{ m: 2, mb: '-4px' }} /> Clientes</Title>
 
-      <Box sx={{ height: 450, width: '100%', backgroundColor: 'white' }}>
+      <Box sx={{ height: 450, width: '100%', backgroundColor: 'white', '& .celldisabled': {textDecoration: 'line-through'} }}>
         <DataGrid
           //apiRef={apiRef}
           rows={data?.content ?? []}
@@ -156,6 +161,10 @@ const Clientes: React.FC = () => {
           loading={isLoading}
           slots={{
             toolbar: ClienteToolbar,
+          }}
+          getCellClassName={(params: GridCellParams<ClienteType, any, number>) => {
+            console.log('params', params);
+            return params.field==='name' && params.row.activo==false ? 'celldisabled' : '';
           }}
         />
 
