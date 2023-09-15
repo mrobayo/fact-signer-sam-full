@@ -50,6 +50,14 @@ public class FacturaDTO extends ComprobanteDTO {
 
     private String clienteName;
 
+    private String tipoIdentificacionComprador;
+
+    private String razonSocialComprador;
+
+    private String identificacionComprador;
+
+    private String direccionComprador;
+
     @NotNull
     private List<DetalleFacturaDTO> detalles;
 
