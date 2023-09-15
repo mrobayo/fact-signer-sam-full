@@ -5,12 +5,12 @@ import LoginPage from "./layout/LoginPage/LoginPage.tsx";
 import PublicPage from "./layout/PublicPage/PublicPage.tsx";
 // import FacturasPage from "./pages/FacturasPage";
 import NoMatch from "./components/ui/NoMatch/NoMatch.tsx";
-import EditFactura from "./pages/EditFacturaPage";
 import Clientes, {EditCliente} from "./pages/Clientes";
 import Productos, {EditProducto} from "./pages/Productos";
 import Admin from "./pages/Admin";
 import Arqueo from "./pages/Arqueo";
-import Facturas from "./pages/Facturas/Facturas.tsx";
+import Facturas, { EditFactura } from "./pages/Facturas";
+import EditFacturaPage from "./pages/EditFacturaPage";
 
 // import { activeYupLocale } from "./util";
 // activeYupLocale();
@@ -25,7 +25,8 @@ function App() {
           <Route path="/facturas">
             <Route index element={<Facturas />} />
             <Route path="new" element={<EditFactura />} />
-            <Route path="edit/:id" element={<div>Factura edit 1</div>} />
+            <Route path="new-v1" element={<EditFacturaPage />} />
+            <Route path="edit/:id" element={<EditFactura />} />
           </Route>
 
           <Route path="/clientes">

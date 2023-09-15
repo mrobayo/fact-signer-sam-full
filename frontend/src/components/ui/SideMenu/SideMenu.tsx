@@ -8,8 +8,9 @@ import Drawer from "../Drawer/Drawer.tsx";
 import * as React from "react";
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../../../services/auth/useAuth.ts";
-import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined';
+// import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined';
 import RequestQuoteOutlinedIcon from '@mui/icons-material/RequestQuoteOutlined';
+import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 // import AssignmentReturnedOutlinedIcon from '@mui/icons-material/AssignmentReturnedOutlined';
 // import AssignmentReturnOutlinedIcon from '@mui/icons-material/AssignmentReturnOutlined';
 import ListSubheader from "@mui/material/ListSubheader";
@@ -38,8 +39,8 @@ const SideMenu: React.FC<{
   }
 
   const mainListItems = [
-    addMenu("Facturas", <ReceiptOutlinedIcon />, "/facturas"),
-    addMenu("Retenciones", <RequestQuoteOutlinedIcon />, "/facturas"),
+    addMenu("Facturas", <RequestQuoteOutlinedIcon />, "/facturas"),
+    addMenu("Retenciones", <RequestQuoteIcon />, "/facturas"),
     addMenu("Arqueo Caja", <PointOfSaleTwoToneIcon />, "/arqueo"),
     // addMenu("Notas Credito", <AssignmentReturnedOutlinedIcon />, "/notas-credito"),
     // addMenu("Notas Debito", <AssignmentReturnOutlinedIcon />, "/notas-debito"),

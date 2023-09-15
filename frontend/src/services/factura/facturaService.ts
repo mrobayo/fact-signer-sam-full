@@ -1,17 +1,24 @@
 import {buildQueryByPage, createAxiosService, PageType} from "../../util";
-import {DetAdicionalType, ImpuestoType} from "../../pages/FacturasPage/factura";
+
+export type ImpuestoType = {
+  codigoPorcentaje?: number,
+  tarifa?: number,
+  baseImponible: number,
+  valor: number,
+};
 
 export type DetalleFacturaType = {
-  detalleId: number,
-  codigoPrincipal: string,
-  codigoAuxiliar?: string,
-  descripcion: string,
-  cantidad: number,
-  precioUnitario: number,
-  descuento: number,
-  precioTotalSinImpuesto: number,
-  detallesAdicionales?: DetAdicionalType[],
-  iva: ImpuestoType[]
+  linea: number;
+  itemId?: string|null;
+  codigoPrincipal: string;
+  codigoAuxiliar?: string;
+  descripcion: string;
+  cantidad: number;
+  precioUnitario: number;
+  descuento: number;
+  precioTotalSinImpuesto: number;
+  detallesAdicionales?: Record<string, string>;
+  iva: ImpuestoType
 };
 
 export type FacturaType = {
@@ -42,7 +49,8 @@ export type FacturaType = {
   valorRetRenta?: number;
   guiaRemision?: string;
   compradorId?: string;
-  detalles: DetalleFacturaType[]
+  detalles: DetalleFacturaType[],
+  observacion?: string;
 }
 
 export function facturaEmpty(defaultValues: Partial<FacturaType>): FacturaType {
@@ -75,7 +83,24 @@ export function facturaEmpty(defaultValues: Partial<FacturaType>): FacturaType {
     //valorRetRenta?: number;
     //guiaRemision?: string;
     //compradorId:
-    detalles: []
+    detalles: [{
+        linea: 1,
+        itemId: null,
+        codigoPrincipal: '',
+        codigoAuxiliar: '',
+        descripcion: '',
+        cantidad: 1,
+        precioUnitario: 0,
+        descuento: 0,
+        precioTotalSinImpuesto: 0,
+        detallesAdicionales: {},
+        iva: {
+          codigoPorcentaje: undefined,
+          tarifa: undefined,
+          baseImponible: 0,
+          valor: 0
+        }
+      }],
   };
 }
 
@@ -99,6 +124,10 @@ class FacturaService {
   async get(empresaId: string, page: number, size: number, sort: string[]): Promise<PageType<FacturaType>> {
     const { data } = await this.service.get(buildQueryByPage(page, size, sort)+`&empresa_id=${empresaId}`);
     return data;
+  }
+
+  async create(body: FacturaType): Promise<FacturaType> {
+    return await this.service.post('/', body);
   }
 
   // async get1(url: string, config?: AxiosRequestConfig<any> | undefined) {

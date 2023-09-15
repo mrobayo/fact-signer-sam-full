@@ -15,7 +15,7 @@ import {useQuery} from "@tanstack/react-query";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import Box from "@mui/material/Box";
-import ColorLensTwoToneIcon from "@mui/icons-material/ColorLensTwoTone";
+import RequestQuoteOutlinedIcon from '@mui/icons-material/RequestQuoteOutlined';
 
 import withAuth from "../../services/auth/withAuth.tsx";
 import {facturaService, type FacturaType} from "../../services";
@@ -29,11 +29,16 @@ function FacturaToolbar() {
   return (
     <GridToolbarContainer sx={{ justifyContent: 'flex-end' }}>
       <GridToolbarExport />
-      <span><IconButton
+      <IconButton
         color="info"
         onClick={() => navigate('/facturas/new')}>
         <AddIcon />
-      </IconButton></span>
+      </IconButton>
+      <IconButton
+        color="info"
+        onClick={() => navigate('/facturas/new-v1')}>
+        <AddIcon />
+      </IconButton>
     </GridToolbarContainer>
   );
 }
@@ -128,7 +133,7 @@ const Facturas: React.FC = () => {
 
   return (
     <div>
-      <Title><ColorLensTwoToneIcon sx={{ m: 2, mb: '-4px' }} /> Facturas</Title>
+      <Title><RequestQuoteOutlinedIcon sx={{ m: 2, mb: '-4px' }} /> Facturas</Title>
 
       <Box sx={{ height: 450, width: '100%', backgroundColor: 'white' }}>
         <DataGrid
