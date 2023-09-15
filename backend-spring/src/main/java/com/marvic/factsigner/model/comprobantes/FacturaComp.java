@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -81,8 +80,8 @@ public class FacturaComp extends Comprobante {
     private BigDecimal valorRetRenta;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="comprador_id", nullable = false)
-    private Cliente comprador;
+    @JoinColumn(name="cliente_id", nullable = false)
+    private Cliente cliente;
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name="ct_factura_detalles")

@@ -23,7 +23,6 @@ import com.marvic.factsigner.util.Utils;
 import ec.gob.sri.comprobantes.modelo.factura.Factura;
 import com.marvic.factsigner.service.SignerService;
 import ec.gob.sri.types.SriTipoDoc;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
@@ -36,16 +35,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
-import software.amazon.awssdk.utils.IoUtils;
 
 import static java.math.BigDecimal.ZERO;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -209,8 +205,8 @@ public class FacturaServiceImpl implements FacturaService {
 
         PuntoVenta puntoVenta = puntoVentaRepository.findById(dto.getPuntoVentaId()).get();
         Empresa empresa = puntoVenta.getEmpresa();
-        UUID compradorUuid = Utils.toUUID(dto.getCompradorId());
-        Cliente comprador = clienteRepository.findById(compradorUuid).get();
+        UUID clienteId = Utils.toUUID(dto.getClienteId());
+        Cliente cliente = clienteRepository.findById(clienteId).get();
 
         // Check UK by name + empresa
         if (dto.getName() != null) {
@@ -245,13 +241,13 @@ public class FacturaServiceImpl implements FacturaService {
         entity.setImporteTotal(ZERO);
 
         // Comprador
-        entity.setComprador(comprador);
-        if (comprador != null) {
-            entity.setTipoIdentificacionComprador(comprador.getTipo());
-            entity.setRazonSocialComprador(comprador.getName());
-            entity.setIdentificacionComprador(comprador.getIdentidad());
-            entity.setDireccionComprador(comprador.getDireccion());
-            entity.setSujetoEmail(comprador.getEmail());
+        entity.setCliente(cliente);
+        if (cliente != null) {
+            entity.setTipoIdentificacionComprador(cliente.getTipo());
+            entity.setRazonSocialComprador(cliente.getName());
+            entity.setIdentificacionComprador(cliente.getIdentidad());
+            entity.setDireccionComprador(cliente.getDireccion());
+            entity.setSujetoEmail(cliente.getEmail());
         }
 
         if (entity.getDetalles() != null) {
