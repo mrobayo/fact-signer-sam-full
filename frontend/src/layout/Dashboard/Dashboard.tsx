@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+
 import CssBaseline from '@mui/material/CssBaseline';
+import GlobalStyles from "@mui/material/GlobalStyles";
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 
@@ -49,6 +51,17 @@ const Dashboard: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: 'flex' }}>
+        <GlobalStyles
+          styles={{
+            '&.MuiInputLabel-root.MuiInputLabel-shrink.MuiInputLabel-outlined.Mui-disabled': {
+              //'-webkit-text-fill-color': 'rgb(125, 102, 95, 0.8)!important'
+              '-webkit-text-fill-color': 'rgb(70, 90, 100, 0.7)!important'
+            },
+            '&.MuiInputBase-root>.Mui-disabled': {
+              '-webkit-text-fill-color': 'rgba(0, 0, 0, 0.6)!important'
+            },
+          }}
+        />
         <CssBaseline />
         <MainBar open={open} toggleDrawer={toggleDrawer} />
         <SideMenu open={open} toggleDrawer={toggleDrawer} />
@@ -72,40 +85,7 @@ const Dashboard: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
               spacing={3}
               data-test-id="dashboard-body"
             >
-
                 {children}
-              {/*<Grid item xs={12} md={8} lg={9}>*/}
-              {/*  <Paper*/}
-              {/*    sx={{*/}
-              {/*      p: 2,*/}
-              {/*      display: 'flex',*/}
-              {/*      flexDirection: 'column',*/}
-              {/*      height: 240,*/}
-              {/*    }}*/}
-              {/*  >*/}
-              {/*    <Chart />*/}
-              {/*  </Paper>*/}
-              {/*</Grid>*/}
-
-              {/*<Grid item xs={12} md={4} lg={3}>*/}
-              {/*  <Paper*/}
-              {/*    sx={{*/}
-              {/*      p: 2,*/}
-              {/*      display: 'flex',*/}
-              {/*      flexDirection: 'column',*/}
-              {/*      height: 240,*/}
-              {/*    }}*/}
-              {/*  >*/}
-              {/*    <Deposits />*/}
-              {/*  </Paper>*/}
-              {/*</Grid>*/}
-
-              {/*<Grid item xs={12}>*/}
-              {/*  <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>*/}
-              {/*    <Orders />*/}
-              {/*  </Paper>*/}
-              {/*</Grid>*/}
-
             </Grid>
               <Container
                 maxWidth="md"
