@@ -49,6 +49,11 @@ export type FacturaType = {
   valorRetRenta?: number;
   guiaRemision?: string;
   clienteId?: string;
+  clienteName?: string;
+  tipoIdentificacionComprador?: string;
+  razonSocialComprador?: string;
+  identificacionComprador?: string;
+  direccionComprador?: string;
   detalles: DetalleFacturaType[],
   observacion?: string;
 }
@@ -57,7 +62,13 @@ export function facturaEmpty(defaultValues: Partial<FacturaType>): FacturaType {
   const {
     empresaId,
     puntoVentaId,
-    moneda
+    moneda,
+    clienteId,
+    clienteName,
+    tipoIdentificacionComprador,
+    razonSocialComprador,
+    identificacionComprador,
+    direccionComprador
   } = defaultValues;
 
   return {
@@ -82,7 +93,12 @@ export function facturaEmpty(defaultValues: Partial<FacturaType>): FacturaType {
     //valorRetIva?: number;
     //valorRetRenta?: number;
     //guiaRemision?: string;
-    //clienteId:
+    clienteId,
+    clienteName,
+    tipoIdentificacionComprador,
+    razonSocialComprador,
+    identificacionComprador,
+    direccionComprador,
     detalles: [{
         linea: 1,
         itemId: null,

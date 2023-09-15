@@ -27,6 +27,10 @@ import LockOpenIcon from '@mui/icons-material/LockOpen';
 import {useAuth} from "../../services/auth/useAuth.ts";
 import TopToolbar from "../../components/ui/TopToolbar/TopToolbar.tsx";
 import {ToolbarTitle} from "../../components/ui/ToolbarTitle/ToolbarTitle.tsx";
+import FormControl from "@mui/material/FormControl";
+import FormHelperText from "@mui/material/FormHelperText";
+import InputLabel from "@mui/material/InputLabel";
+import {Input} from "@mui/material";
 
 const EditFactura: React.FC = () => {
   const auth = useAuth();
@@ -34,7 +38,7 @@ const EditFactura: React.FC = () => {
   const { id } = useParams();
   const { isNew, query } = useRouterQuery();
   const navigate = useNavigate();
-  query.get("clienteId")
+
   const [clienteId, setClienteId] = useState<string>();
   const { data: cliente } = useGetCliente(clienteId);
   const [isReadMode, setReadMode] = useState(!isNew);
@@ -63,8 +67,20 @@ const EditFactura: React.FC = () => {
     const puntoVentaId = auth.puntoVenta.id;
     const moneda = auth.puntoVenta.empresa.moneda;
     const {empresaId} = auth.puntoVenta ?? {};
-    reset(factura != null ? {...factura} : facturaEmpty({ empresaId, puntoVentaId, moneda }));
-  }, [factura, reset]);
+    const newFactura = facturaEmpty({
+      empresaId,
+      puntoVentaId,
+      moneda,
+      clienteId: cliente?.id,
+      clienteName: cliente?.name,
+      tipoIdentificacionComprador: cliente?.tipo,
+      razonSocialComprador: cliente?.name,
+      identificacionComprador: cliente?.identidad,
+      direccionComprador: cliente?.direccion
+    });
+    console.log(factura, newFactura);
+    reset(isNew ? newFactura : {...factura});
+  }, [factura, cliente, reset]);
 
   const onFormSubmit = handleSubmit((data) => {
     console.log('submit...', data);
@@ -80,6 +96,7 @@ const EditFactura: React.FC = () => {
               error={!isEmpty(errors[name])}
               helperText={errors[name]?.message}
               disabled={isReadMode}
+              inputProps={isReadMode ? {readOnly: true} : {}}
               InputLabelProps={{disableAnimation: true, shrink: true}}
               fullWidth
               {...textFieldProps}
@@ -109,9 +126,9 @@ const EditFactura: React.FC = () => {
           spacing={3}
           sx={{ p: 4 }}
         >
-          <GridItem sm={5}>{cliente?.id} - {cliente?.name}</GridItem>
-
-          <GridItem sm={5}>{buildTextField('clienteId')}</GridItem>
+          <GridItem sm={2}>{buildTextField('tipoIdentificacionComprador', {disabled: true, inputProps: {readOnly: true}})}</GridItem>
+          <GridItem sm={3}>{buildTextField('identificacionComprador', {disabled: true, inputProps: {readOnly: true}})}</GridItem>
+          <GridItem sm={7}>{buildTextField('razonSocialComprador', {disabled: true, inputProps: {readOnly: true}})}</GridItem>
 
           <GridItem sm={12}>{buildTextField('observacion', {multiline: true, rows: 4})}</GridItem>
 

@@ -73,6 +73,7 @@ const EditCliente: React.FC = () => {
               error={!isEmpty(errors[name])}
               helperText={errors[name]?.message}
               disabled={isReadMode}
+              inputProps={isReadMode ? {readOnly: true} : {}}
               InputLabelProps={{disableAnimation: true, shrink: true}}
               fullWidth
               {...textFieldProps}

@@ -39,7 +39,12 @@ export const facturaSchema = Yup.object().shape({
 
 export const getFacturaLabel = (field: string): string => {
   const labels = {
-    clienteId: 'Paciente',
+    clienteId: 'Cliente',
+    clienteName: 'Paciente',
+    tipoIdentificacionComprador: 'Tipo',
+    razonSocialComprador: 'Razon Social',
+    identificacionComprador: 'Identificación',
+    direccionComprador: 'Dirección'
   } as Record<string, string>;
   if (field in labels) {
     return labels[field];
