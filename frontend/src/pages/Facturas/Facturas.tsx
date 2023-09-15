@@ -80,7 +80,7 @@ const Facturas: React.FC = () => {
           width: 110,
         },
         {
-          field: 'compradorName',
+          field: 'clienteName',
           headerName: 'Cliente',
           flex: 1,
           minWidth: 200,

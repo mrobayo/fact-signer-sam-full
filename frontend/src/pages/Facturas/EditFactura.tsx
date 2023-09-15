@@ -2,8 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import withAuth from "../../services/auth/withAuth.tsx";
 import Box from '@mui/material/Box';
 import {useParams, useNavigate} from "react-router-dom";
-import {GridItem, Title} from "../../components/ui";
-import PeopleAltTwoToneIcon from "@mui/icons-material/PeopleAltTwoTone";
+import {GridItem} from "../../components/ui";
 import {useRouterQuery} from "../../util";
 import {useForm} from "react-hook-form";
 import isEmpty from "lodash/isEmpty";
@@ -22,10 +21,12 @@ import facturaService, {facturaEmpty, FacturaType} from "../../services/factura/
 import {useGetCliente, useGetFactura} from "../../services";
 
 import IconButton from "@mui/material/IconButton";
+import RequestQuoteOutlinedIcon from '@mui/icons-material/RequestQuoteOutlined';
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import {useAuth} from "../../services/auth/useAuth.ts";
 import TopToolbar from "../../components/ui/TopToolbar/TopToolbar.tsx";
+import {ToolbarTitle} from "../../components/ui/ToolbarTitle/ToolbarTitle.tsx";
 
 const EditFactura: React.FC = () => {
   const auth = useAuth();
@@ -89,12 +90,12 @@ const EditFactura: React.FC = () => {
   return (
     <div>
       <TopToolbar>
-        <div style={{ flexGrow: 1 }}>
-          <Title>
-            <PeopleAltTwoToneIcon sx={{ m: 2, mb: '-4px' }} /> Factura <b>{isNew ? 'Nueva' : factura?.name}</b>
-          </Title>
-        </div>
-        <IconButton onClick={() => setReadMode(!isReadMode)} sx={{ float: 'right' }}>{isReadMode ? <LockIcon /> : <LockOpenIcon />}</IconButton>
+        <ToolbarTitle Icon={RequestQuoteOutlinedIcon}>
+          Factura <b>{isNew ? 'Nueva' : factura?.name}</b>
+        </ToolbarTitle>
+        {!isNew && <IconButton onClick={() => setReadMode(!isReadMode)}>
+          {isReadMode ? <LockIcon /> : <LockOpenIcon />}
+        </IconButton>}
       </TopToolbar>
 
       <Box
@@ -108,8 +109,9 @@ const EditFactura: React.FC = () => {
           spacing={3}
           sx={{ p: 4 }}
         >
+          <GridItem sm={5}>{cliente?.id} - {cliente?.name}</GridItem>
 
-          <GridItem sm={5}>{buildTextField('compradorId')}</GridItem>
+          <GridItem sm={5}>{buildTextField('clienteId')}</GridItem>
 
           <GridItem sm={12}>{buildTextField('observacion', {multiline: true, rows: 4})}</GridItem>
 

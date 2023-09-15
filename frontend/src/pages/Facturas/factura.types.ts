@@ -32,14 +32,14 @@ export const facturaSchema = Yup.object().shape({
   valorRetIva: Yup.number().nullable(),
   valorRetRenta: Yup.number().nullable(),
   guiaRemision: Yup.string().nullable(),
-  compradorId: Yup.string().nullable(),
+  clienteId: Yup.string().nullable(),
   detalles: Yup.array().ensure(),
   observacion: Yup.string().nullable(),
 }) as ObjectSchema<FacturaType>;
 
 export const getFacturaLabel = (field: string): string => {
   const labels = {
-    compradorId: 'Paciente',
+    clienteId: 'Paciente',
   } as Record<string, string>;
   if (field in labels) {
     return labels[field];
