@@ -12,7 +12,7 @@ public interface ClienteService {
 
     ClienteDTO getOne(String id);
 
-    PageResponse<ClienteDTO> getAll(Pageable paging);
+    PageResponse<ClienteDTO> getAll(String search, String activo, Pageable paging);
 
     ClienteDTO create(ClienteDTO dto);
 

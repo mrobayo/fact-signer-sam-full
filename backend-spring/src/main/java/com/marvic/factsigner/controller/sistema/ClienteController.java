@@ -35,10 +35,12 @@ public class ClienteController {
      */
     @GetMapping
     public PageResponse<ClienteDTO> getAll(
+            @RequestParam(required = false) String search,
+            @RequestParam(defaultValue = "all") String activo,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
             @RequestParam(defaultValue = "id,desc") String[] sort) {
-        return service.getAll(PageUtil.pagingAndSort(page, size, sort));
+        return service.getAll(search, activo, PageUtil.pagingAndSort(page, size, sort));
     }
 
     @PostMapping

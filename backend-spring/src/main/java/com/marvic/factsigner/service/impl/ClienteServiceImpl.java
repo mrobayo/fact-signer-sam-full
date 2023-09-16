@@ -46,8 +46,20 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public PageResponse<ClienteDTO> getAll(Pageable paging) {
-        Page<Cliente> page = repository.findAll(paging);
+    public PageResponse<ClienteDTO> getAll(String search, String activo, Pageable paging) {
+        Boolean allOrActivo = "all".equals(activo) ? null : !"false".equalsIgnoreCase(activo);
+        String trimSearch = StringUtils.trimToEmpty(search);
+        Page<Cliente> page;
+        if (trimSearch.isEmpty() && allOrActivo == null) {
+            page = repository.findAll(paging);
+        } else {
+            if (trimSearch.matches("[0-9]+")) {
+                page = repository.findAllByIdentidadAndActivo(trimSearch + "%", allOrActivo, paging);
+            } else {
+                page = repository.findAllByNameAndActivo("%" + trimSearch + "%", allOrActivo, paging);
+            }
+        }
+
         return PageUtil.mapPage(page, this::mapToDTO);
     }
 
