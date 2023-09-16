@@ -22,6 +22,7 @@ import {useGetCliente, useGetFactura} from "../../services";
 
 import IconButton from "@mui/material/IconButton";
 import RequestQuoteOutlinedIcon from '@mui/icons-material/RequestQuoteOutlined';
+import SearchIcon from '@mui/icons-material/Search';
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import {useAuth} from "../../services/auth/useAuth.ts";
@@ -31,6 +32,8 @@ import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
 import InputLabel from "@mui/material/InputLabel";
 import {Input} from "@mui/material";
+import Tooltip from "@mui/material/Tooltip";
+import SearchCliente from "../../components/SearchCliente/SearchCliente.tsx";
 
 const EditFactura: React.FC = () => {
   const auth = useAuth();
@@ -41,6 +44,8 @@ const EditFactura: React.FC = () => {
 
   const [clienteId, setClienteId] = useState<string>();
   const { data: cliente } = useGetCliente(clienteId);
+  const [isClienteDialogOpen, setClienteDialogOpen] = useState(false);
+
   const [isReadMode, setReadMode] = useState(!isNew);
   const {
       //control,
@@ -126,9 +131,14 @@ const EditFactura: React.FC = () => {
           spacing={3}
           sx={{ p: 4 }}
         >
+          <GridItem sm={1} sx={{textAlign: 'right'}}>
+            <Tooltip title="Buscar Cliente">
+              <IconButton onClick={() => setClienteDialogOpen(true)}><SearchIcon fontSize={"large"} /></IconButton>
+            </Tooltip>
+          </GridItem>
           <GridItem sm={2}>{buildTextField('tipoIdentificacionComprador', {disabled: true, inputProps: {readOnly: true}})}</GridItem>
           <GridItem sm={3}>{buildTextField('identificacionComprador', {disabled: true, inputProps: {readOnly: true}})}</GridItem>
-          <GridItem sm={7}>{buildTextField('razonSocialComprador', {disabled: true, inputProps: {readOnly: true}})}</GridItem>
+          <GridItem sm={6}>{buildTextField('razonSocialComprador', {disabled: true, inputProps: {readOnly: true}})}</GridItem>
 
           <GridItem sm={12}>{buildTextField('observacion', {multiline: true, rows: 4})}</GridItem>
 
@@ -147,6 +157,12 @@ const EditFactura: React.FC = () => {
         </Paper>
 
       </Box>
+      <SearchCliente
+        cliente={cliente}
+        onSelect={(cliente) => {console.log(cliente);}}
+        isVisible={isClienteDialogOpen}
+        setVisible={setClienteDialogOpen}
+      />
     </div>
   )
 };
