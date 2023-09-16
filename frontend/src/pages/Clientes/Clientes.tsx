@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import withAuth from "../../services/auth/withAuth.tsx";
 import Box from '@mui/material/Box';
 
@@ -21,17 +21,15 @@ import {Title} from "../../components/ui";
 import {getAge, PageType} from "../../util";
 import {PageSize} from "../../constants.ts";
 import IconButton from "@mui/material/IconButton";
-import OutlinedInput from '@mui/material/OutlinedInput';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import AddIcon from '@mui/icons-material/AddBoxRounded';
-import InputAdornment from '@mui/material/InputAdornment';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import PeopleAltTwoToneIcon from "@mui/icons-material/PeopleAltTwoTone";
 import {useNavigate} from "react-router-dom";
 import {clienteService, type ClienteType} from "../../services";
-import SearchIcon from "@mui/icons-material/Search";
-import {debounce} from "lodash";
+
 import {Switch} from "@mui/material";
+import DebouncedInput from "../../components/ui/DebouncedInput/DebouncedInput.tsx";
 
 interface ClienteToolbarProps {
   criteria: string;
@@ -42,25 +40,10 @@ interface ClienteToolbarProps {
 
 function ClienteToolbar({criteria, setCriteria, activo, setActivo}: ClienteToolbarProps) {
   const navigate = useNavigate();
-  const [text, setText] = useState(criteria);
-
-  const debouncedSearch = useRef(
-    debounce(async (criteria) => setCriteria(criteria), 500)).current;
-  useEffect(() => () => debouncedSearch.cancel(), [debouncedSearch]);
 
   return (
     <GridToolbarContainer sx={{ justifyContent: 'flex-end' }}>
-      <OutlinedInput
-        value={text}
-        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          setText(event.target.value);
-          debouncedSearch(event.target.value);
-        }}
-        sx={{ flexGrow: 1 }}
-        autoFocus
-        placeholder="Buscar por Identificacion/Nombre..."
-        startAdornment={<InputAdornment position="start"><SearchIcon /></InputAdornment>}
-      />
+      <DebouncedInput value={criteria} setValue={setCriteria} />
       <Switch
         checked={activo}
         onChange={() => setActivo(!activo)}
@@ -172,7 +155,7 @@ const Clientes: React.FC = () => {
 
   return (
     <div>
-      <Title><PeopleAltTwoToneIcon sx={{ m: 2, mb: '-4px' }} /> Clientes <b>{!activo && 'Archivados'}</b></Title>
+      <Title><PeopleAltTwoToneIcon sx={{ m: 2, mb: '-4px' }} /> Clientes <b>{!activo && '(Archivado)'}</b></Title>
 
       <Box sx={{ height: 450, width: '100%', backgroundColor: 'white', '& .celldisabled': {textDecoration: 'line-through'} }}>
         <DataGrid
