@@ -1,72 +1,60 @@
-import * as React from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
+import Box from "@mui/material/Box";
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-
 import DialogTitle from '@mui/material/DialogTitle';
-import {ClienteType} from "../../services";
 import SearchIcon from '@mui/icons-material/Search';
-import TopToolbar from "../ui/TopToolbar/TopToolbar.tsx";
-
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import {useEffect, useRef} from "react";
+import {
+  DataGrid,
+  GridColDef,
+  GridPaginationModel,
+  GridRowId,
+  GridRowSelectionModel
+} from "@mui/x-data-grid";
+import {PageSize} from "../../constants";
+import TopToolbar from "../ui/TopToolbar/TopToolbar";
+import DebouncedInput from "../ui/DebouncedInput/DebouncedInput";
+import {ClienteType, useGetClientes} from "../../services";
 
 interface SearchClienteProps {
-    cliente?: ClienteType;
     onSelect: (cliente?: ClienteType) => void;
     isVisible: boolean;
     setVisible: (visible: boolean) => void;
 }
 
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number,
-) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
-
 const SearchCliente: React.FC<SearchClienteProps> = (
-    { cliente, onSelect, isVisible, setVisible }
+    { onSelect, isVisible, setVisible }
 ) => {
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [criteria, setCriteria] = useState('');
+  const [page, setPage] = useState(0);
+  const {isLoading, data} = useGetClientes(criteria, true, page);
+  const [selectedId, setSelectedId] = useState<GridRowId>();
 
   useEffect(() => {
-    setTimeout(() => {
-      if (inputRef.current) {
-        inputRef.current.focus();
-      }
-    }, 1000);
+    setSelectedId(undefined);
   }, [isVisible]);
 
   const handleSelect = () => {
-      if (cliente !== undefined) {
-          onSelect(cliente);
-      }
-      setVisible(false);
+    const cliente = data?.content?.find(row => row.id === selectedId);
+    onSelect(cliente);
+    setVisible(false);
   }
 
-  const handleClose = () => {
-    setVisible(false);
-  };
+  const handleOnRowSelection = (rowSelectionModel: GridRowSelectionModel) => {
+    setSelectedId(rowSelectionModel[0]);
+  }
+
+  const handleClose = () => setVisible(false);
+
+  const columns: GridColDef[] = useMemo(() => {
+    return [
+      {field: 'tipo', headerName: 'Tipo', width: 60},
+      {field: 'identidad', headerName: 'Ident.', width: 120},
+      {field: 'name', headerName: 'Nombres', flex: 1, minWidth: 200},
+      ] as GridColDef[];
+  }, []);
 
   return (
       <Dialog
@@ -81,31 +69,35 @@ const SearchCliente: React.FC<SearchClienteProps> = (
         </DialogTitle>
         <DialogContent>
             <TopToolbar>
-              <OutlinedInput ref={inputRef} sx={{ flexGrow: 1 }} placeholder="Buscar por Identificacion/Nombre..."/>
+              <DebouncedInput value={criteria} setValue={setCriteria} />
             </TopToolbar>
-            <TableContainer component={Paper}>
-              <Table aria-label="Resultados">
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="center" colSpan={2}>Identificacion</TableCell>
-                    <TableCell sx={{ flexGrow: 1, minWidth: '70%' }}>Razon Social / Nombre Completo</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {rows.map((row) => (
-                    <TableRow key={row.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                      <TableCell align="right">{row.calories}</TableCell>
-                      <TableCell>{row.fat}</TableCell>
-                      <TableCell sx={{ flexGrow: 1 }}>{row.name}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+            <Box sx={{ height: 450, width: '100%' }}>
+              <DataGrid
+                rows={data?.content ?? []}
+                columns={columns}
+                initialState={{
+                  pagination: { paginationModel: { pageSize: PageSize } },
+                }}
+                onPaginationModelChange={(model: GridPaginationModel) => setPage(model.page)}
+                onRowSelectionModelChange={handleOnRowSelection}
+                paginationModel={{ page, pageSize: PageSize}}
+                paginationMode="server"
+                pageSizeOptions={[PageSize]}
+                rowCount={data?.totalElements ?? 0}
+                loading={isLoading}
+              />
+            </Box>
         </DialogContent>
         <DialogActions sx={{ justifyContent: "space-between", m: 2, mt: 0 }}>
             <Button color="secondary" onClick={handleClose} aria-label="Cancel">Cancel</Button>
-            <Button variant="contained" color="primary" onClick={handleSelect} autoFocus aria-label="Seleccionar">Seleccionar</Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleSelect}
+              disabled={selectedId === undefined}
+              aria-label="Seleccionar">
+              Seleccionar
+            </Button>
         </DialogActions>
       </Dialog>
   );

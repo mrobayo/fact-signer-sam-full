@@ -9,3 +9,4 @@ export * from './producto/useGetProducto';
 export { default as clienteService } from './cliente/clienteService';
 export * from './cliente/clienteService';
 export * from './cliente/useGetCliente';
+export * from './cliente/useGetClientes';
