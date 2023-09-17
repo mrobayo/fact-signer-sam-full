@@ -150,9 +150,7 @@ const EditFacturaPage: React.FC<{
 
   const onFormSubmit = handleSubmit((data) => {
     //const detalles = getValues("detalles");
-
-      console.log('submit...', data)
-
+    console.log('submit...', data)
   })
 
   const handleSelected = (detalleId: number) => {

@@ -1,6 +1,6 @@
 import {styled} from "@mui/material/styles";
-import Table from "@mui/material/Table";
 import TableCell from "@mui/material/TableCell";
+import Table from "@mui/material/Table";
 
 export const editFacturaCss = {
     marginTop: 2,
@@ -13,7 +13,7 @@ export const editFacturaCss = {
 };
 
 export const DetailCell = styled(TableCell)({
-  padding: '8px',
+  padding: '12px',
 });
 
 export const DetailToolCell = styled(TableCell)({
@@ -31,5 +31,3 @@ export const DetailTable = styled(Table)({
        marginBottom: 0,
    }
 });
-
-//export const DetailCell = TableCell;

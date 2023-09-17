@@ -7,7 +7,6 @@ import Tooltip from '@mui/material/Tooltip';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddBoxIcon from "@mui/icons-material/AddBox";
-import Button from "@mui/material/Button";
 import FormHelperText from "@mui/material/FormHelperText";
 
 interface EnhancedTableToolbarProps {
@@ -55,22 +54,8 @@ function DetalleToolbar(props: EnhancedTableToolbarProps) {
         </Typography>
       )
       }
-      {numSelected > 0 && (
-        <Tooltip title="Delete">
-          <IconButton onClick={removeSelected}>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      )}
-      {numSelected === -1 && (
-        <Button
-          type="button"
-          onClick={appendNew}
-          startIcon={<AddBoxIcon />}
-        >
-          Añadir
-        </Button>
-      )}
+      {numSelected > 0 && <Tooltip title="Eliminar"><IconButton aria-label="Eliminar" onClick={removeSelected}><DeleteIcon /></IconButton></Tooltip>}
+      {numSelected <= 0 && <Tooltip title="Añadir"><IconButton color="primary" aria-label="Añadir" onClick={appendNew}><AddBoxIcon /></IconButton></Tooltip>}
     </Toolbar>
   );
 }
