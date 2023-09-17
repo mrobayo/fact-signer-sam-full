@@ -1,16 +1,12 @@
 package com.marvic.factsigner.util;
 
 import com.marvic.factsigner.model.comprobantes.FacturaComp;
-import com.marvic.factsigner.model.comprobantes.types.Pago;
 import com.marvic.factsigner.model.sistema.Cliente;
 import com.marvic.factsigner.model.sistema.Empresa;
 import ec.gob.sri.comprobantes.modelo.InfoTributaria;
 import ec.gob.sri.comprobantes.modelo.factura.Factura;
 import ec.gob.sri.comprobantes.modelo.factura.Impuesto;
 import ec.gob.sri.types.SriImpuesto;
-
-import java.util.Map;
-import java.util.Set;
 
 import static com.marvic.factsigner.util.Utils.*;
 
@@ -56,7 +52,7 @@ public class Model2XML {
         }
         f.setDirEstablecimiento(empresa.getDireccion());
         f.setObligadoContabilidad(empresa.isObligado()?"SI":"NO");
-        Cliente cliente = entity.getComprador();
+        Cliente cliente = entity.getCliente();
         f.setRazonSocialComprador(removeAccents(cliente.getName()));
         f.setTipoIdentificacionComprador(cliente.getTipo().value());
         f.setIdentificacionComprador(cliente.getIdentidad());

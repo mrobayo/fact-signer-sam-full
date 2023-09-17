@@ -1,11 +1,16 @@
 package com.marvic.factsigner.controller;
 
 import com.marvic.factsigner.payload.FacturaDTO;
+import com.marvic.factsigner.payload.PageResponse;
+import com.marvic.factsigner.security.CustomUser;
 import com.marvic.factsigner.service.FacturaService;
+import com.marvic.factsigner.util.PageUtil;
+import com.marvic.factsigner.util.SecurityHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -41,9 +46,16 @@ public class FacturaController {
     }
 
     @GetMapping
-    public List<FacturaDTO> getAll(@RequestParam(value = "empresa_id") String empresaId) {
-        List<FacturaDTO> all = facturaService.getAllByEmpresaId(empresaId);
-        return all;
+    public PageResponse<FacturaDTO> getAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "id,desc") String[] sort,
+            @RequestParam(value = "empresa_id", required = true) String empresaId) {
+        CustomUser user = SecurityHelper.getUser();
+        if (SecurityHelper.isNotPermitted(user, empresaId)) {
+            throw new AccessDeniedException(String.format("%s no autorizado a consultar %s", user.getUsuarioId(), empresaId));
+        }
+        return facturaService.getAllByEmpresaId(empresaId, PageUtil.pagingAndSort(page, size, sort));
     }
 
     @PostMapping

@@ -9,35 +9,50 @@ import {
   DataGrid,
   GridColDef,
   GridPaginationModel,
+  GridCellParams,
   GridValueGetterParams,
   GridToolbarContainer,
   GridToolbarExport,
   GridActionsCellItem,
   GridRowId,
+  GridToolbarColumnsButton,
 } from '@mui/x-data-grid';
 import {Title} from "../../components/ui";
-import clienteService from "../../services/cliente/clienteService.ts";
 import {getAge, PageType} from "../../util";
 import {PageSize} from "../../constants.ts";
 import IconButton from "@mui/material/IconButton";
-import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import AddIcon from '@mui/icons-material/AddBoxRounded';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import PeopleAltTwoToneIcon from "@mui/icons-material/PeopleAltTwoTone";
 import {useNavigate} from "react-router-dom";
-import {ClienteType} from "../../services/cliente/clienteService.ts";
+import {clienteService, type ClienteType} from "../../services";
 
-function ClienteToolbar() {
+import {Switch} from "@mui/material";
+import DebouncedInput from "../../components/ui/DebouncedInput/DebouncedInput.tsx";
+
+interface ClienteToolbarProps {
+  criteria: string;
+  setCriteria: (criteria: string) => void;
+  activo: boolean;
+  setActivo: (activo: boolean) => void
+}
+
+function ClienteToolbar({criteria, setCriteria, activo, setActivo}: ClienteToolbarProps) {
   const navigate = useNavigate();
+
   return (
     <GridToolbarContainer sx={{ justifyContent: 'flex-end' }}>
-      {/*<GridToolbarColumnsButton />*/}
-      {/*<GridToolbarFilterButton />*/}
-      {/*<GridToolbarDensitySelector />*/}
+      <DebouncedInput value={criteria} setValue={setCriteria} />
+      <Switch
+        checked={activo}
+        onChange={() => setActivo(!activo)}
+        inputProps={{ 'aria-label': 'Cliente Activo' }}
+      />
+      <Box sx={{ minWidth: 200 }}/>
+      <GridToolbarColumnsButton  />
       <GridToolbarExport />
-      <span><IconButton
-        color="info"
-        onClick={() => navigate('/clientes/new')}>
+      <span><IconButton color="info" onClick={() => navigate('/clientes/new')}>
         <AddIcon />
       </IconButton></span>
     </GridToolbarContainer>
@@ -46,14 +61,16 @@ function ClienteToolbar() {
 
 const Clientes: React.FC = () => {
   const navigate = useNavigate();
+  const [activo, setActivo] = useState<boolean>(true);
   const [page, setPage] = useState(0);
+  const [criteria, setCriteria] = useState('');
+
   const { isLoading, data  } = useQuery<PageType<ClienteType>, Error>({
-    queryKey: ['clientes', page],
-    queryFn: () => clienteService.get(page, PageSize, []),
+    queryKey: ['clientes', page, criteria, activo],
+    queryFn: () => clienteService.get(criteria, activo, page, PageSize, []),
     keepPreviousData: true,
     staleTime: 30000,
   });
-  //const apiRef = useGridApiRef();
 
   const handleEditClick = (id: GridRowId) => () => {
     navigate(`/clientes/edit/${id}`);
@@ -82,6 +99,8 @@ const Clientes: React.FC = () => {
           headerName: 'Nombres Apellidos',
           flex: 1,
           minWidth: 200,
+
+          //valueGetter: (params: GridValueGetterParams) => (params.row.birthday)
         },
         {
           field: 'edad',
@@ -111,15 +130,15 @@ const Clientes: React.FC = () => {
             //const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
             return [
               <GridActionsCellItem
-                icon={<EditIcon/>}
-                label="Edit"
+                icon={<ModeEditIcon />}
+                label="Ver"
                 className="textPrimary"
                 onClick={handleEditClick(id)}
                 color="inherit"
               />,
               <GridActionsCellItem
                 icon={<DeleteIcon/>}
-                label="Delete"
+                label="Eliminar"
                 onClick={handleDeleteClick(id)}
                 color="inherit"
                 disabled
@@ -131,13 +150,14 @@ const Clientes: React.FC = () => {
   }, []);
 
 
+
   // if (error) return 'An error has occurred.';
 
   return (
     <div>
-      <Title><PeopleAltTwoToneIcon sx={{ m: 2, mb: '-4px' }} /> Clientes</Title>
+      <Title><PeopleAltTwoToneIcon sx={{ m: 2, mb: '-4px' }} /> Clientes <b>{!activo && '(Archivado)'}</b></Title>
 
-      <Box sx={{ height: 450, width: '100%', backgroundColor: 'white' }}>
+      <Box sx={{ height: 450, width: '100%', backgroundColor: 'white', '& .celldisabled': {textDecoration: 'line-through'} }}>
         <DataGrid
           //apiRef={apiRef}
           rows={data?.content ?? []}
@@ -156,8 +176,11 @@ const Clientes: React.FC = () => {
           disableRowSelectionOnClick
           loading={isLoading}
           slots={{
-            toolbar: ClienteToolbar,
+            toolbar: () => ClienteToolbar({criteria, setCriteria, activo, setActivo}),
           }}
+          getCellClassName={(params: GridCellParams<ClienteType, any, number>) =>
+            params.field==='name' && params.row.activo==false ? 'celldisabled' : ''
+          }
         />
 
       </Box>

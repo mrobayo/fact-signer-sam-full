@@ -1,5 +1,5 @@
 import { AxiosInstance } from 'axios';
-import {buildQueryByPage, createAxiosService, PageType} from "../../util";
+import {buildQuery, createAxiosService, PageType} from "../../util";
 import dayjs from "dayjs";
 
 export type ClienteType = {
@@ -62,8 +62,10 @@ class ClienteService {
     }
   }
 
-  async get(page: number, size: number, sort: string[]): Promise<PageType<ClienteType>> {
-    const { data } = await this.service.get(buildQueryByPage(page, size, sort));
+  async get(search: string, activo: boolean|undefined, page: number, size: number, sort: string[]): Promise<PageType<ClienteType>> {
+    const url = "?"+buildQuery({search, activo: `${activo ?? 'all'}`, page, size, sort});
+    console.log(url, {search, activo: `${activo ?? 'all'}`, page, size, sort})
+    const { data } = await this.service.get(url);
     return data;
   }
 

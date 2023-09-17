@@ -1,5 +1,6 @@
 package com.marvic.factsigner.service.impl;
 
+import com.marvic.factsigner.payload.PageResponse;
 import com.marvic.factsigner.service.aws.S3Service;
 import com.marvic.factsigner.exception.ComprobanteException;
 import com.marvic.factsigner.exception.ResourceExistsException;
@@ -15,31 +16,32 @@ import com.marvic.factsigner.payload.FacturaDTO;
 import com.marvic.factsigner.repository.*;
 import com.marvic.factsigner.service.FacturaService;
 import com.marvic.factsigner.util.Model2XML;
+import com.marvic.factsigner.util.PageUtil;
 import com.marvic.factsigner.util.SriUtil;
 import com.marvic.factsigner.util.Utils;
 
 import ec.gob.sri.comprobantes.modelo.factura.Factura;
 import com.marvic.factsigner.service.SignerService;
 import ec.gob.sri.types.SriTipoDoc;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
+import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
-import software.amazon.awssdk.utils.IoUtils;
 
 import static java.math.BigDecimal.ZERO;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -55,6 +57,8 @@ public class FacturaServiceImpl implements FacturaService {
     private final ClienteRepository clienteRepository;
 
     private final ModelMapper modelMapper;
+
+    private final ModelMapper skipModelMapper;
 
     private final S3Service s3Service;
 
@@ -76,7 +80,16 @@ public class FacturaServiceImpl implements FacturaService {
         this.modelMapper = modelMapper;
         this.s3Service = s3Service;
         this.signerService = signerService;
+
+        this.skipModelMapper = new ModelMapper();
+        skipModelMapper.addMappings(skipModifiedFieldsMap);
     }
+
+    PropertyMap<FacturaComp, FacturaDTO> skipModifiedFieldsMap = new PropertyMap<FacturaComp, FacturaDTO>() {
+        protected void configure() {
+            skip().setDetalles(null);
+        }
+    };
 
     private FacturaComp getById(String id) {
         return facturaRepository
@@ -178,12 +191,13 @@ public class FacturaServiceImpl implements FacturaService {
     }
 
     @Override @Transactional(readOnly = true)
-    public List<FacturaDTO> getAllByEmpresaId(String empresaId) {
-        List<FacturaDTO> dtoList = facturaRepository
-                .findAllByEmpresaId(empresaId)
-                .stream().map(this::mapToDTO).collect(Collectors.toList());
+    public PageResponse<FacturaDTO> getAllByEmpresaId(String empresaId, Pageable paging) {
+        Page<FacturaComp> page = facturaRepository.findAllByEmpresaId(empresaId, paging);
+        return PageUtil.mapPage(page, this::skipToDTO);
+    }
 
-        return dtoList;
+    private static void copyProperties(FacturaComp entity, FacturaDTO dto) {
+        BeanUtils.copyProperties(entity, dto, "detalles");
     }
 
     @Override
@@ -191,8 +205,8 @@ public class FacturaServiceImpl implements FacturaService {
 
         PuntoVenta puntoVenta = puntoVentaRepository.findById(dto.getPuntoVentaId()).get();
         Empresa empresa = puntoVenta.getEmpresa();
-        UUID compradorUuid = Utils.toUUID(dto.getCompradorId());
-        Cliente comprador = clienteRepository.findById(compradorUuid).get();
+        UUID clienteId = Utils.toUUID(dto.getClienteId());
+        Cliente cliente = clienteRepository.findById(clienteId).get();
 
         // Check UK by name + empresa
         if (dto.getName() != null) {
@@ -227,13 +241,13 @@ public class FacturaServiceImpl implements FacturaService {
         entity.setImporteTotal(ZERO);
 
         // Comprador
-        entity.setComprador(comprador);
-        if (comprador != null) {
-            entity.setTipoIdentificacionComprador(comprador.getTipo());
-            entity.setRazonSocialComprador(comprador.getName());
-            entity.setIdentificacionComprador(comprador.getIdentidad());
-            entity.setDireccionComprador(comprador.getDireccion());
-            entity.setSujetoEmail(comprador.getEmail());
+        entity.setCliente(cliente);
+        if (cliente != null) {
+            entity.setTipoIdentificacionComprador(cliente.getTipo());
+            entity.setRazonSocialComprador(cliente.getName());
+            entity.setIdentificacionComprador(cliente.getIdentidad());
+            entity.setDireccionComprador(cliente.getDireccion());
+            entity.setSujetoEmail(cliente.getEmail());
         }
 
         if (entity.getDetalles() != null) {
@@ -265,6 +279,17 @@ public class FacturaServiceImpl implements FacturaService {
 
     private FacturaDTO mapToDTO(FacturaComp model){
         FacturaDTO dto = modelMapper.map(model, FacturaDTO.class);
+        if (model.getId() != null) {
+            dto.setId(model.getId().toString());
+        }
+        else {
+            dto.setId(null);
+        }
+        return dto;
+    }
+
+    private FacturaDTO skipToDTO(FacturaComp model){
+        FacturaDTO dto = skipModelMapper.map(model, FacturaDTO.class);
         if (model.getId() != null) {
             dto.setId(model.getId().toString());
         }

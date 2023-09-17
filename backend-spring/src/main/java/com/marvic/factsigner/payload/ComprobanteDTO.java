@@ -53,15 +53,11 @@ public class ComprobanteDTO {
 
     private Boolean emailEnviado;
 
-    private String sujetoTipo;
-
-    private String sujetoRazonSocial;
-
-    private String sujetoIdentidad;
-
-    private String sujetoDireccion;
-
-    private String sujetoTelefono;
+    //private String sujetoTipo;
+    //private String sujetoRazonSocial;
+    //private String sujetoIdentidad;
+    //private String sujetoDireccion;
+    //private String sujetoTelefono;
 
     private String sujetoEmail;
 

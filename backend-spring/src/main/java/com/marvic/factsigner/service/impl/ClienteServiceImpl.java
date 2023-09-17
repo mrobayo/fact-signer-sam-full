@@ -19,9 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static com.marvic.factsigner.util.Utils.coalesce;
 
@@ -46,8 +44,20 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public PageResponse<ClienteDTO> getAll(Pageable paging) {
-        Page<Cliente> page = repository.findAll(paging);
+    public PageResponse<ClienteDTO> getAll(String search, String activo, Pageable paging) {
+        Boolean allOrActivo = "all".equals(activo) ? null : !"false".equalsIgnoreCase(activo);
+        String trimSearch = StringUtils.trimToEmpty(search);
+        Page<Cliente> page;
+        if (trimSearch.isEmpty() && allOrActivo == null) {
+            page = repository.findAll(paging);
+        } else {
+            if (trimSearch.matches("[0-9]+")) {
+                page = repository.findAllByIdentidadAndActivo(trimSearch + "%", allOrActivo, paging);
+            } else {
+                page = repository.findAllByNameAndActivo("%" + trimSearch + "%", allOrActivo, paging);
+            }
+        }
+
         return PageUtil.mapPage(page, this::mapToDTO);
     }
 

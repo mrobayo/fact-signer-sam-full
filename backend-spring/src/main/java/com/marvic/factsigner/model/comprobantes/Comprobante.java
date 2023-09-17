@@ -1,17 +1,11 @@
 package com.marvic.factsigner.model.comprobantes;
-
 import com.marvic.factsigner.model.comprobantes.extra.PuntoVenta;
 import com.marvic.factsigner.model.comprobantes.types.EstadoTipo;
-import com.marvic.factsigner.model.comprobantes.types.InfoTributaria;
 import com.marvic.factsigner.model.sistema.Empresa;
-import com.marvic.factsigner.model.sistema.Usuario;
 import ec.gob.sri.types.SriAmbiente;
-import ec.gob.sri.types.SriEnumIdentidad;
 import ec.gob.sri.types.SriTipoDoc;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
-
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -163,5 +157,8 @@ public class Comprobante {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="punto_venta_id", nullable = false)
     private PuntoVenta puntoVenta;
+
+    @Column(length = 300)
+    private String observacion;
 
 }

@@ -1,5 +1,5 @@
 import axios, {AxiosInstance} from "axios";
-import {ApiEndpoint} from "../constants.ts";
+import {ApiEndpoint, isDevelopment} from "../constants.ts";
 
 export type PageType<T> = {
   content: T[]
@@ -22,7 +22,10 @@ export function createAxiosService(apiPath: string): AxiosInstance {
   }
 
   const handleError = (error: any) => {
-    switch (error.response.status) {
+    if (isDevelopment) {
+      // console.log('axios-error', error);
+    }
+    switch (error?.response?.status) {
       case 401: // Token expired
         console.log('401');
         delete service.defaults.headers["Authorization"];
@@ -34,7 +37,7 @@ export function createAxiosService(apiPath: string): AxiosInstance {
         //this.redirectTo("/404");
         break;
       default: // Internal server error
-        console.log('internal server error');
+        console.log('internal server error', error);
         //this.redirectTo("/500");
         break;
     }

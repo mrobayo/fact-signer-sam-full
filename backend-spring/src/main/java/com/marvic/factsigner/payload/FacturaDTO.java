@@ -46,7 +46,17 @@ public class FacturaDTO extends ComprobanteDTO {
     private String guiaRemision;
 
     @NotBlank @Size(max=40)
-    private String compradorId;
+    private String clienteId;
+
+    private String clienteName;
+
+    private String tipoIdentificacionComprador;
+
+    private String razonSocialComprador;
+
+    private String identificacionComprador;
+
+    private String direccionComprador;
 
     @NotNull
     private List<DetalleFacturaDTO> detalles;
@@ -61,5 +71,7 @@ public class FacturaDTO extends ComprobanteDTO {
 
     @NotNull
     private TotalImpuesto totalIce;
+
+    private String observacion;
 
 }

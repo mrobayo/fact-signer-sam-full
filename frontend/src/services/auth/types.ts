@@ -12,6 +12,7 @@ export type EmpresaType = {
     color: string;
     ambiente: string;
     tarifaIva: number;
+    moneda: string;
 };
 
 export type PuntoVentaType = {

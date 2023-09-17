@@ -6,7 +6,6 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from '@mui/material/TableRow';
 import TableCell from "@mui/material/TableCell";
 import TableBody from '@mui/material/TableBody';
-import facturaService from "../../../services";
 
 const ColDefinition: {
   label: string;
@@ -24,12 +23,12 @@ const ColDefinition: {
 ];
 
 const FacturaList: React.FC = () => {
-  const service = facturaService;
-  const empresaId = '1100000000001';
+  // const service = facturaService;
+  // const empresaId = '1100000000001';
 
   const getAll = async () => {
-    const test = await service.get(`facturas/${empresaId}`);
-    console.log(test);
+    // const test = await service.get(`facturas/${empresaId}`);
+    // console.log(test);
   }
   useEffect(() => {
     getAll();
