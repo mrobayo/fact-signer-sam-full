@@ -38,9 +38,10 @@ export const facturaSchema = Yup.object().shape({
   detalles: Yup.array(
     Yup.object({
       descripcion: Yup.string().trim().required(),
-      cantidad: Yup.number(),
-      precioUnitario: Yup.number(),
-      descuento: Yup.number(),
+      cantidad: Yup.number().required().positive(),
+      precioUnitario: Yup.number().required().positive(),
+      descuento: Yup.number().required().min(0),
+      // precioTotalSinImpuesto: Yup.number().required().min(0),
     })
   ),
   // array(object({ num: number().max(4) })),

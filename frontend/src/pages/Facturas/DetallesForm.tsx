@@ -1,7 +1,7 @@
 import React, {useRef} from "react";
 import isEmpty from "lodash/isEmpty";
 import {useNavigate} from "react-router-dom";
-import {Controller, useFormContext} from "react-hook-form";
+import {useFormContext} from "react-hook-form";
 
 import Box from '@mui/material/Box';
 import Grid from "@mui/material/Grid";
@@ -57,7 +57,6 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
 }) => {
   const navigate = useNavigate();
   const {
-    control,
     register,
     formState: { errors },
   } = useFormContext<FacturaType>();
@@ -175,20 +174,15 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
                           </DetailCell>
                           <DetailCell align="right">
                             {isEditMode &&
-                              <Controller
-                                render={({ field }) =>
-                                  <TextField
-                                    margin="normal"
-                                    fullWidth
-                                    id={`detalles.${index}.precioUnitario`}
-                                    label=""
-                                    type="number"
-                                    {...field}
-                                  />
-                                }
-                                defaultValue={0}
-                                name={`detalles.${index}.precioUnitario`}
-                                control={control}
+                              <TextField
+                                margin="normal"
+                                fullWidth
+                                id={`detalles.${index}.precioUnitario`}
+                                label=""
+                                type="number"
+                                error={errors?.detalles?.[index]?.precioUnitario !== undefined}
+                                helperText={errors?.detalles?.[index]?.precioUnitario?.message}
+                                {...register(`detalles.${index}.precioUnitario`)}
                               />
                             }
                             {!isEditMode && item.precioUnitario && formatCurrency(item.precioUnitario)}
