@@ -13,7 +13,7 @@ import withAuth from "../../services/auth/withAuth";
 import {facturaSchema} from "./factura.types";
 import {useRouterQuery} from "../../util";
 import facturaService, {facturaEmpty, FacturaType} from "../../services/factura/facturaService";
-import {useGetCliente, useGetFactura} from "../../services";
+import {ClienteType, useGetCliente, useGetFactura} from "../../services";
 
 import {useAuth} from "../../services/auth/useAuth";
 import TopToolbar from "../../components/ui/TopToolbar/TopToolbar";
@@ -34,7 +34,7 @@ const EditFactura: React.FC = () => {
   const [isReadMode, setReadMode] = useState(!isNew);
 
   const methods = useForm<FacturaType>({resolver: yupResolver(facturaSchema)});
-  const { reset, handleSubmit } = methods;
+  const { reset, setValue, handleSubmit } = methods;
 
   const { data: factura } = useGetFactura(id);
   const { mutate: saveFactura } = useMutation({
@@ -68,6 +68,13 @@ const EditFactura: React.FC = () => {
     navigate('/facturas');
   });
 
+  const handleSelectCliente = (cliente: ClienteType) => {
+    setValue(`razonSocialComprador`, cliente.name);
+    setValue(`tipoIdentificacionComprador`, cliente.tipo);
+    setValue(`direccionComprador`, cliente.direccion);
+    setValue(`identificacionComprador`, cliente.identidad);//{shouldDirty: true, shouldTouch: true, shouldValidate: true}
+  };
+
   return (
     <div>
       <TopToolbar>
@@ -90,7 +97,7 @@ const EditFactura: React.FC = () => {
       </FormProvider>
 
       <SearchCliente
-        onSelect={(cliente) => {console.log(cliente);}}
+        onSelect={handleSelectCliente}
         isVisible={isClienteDialogOpen}
         setVisible={setClienteDialogOpen}
       />

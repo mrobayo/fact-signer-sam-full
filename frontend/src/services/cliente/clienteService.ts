@@ -64,7 +64,6 @@ class ClienteService {
 
   async get(search: string, activo: boolean|undefined, page: number, size: number, sort: string[]): Promise<PageType<ClienteType>> {
     const url = "?"+buildQuery({search, activo: `${activo ?? 'all'}`, page, size, sort});
-    console.log(url, {search, activo: `${activo ?? 'all'}`, page, size, sort})
     const { data } = await this.service.get(url);
     return data;
   }

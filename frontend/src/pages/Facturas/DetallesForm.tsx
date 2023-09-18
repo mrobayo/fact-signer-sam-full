@@ -14,12 +14,13 @@ import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
 import Checkbox from "@mui/material/Checkbox";
-import TextField from "@mui/material/TextField";
+import TextField, {TextFieldProps} from "@mui/material/TextField";
 import FormHelperText from "@mui/material/FormHelperText";
 import EditIcon from "@mui/icons-material/Edit";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
-import {TextFieldProps} from "@mui/material/TextField/TextField";
+import {useTheme} from "@mui/material";
+import NotInterestedIcon from "@mui/icons-material/NotInterested";
 
 import {DetailCell, DetailToolCell} from "../EditFacturaPage/EditFactura.style";
 import DetalleToolbar from "../EditFacturaPage/DetalleToolbar";
@@ -30,9 +31,9 @@ import {FacturaType} from "../../services";
 import {getFacturaLabel} from "./factura.types";
 import useDetallesForm from "./useDetallesForm.tsx";
 
-import NotInterestedIcon from "@mui/icons-material/NotInterested";
 import InformationIcon from "../../components/icons/InformationIcon";
 import EditImpuestosModal from "../EditFacturaPage/EditImpuestosModal.tsx";
+import {TipoIdentidad} from "../tarifario.ts";
 
 const ColDefinition: {
   label: string;
@@ -59,6 +60,7 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
     setClienteDialogOpen,
     onSubmit,
 }) => {
+  const theme = useTheme();
   const navigate = useNavigate();
   const {
     register,
@@ -109,13 +111,18 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
         <Grid container spacing={2} sx={{ p: 4 }}>
 
           <GridItem sm={1} sx={{textAlign: 'right'}}>
-            <Tooltip title="Buscar Cliente"><span>
+            <Tooltip title="Buscar Cliente"><span style={{backgroundColor: theme.palette.grey[200]}}>
                 <IconButton disabled={isReadMode} onClick={() => setClienteDialogOpen(true)}><SearchIcon fontSize={"large"} /></IconButton>
             </span></Tooltip>
           </GridItem>
 
           {/*// , {disabled: true, inputProps: {readOnly: true}}*/}
-          <GridItem sm={2}>{buildTextField('tipoIdentificacionComprador')}</GridItem>
+          <GridItem sm={2}>{buildTextField('tipoIdentificacionComprador', {
+            select: true, SelectProps: { native: true },
+            children: TipoIdentidad.map((option) => (
+              <option key={option.value} value={option.value}>{option.label}</option>
+            ))
+          })}</GridItem>
           <GridItem sm={3}>{buildTextField('identificacionComprador')}</GridItem>
           <GridItem sm={6}>{buildTextField('razonSocialComprador')}</GridItem>
 
@@ -208,7 +215,7 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
                                 {...register(`detalles.${index}.descuento`)}
                               />
                             }
-                            {!isEditMode && item.descuento && formatAmount(item.cantidad)}
+                            {!isEditMode && item.descuento && formatAmount(item.descuento)}
                           </DetailCell>
                           <DetailCell align="right">
                             {item.precioTotalSinImpuesto && formatCurrency(item.precioTotalSinImpuesto)}

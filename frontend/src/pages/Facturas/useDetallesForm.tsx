@@ -72,6 +72,8 @@ function useDetallesForm() {
       );
     }
 
+    console.log(`detalle: ${index}`, detalle);
+
     if (isRowValid) {
       clearErrors(`detalles.${index}.precioTotalSinImpuesto`);
     }

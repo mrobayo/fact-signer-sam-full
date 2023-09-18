@@ -19,7 +19,7 @@ import DebouncedInput from "../ui/DebouncedInput/DebouncedInput";
 import {ClienteType, useGetClientes} from "../../services";
 
 interface SearchClienteProps {
-    onSelect: (cliente?: ClienteType) => void;
+    onSelect: (cliente: ClienteType) => void;
     isVisible: boolean;
     setVisible: (visible: boolean) => void;
 }
@@ -38,8 +38,10 @@ const SearchCliente: React.FC<SearchClienteProps> = (
 
   const handleSelect = () => {
     const cliente = data?.content?.find(row => row.id === selectedId);
-    onSelect(cliente);
-    setVisible(false);
+    if (cliente != undefined) {
+      onSelect(cliente);
+      setVisible(false);
+    }
   }
 
   const handleOnRowSelection = (rowSelectionModel: GridRowSelectionModel) => {

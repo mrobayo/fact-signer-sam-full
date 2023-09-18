@@ -47,7 +47,7 @@ const Facturas: React.FC = () => {
   const auth = useAuth();
   const {empresaId} = auth.puntoVenta ?? {};
 
-  console.log('empresa: ', auth);
+  // console.log('empresa: ', auth);
 
   const navigate = useNavigate();
   const [page, setPage] = useState(0);
