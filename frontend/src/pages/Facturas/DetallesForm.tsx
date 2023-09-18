@@ -170,7 +170,9 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
                                 { required: true })}
                             />
                           }
-                          {!isEditMode && item.descripcion}
+                          {!isEditMode && <>
+                            {item.descripcion}<FormHelperText error>{errors?.detalles?.[index]?.descripcion?.message}</FormHelperText>
+                          </>}
                         </DetailCell>
                         <DetailCell align="right">
                             {isEditMode &&
@@ -185,7 +187,9 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
                                 {...register(`detalles.${index}.cantidad`, { required: true, min: 0.0001 })}
                               />
                             }
-                            {!isEditMode && item.cantidad && formatAmount(item.cantidad)}
+                            {!isEditMode && item.cantidad && <>
+                              {formatAmount(item.cantidad)}<FormHelperText error>{errors?.detalles?.[index]?.cantidad?.message}</FormHelperText>
+                            </>}
                           </DetailCell>
                           <DetailCell align="right">
                             {isEditMode &&
@@ -200,7 +204,9 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
                                 {...register(`detalles.${index}.precioUnitario`)}
                               />
                             }
-                            {!isEditMode && item.precioUnitario && formatCurrency(item.precioUnitario)}
+                            {!isEditMode && item.precioUnitario && <>
+                              {formatCurrency(item.precioUnitario)}<FormHelperText error>{errors?.detalles?.[index]?.precioUnitario?.message}</FormHelperText>
+                            </>}
                           </DetailCell>
                           <DetailCell align="right">
                             {isEditMode &&
@@ -215,11 +221,14 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
                                 {...register(`detalles.${index}.descuento`)}
                               />
                             }
-                            {!isEditMode && item.descuento && formatAmount(item.descuento)}
+                            {!isEditMode && item.descuento && <>
+                              {formatAmount(item.descuento)}
+                              <FormHelperText error>{errors?.detalles?.[index]?.descuento?.message}</FormHelperText>
+                            </>}
                           </DetailCell>
                           <DetailCell align="right">
                             {item.precioTotalSinImpuesto && formatCurrency(item.precioTotalSinImpuesto)}
-                            {errors?.detalles?.[index]?.precioTotalSinImpuesto && <FormHelperText error>{errors?.detalles?.[index]?.precioTotalSinImpuesto?.message}</FormHelperText>}
+                            {<FormHelperText error>{errors?.detalles?.[index]?.precioTotalSinImpuesto?.message}</FormHelperText>}
                           </DetailCell>
                           <DetailCell align="center">
                             <Tooltip
