@@ -35,15 +35,15 @@ export const facturaSchema = Yup.object().shape({
   clienteId: Yup.string().nullable(),
 
   tipoIdentificacionComprador: Yup.string().trim().required(),
-  identificacionComprador: Yup.string().trim().required(),
-  razonSocialComprador: Yup.string().trim().required(),
+  identificacionComprador: Yup.string().trim().required("(obligatorio)"),
+  razonSocialComprador: Yup.string().trim().required("(obligatorio)"),
 
   detalles: Yup.array(
     Yup.object({
-      descripcion: Yup.string().trim().required(),
-      cantidad: Yup.number().required().positive(),
-      precioUnitario: Yup.number().required().positive(),
-      descuento: Yup.number().required().min(0),
+      descripcion: Yup.string().trim().required("(obligatorio)"),
+      cantidad: Yup.number().required().positive("(mayor a cero)"),
+      precioUnitario: Yup.number().required().positive("(mayor a cero)"),
+      descuento: Yup.number().required("(obligatorio)").min(0, "(numero invalido)"),
       // precioTotalSinImpuesto: Yup.number().required().min(0),
     })
   ),
