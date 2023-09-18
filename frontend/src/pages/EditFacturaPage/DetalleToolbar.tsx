@@ -10,6 +10,7 @@ import AddBoxIcon from "@mui/icons-material/AddBox";
 import FormHelperText from "@mui/material/FormHelperText";
 
 interface EnhancedTableToolbarProps {
+  isReadMode: boolean;
   numSelected: number;
   appendNew: () => void;
   removeSelected: () => void;
@@ -17,7 +18,7 @@ interface EnhancedTableToolbarProps {
 }
 
 function DetalleToolbar(props: EnhancedTableToolbarProps) {
-  const { numSelected, appendNew, removeSelected, error } = props;
+  const { isReadMode, numSelected, appendNew, removeSelected, error } = props;
 
   return (
     <Toolbar
@@ -54,8 +55,8 @@ function DetalleToolbar(props: EnhancedTableToolbarProps) {
         </Typography>
       )
       }
-      {numSelected > 0 && <Tooltip title="Eliminar"><IconButton aria-label="Eliminar" onClick={removeSelected}><DeleteIcon /></IconButton></Tooltip>}
-      {numSelected <= 0 && <Tooltip title="Añadir"><IconButton color="primary" aria-label="Añadir" onClick={appendNew}><AddBoxIcon /></IconButton></Tooltip>}
+      {numSelected > 0 && !isReadMode && <Tooltip title="Eliminar"><IconButton aria-label="Eliminar" onClick={removeSelected}><DeleteIcon /></IconButton></Tooltip>}
+      {numSelected <= 0 && !isReadMode && <Tooltip title="Añadir"><IconButton color="primary" aria-label="Añadir" onClick={appendNew}><AddBoxIcon /></IconButton></Tooltip>}
     </Toolbar>
   );
 }

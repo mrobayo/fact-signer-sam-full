@@ -100,20 +100,21 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
       data-test-id="factura-form">
 
       <Paper variant="outlined">
-        <Grid container spacing={3} sx={{ p: 4 }}>
+        <Grid container spacing={2} sx={{ p: 4 }}>
 
           <GridItem sm={1} sx={{textAlign: 'right'}}>
             <Tooltip title="Buscar Cliente">
-              <IconButton onClick={() => setClienteDialogOpen(true)}><SearchIcon fontSize={"large"} /></IconButton>
+              <IconButton disabled={isReadMode} onClick={() => setClienteDialogOpen(true)}><SearchIcon fontSize={"large"} /></IconButton>
             </Tooltip>
           </GridItem>
+
           {/*// , {disabled: true, inputProps: {readOnly: true}}*/}
           <GridItem sm={2}>{buildTextField('tipoIdentificacionComprador')}</GridItem>
           <GridItem sm={3}>{buildTextField('identificacionComprador')}</GridItem>
           <GridItem sm={6}>{buildTextField('razonSocialComprador')}</GridItem>
 
           <GridItem sm={12} data-test-id="factura-detalles">
-            <DetalleToolbar error={errors?.detalles?.root?.message} numSelected={selected.length} appendNew={appendRow} removeSelected={removeRow} />
+            <DetalleToolbar isReadMode error={errors?.detalles?.root?.message} numSelected={selected.length} appendNew={appendRow} removeSelected={removeRow} />
 
             <TableContainer sx={{ maxHeight: 440 }}>
               <DetailTable sx={{ minWidth: 650 }} stickyHeader aria-label="Factura Detalle">
@@ -140,7 +141,8 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                       >
                         <DetailCell align="right" onClick={() => handleSelected(item.linea)} sx={{ cursor: "pointer" }}>
-                          <Checkbox color="primary" checked={isItemSelected} inputProps={{'aria-labelledby': labelId}} />
+                          {!isReadMode &&
+                            <Checkbox color="primary" checked={isItemSelected} inputProps={{'aria-labelledby': labelId}} />}
                         </DetailCell>
                         <DetailCell align="left" id={labelId}>
                           {isEditMode &&
@@ -220,7 +222,8 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
                             {/*</Tooltip>*/}
                           </DetailCell>
                           <DetailToolCell align="right">
-                            <IconButton disabled={isEditMode} color="primary" onClick={() => editRow(index)}><EditIcon /></IconButton>
+                            {!isReadMode &&
+                              <IconButton disabled={isEditMode} color="primary" onClick={() => editRow(index)}><EditIcon /></IconButton>}
                           </DetailToolCell>
                        </TableRow>
                     );
