@@ -1,4 +1,4 @@
-import React, {useRef} from "react";
+import React, {useRef, useState} from "react";
 import isEmpty from "lodash/isEmpty";
 import {useNavigate} from "react-router-dom";
 import {useFormContext} from "react-hook-form";
@@ -29,6 +29,10 @@ import {formatAmount, formatCurrency} from "../../util";
 import {FacturaType} from "../../services";
 import {getFacturaLabel} from "./factura.types";
 import useDetallesForm from "./useDetallesForm.tsx";
+
+import NotInterestedIcon from "@mui/icons-material/NotInterested";
+import InformationIcon from "../../components/icons/InformationIcon";
+import EditImpuestosModal from "../EditFacturaPage/EditImpuestosModal.tsx";
 
 const ColDefinition: {
   label: string;
@@ -69,9 +73,11 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
     editRow,
     removeRow,
     handleSelected,
+    updateImpuestos,
+    getEditDetalle
   } = useDetallesForm();
   const formRef = useRef<HTMLFormElement>(null);
-
+  const [isEditImpuesto, setEditImpuesto] = useState(false);
   const buildTextField = (name: keyof FacturaType, textFieldProps?: TextFieldProps) => {
     const label = getFacturaLabel(name);
     return <TextField
@@ -86,6 +92,10 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
               {...textFieldProps}
               {...register(name)}
           />;
+  }
+
+  const handleImpuestos = () => {
+    setEditImpuesto(true);
   }
 
   return (
@@ -103,9 +113,9 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
         <Grid container spacing={2} sx={{ p: 4 }}>
 
           <GridItem sm={1} sx={{textAlign: 'right'}}>
-            <Tooltip title="Buscar Cliente">
-              <IconButton disabled={isReadMode} onClick={() => setClienteDialogOpen(true)}><SearchIcon fontSize={"large"} /></IconButton>
-            </Tooltip>
+            <Tooltip title="Buscar Cliente"><span>
+                <IconButton disabled={isReadMode} onClick={() => setClienteDialogOpen(true)}><SearchIcon fontSize={"large"} /></IconButton>
+            </span></Tooltip>
           </GridItem>
 
           {/*// , {disabled: true, inputProps: {readOnly: true}}*/}
@@ -114,7 +124,7 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
           <GridItem sm={6}>{buildTextField('razonSocialComprador')}</GridItem>
 
           <GridItem sm={12} data-test-id="factura-detalles">
-            <DetalleToolbar isReadMode error={errors?.detalles?.root?.message} numSelected={selected.length} appendNew={appendRow} removeSelected={removeRow} />
+            <DetalleToolbar isReadMode={isReadMode} error={errors?.detalles?.root?.message} numSelected={selected.length} appendNew={appendRow} removeSelected={removeRow} />
 
             <TableContainer sx={{ maxHeight: 440 }}>
               <DetailTable sx={{ minWidth: 650 }} stickyHeader aria-label="Factura Detalle">
@@ -209,17 +219,17 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
                             {errors?.detalles?.[index]?.precioTotalSinImpuesto && <FormHelperText error>{errors?.detalles?.[index]?.precioTotalSinImpuesto?.message}</FormHelperText>}
                           </DetailCell>
                           <DetailCell align="center">
-                            {/*<Tooltip*/}
-                            {/*  title={isEditMode ? "Actualizar Tarifa del IVA" : `Impuestos IVA ${item?.impuestos?.[0]?.tarifa}%`}*/}
-                            {/*>*/}
-                            {/*  <span><IconButton*/}
-                            {/*    disabled={!isEditMode}*/}
-                            {/*    color="info"*/}
-                            {/*    size="small"*/}
-                            {/*    onClick={() => handleImpuestos()}>*/}
-                            {/*    {item?.impuestos?.[0]?.tarifa == 0 ? <NotInterestedIcon sx={{ fontSize: 12 }} /> : <InformationIcon sx={{ fontSize: 12 }} />}*/}
-                            {/*  </IconButton></span>*/}
-                            {/*</Tooltip>*/}
+                            <Tooltip
+                              title={isEditMode ? "Actualizar Tarifa del IVA" : `Impuestos IVA ${item?.iva?.tarifa}%`}
+                            >
+                              <span><IconButton
+                                disabled={!isEditMode}
+                                color="info"
+                                size="small"
+                                onClick={handleImpuestos}>
+                                {item?.iva?.tarifa == 0 ? <NotInterestedIcon sx={{ fontSize: 12 }} /> : <InformationIcon sx={{ fontSize: 12 }} />}
+                              </IconButton></span>
+                            </Tooltip>
                           </DetailCell>
                           <DetailToolCell align="right">
                             {!isReadMode &&
@@ -253,6 +263,13 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
 
         </Grid>
       </Paper>
+
+      <EditImpuestosModal
+        impuesto={getEditDetalle()?.iva}
+        onUpdate={updateImpuestos}
+        isVisible={isEditImpuesto}
+        setVisible={setEditImpuesto}
+      />
 
     </Box>
   );

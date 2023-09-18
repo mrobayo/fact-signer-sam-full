@@ -1,6 +1,7 @@
 import {buildQueryByPage, createAxiosService, PageType} from "../../util";
 
 export type ImpuestoType = {
+  codigo?: number,
   codigoPorcentaje?: number,
   tarifa?: number,
   baseImponible: number,

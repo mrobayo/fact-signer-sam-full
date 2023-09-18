@@ -21,9 +21,6 @@ import {ToolbarTitle} from "../../components/ui/ToolbarTitle/ToolbarTitle";
 import SearchCliente from "../../components/SearchCliente/SearchCliente";
 import DetallesForm from "./DetallesForm";
 
-// import NotInterestedIcon from "@mui/icons-material/NotInterested";
-// import InformationIcon from "../../components/icons/InformationIcon";
-
 const EditFactura: React.FC = () => {
   const auth = useAuth();
   const navigate = useNavigate();
@@ -35,13 +32,6 @@ const EditFactura: React.FC = () => {
 
   const [isClienteDialogOpen, setClienteDialogOpen] = useState(false);
   const [isReadMode, setReadMode] = useState(!isNew);
-
-  //const [isEditImpuesto, setEditImpuesto] = useState(false);
-
-  // const {
-  //   reset,
-  //   handleSubmit,
-  // } = useForm<FacturaType>({resolver: yupResolver(facturaSchema)});
 
   const methods = useForm<FacturaType>({resolver: yupResolver(facturaSchema)});
   const { reset, handleSubmit } = methods;

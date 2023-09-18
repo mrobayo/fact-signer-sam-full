@@ -34,6 +34,16 @@ function useDetallesForm() {
     }
   }, [editDetalleId]);
 
+  const updateImpuestos = (data: ImpuestoType) => {
+    const detalles = getValues("detalles");
+    const detalleIndex = detalles.findIndex(({linea}) => linea === editDetalleId);
+
+    if (detalleIndex !== -1) {
+      console.log(`index: ${detalleIndex}`, data);
+      setValue(`detalles.${detalleIndex}.iva`, data);
+    }
+  };
+
   const computePrecioSinImpuestos = (): boolean => {
     const detalles = getValues("detalles");
     const detallesLen = detalles.length;
@@ -153,10 +163,15 @@ function useDetallesForm() {
     setEditDetalleId(detalles[index].linea);
   }
 
+  const getEditDetalle = () => {
+    const detalles = getValues("detalles");
+    return detalles?.find(({linea}) => linea === editDetalleId);
+  }
+
   return { onKeyEnter, selected, setSelected,
-    editDetalleId, setEditDetalleId,
+    editDetalleId, setEditDetalleId, updateImpuestos,
     fields, appendRow, editRow, removeRow, handleSelected,
-    // control, register, errors
+    getEditDetalle
   };
 }
 

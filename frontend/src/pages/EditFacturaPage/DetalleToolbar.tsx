@@ -9,7 +9,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import FormHelperText from "@mui/material/FormHelperText";
 
-interface EnhancedTableToolbarProps {
+interface DetalleToolbarProps {
   isReadMode: boolean;
   numSelected: number;
   appendNew: () => void;
@@ -17,7 +17,7 @@ interface EnhancedTableToolbarProps {
   error?: string;
 }
 
-function DetalleToolbar(props: EnhancedTableToolbarProps) {
+function DetalleToolbar(props: DetalleToolbarProps) {
   const { isReadMode, numSelected, appendNew, removeSelected, error } = props;
 
   return (

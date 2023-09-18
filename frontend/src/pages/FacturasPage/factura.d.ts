@@ -1,15 +1,18 @@
+import {ImpuestoType as Impuesto2Type} from '../../services';
+
 export type DetAdicionalType = {
   nombre: string,
   valor: string
 };
 
-export type ImpuestoType = {
-  codigo: number,
-  codigoPorcentaje: number,
-  tarifa: number,
-  baseImponible: number,
-  valor: number,
-};
+export type ImpuestoType = Impuesto2Type;
+// export type ImpuestoType = {
+//   codigo: number,
+//   codigoPorcentaje: number,
+//   tarifa: number,
+//   baseImponible: number,
+//   valor: number,
+// };
 
 export type DetalleFacturaType = {
   detalleId: number,

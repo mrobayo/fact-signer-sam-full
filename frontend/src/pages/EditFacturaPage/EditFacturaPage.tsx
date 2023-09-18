@@ -288,7 +288,7 @@ const EditFacturaPage: React.FC<{
           onKeyDown={(e) => checkKeyDown(e)}
         >
           <InfoFacturaEdit register={register} errors={errors} />
-          <DetalleToolbar error={errors?.detalles?.root?.message} numSelected={selected.length} appendNew={handleAppendRow} removeSelected={handleRemove} />
+          <DetalleToolbar isReadMode={false} error={errors?.detalles?.root?.message} numSelected={selected.length} appendNew={handleAppendRow} removeSelected={handleRemove} />
 
           <TableContainer sx={{ maxHeight: 440 }}>
             <DetailTable

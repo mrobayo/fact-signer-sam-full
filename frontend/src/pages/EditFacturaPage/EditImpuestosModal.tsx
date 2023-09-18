@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect} from 'react';
 import { useForm } from "react-hook-form";
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -35,7 +35,8 @@ const EditImpuestosModal: React.FC<EditImpuestosProps> = ({
   const {
     register,
     reset,
-    handleSubmit,
+    getValues,
+    //handleSubmit,
     formState: { errors }
   } = useForm<ImpuestoType>({
     defaultValues: {
@@ -46,7 +47,7 @@ const EditImpuestosModal: React.FC<EditImpuestosProps> = ({
       valor: 0
     }
   });
-  const formRef = useRef<HTMLFormElement>(null);
+  //const formRef = useRef<HTMLFormElement>(null);
   const theme = useTheme();
 
   useEffect(() => {
@@ -55,16 +56,19 @@ const EditImpuestosModal: React.FC<EditImpuestosProps> = ({
 
   const handleCloseDialog = () => setVisible(false);
 
-  const onFormSubmit = handleSubmit((data) => {
-    const index = TARIFAS_IVA
-      .findIndex(({ codigoPorcentaje }) => codigoPorcentaje === +data.codigoPorcentaje);
-    const impuesto = {
-      ...data,
-      codigoPorcentaje: +data.codigoPorcentaje,
-      tarifa: TARIFAS_IVA[index]?.tarifa
-    } as ImpuestoType;
-    onUpdate && onUpdate(impuesto);
-  })
+  // const onFormSubmit = handleSubmit((data) => {
+  //   const codigoPorcentaje = data.codigoPorcentaje ?? 0;
+  //   const index = TARIFAS_IVA
+  //     .findIndex((tarifa) => tarifa.codigoPorcentaje === codigoPorcentaje);
+  //   const impuesto = {
+  //     ...data,
+  //     codigoPorcentaje,
+  //     tarifa: TARIFAS_IVA[index]?.tarifa
+  //   } as ImpuestoType;
+  //   onUpdate && onUpdate(impuesto);
+  //   setVisible(false);
+  // })
+
   return (
     <Dialog
       fullWidth
@@ -77,7 +81,7 @@ const EditImpuestosModal: React.FC<EditImpuestosProps> = ({
         Seleccione el Impuesto a Aplicar
       </DialogTitle>
       <DialogContent sx={[ { minHeight: '240px', }, ]}>
-        <form ref={formRef} noValidate autoComplete="off" onSubmit={onFormSubmit}>
+        {/*<form ref={formRef} noValidate autoComplete="off" onSubmit={onFormSubmit}>*/}
           <FormControl fullWidth variant="outlined" error={errors.codigoPorcentaje !== undefined}
              css={css`.Mui-error>select { border-color: ${theme.palette.error.main} !important; }`}>
             <InputLabel
@@ -99,13 +103,24 @@ const EditImpuestosModal: React.FC<EditImpuestosProps> = ({
             </NativeSelect>
             <FormHelperText>{errors?.codigoPorcentaje?.message}</FormHelperText>
           </FormControl>
-        </form>
+        {/*</form>*/}
       </DialogContent>
       <DialogActions css={css`padding: 0 30px 30px 0;`}>
         <Button variant="outlined" onClick={handleCloseDialog}>Cancel</Button>
         <Button
             variant="contained"
-            onClick={() => { formRef?.current?.requestSubmit(); }}
+            onClick={() => { // formRef?.current?.requestSubmit();
+              const codigoPorcentaje = getValues('codigoPorcentaje');
+              const index = TARIFAS_IVA
+                .findIndex((tarifa) => tarifa.codigoPorcentaje === codigoPorcentaje);
+              const impuesto = {
+                //...data,
+                codigoPorcentaje,
+                tarifa: TARIFAS_IVA[index]?.tarifa
+              } as ImpuestoType;
+              onUpdate && onUpdate(impuesto);
+              setVisible(false);
+            }}
         >Seleccionar</Button>
     </DialogActions>
     </Dialog>
