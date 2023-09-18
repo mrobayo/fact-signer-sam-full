@@ -34,7 +34,10 @@ export const facturaSchema = Yup.object().shape({
   guiaRemision: Yup.string().nullable(),
   clienteId: Yup.string().nullable(),
 
+  tipoIdentificacionComprador: Yup.string().trim().required(),
   identificacionComprador: Yup.string().trim().required(),
+  razonSocialComprador: Yup.string().trim().required(),
+
   detalles: Yup.array(
     Yup.object({
       descripcion: Yup.string().trim().required(),
