@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import isEmpty from "lodash/isEmpty";
 import {FacturaType, ImpuestoType} from "../../services";
+import isEmpty from "lodash/isEmpty";
 
 function useDetallesForm() {
   const [selected, setSelected] = React.useState<readonly number[]>([]);
-  const [editDetalleId, setEditDetalleId] = useState<number>();
+  const [currentLinea, setCurrentLinea] = useState<number>();
   const {
     clearErrors,
     control,
@@ -23,20 +23,27 @@ function useDetallesForm() {
     name: "detalles",
   });
 
-  useEffect(() => {
-    if (editDetalleId) {
-      const detalles = getValues("detalles");
-      const index = detalles.findIndex(({linea}) => linea === editDetalleId);
+  const getCurrentRowIndex = () => {
+    const detalles = getValues("detalles");
+    return detalles?.findIndex(({linea}) => linea === currentLinea);
+  }
 
+  const getCurrentRow = () => {
+    const detalles = getValues("detalles");
+    return detalles?.find(({linea}) => linea === currentLinea);
+  }
+
+  useEffect(() => {
+    if (currentLinea) {
+      const index = getCurrentRowIndex();
       const descripcionInput = document.getElementById(`detalles.${index}.descripcion`) as HTMLInputElement;
       //const descripcionInput = formRef.current?.querySelector(`#detalles.${editDetalleId}.descripcion`) as HTMLInputElement;
       descripcionInput && descripcionInput.focus();
     }
-  }, [editDetalleId]);
+  }, [currentLinea]);
 
   const updateImpuestos = (data: ImpuestoType) => {
-    const detalles = getValues("detalles");
-    const detalleIndex = detalles.findIndex(({linea}) => linea === editDetalleId);
+    const detalleIndex = getCurrentRowIndex();
 
     if (detalleIndex !== -1) {
       console.log(`index: ${detalleIndex}`, data);
@@ -46,39 +53,28 @@ function useDetallesForm() {
 
   const computePrecioSinImpuestos = (): boolean => {
     const detalles = getValues("detalles");
-    const detallesLen = detalles.length;
-    const index = detalles.findIndex(({linea}) => linea === editDetalleId);
+    const index = getCurrentRowIndex();
     if (index === -1) {
-      console.log('index', -1);
       return false;
     }
     const detalle = detalles[index];
 
-    const valor = (+detalle.precioUnitario) * (+detalle.cantidad);
+    const valor = (+detalle.precioUnitario) * (+detalle.cantidad) - (+detalle.descuento);
     setValue(`detalles.${index}.precioTotalSinImpuesto`, +valor.toFixed(2),
       //{shouldDirty: true, shouldTouch: true, shouldValidate: true}
     );
 
     let isRowValid = true;
-    // VALIDATE ROW
-    if (valor === 0) {
-      console.log('2 isRowValid');
+
+    if (valor < 0) { // VALIDATE ROW
       isRowValid = false;
       setError(`detalles.${index}.precioTotalSinImpuesto`,
-        { type: 'manual', message:'Subtotal Sin Impuesto debe ser mayor a cero' }
+        {type: 'manual', message: 'Subtotal debe ser mayor a cero'}
       );
     }
-    if (isEmpty(detalle.descripcion)) {
-      console.log('3 isRowValid');
-      isRowValid = false;
-      trigger(`detalles.${index}.descripcion`);
-    }
+
     if (isRowValid) {
-      console.log('4 isRowValid', isRowValid);
       clearErrors(`detalles.${index}.precioTotalSinImpuesto`);
-      if (!detalles[detallesLen-1].descripcion) {
-        remove(detallesLen-1);
-      }
     }
     return isRowValid;
   };
@@ -92,7 +88,11 @@ function useDetallesForm() {
 
     if (target.id.endsWith('descuento')) {
       if (computePrecioSinImpuestos()) {
-        console.log('3');
+        const detalles = getValues("detalles");
+        const rowLen = detalles.length;
+        if (isEmpty(detalles[rowLen-1].descripcion)) {
+          remove(rowLen-1);
+        }
         appendRow();
       }
     }
@@ -113,7 +113,7 @@ function useDetallesForm() {
       const linea = 1 + detalles.reduce(
       (acc, { linea }) => linea && linea > acc ? linea: acc, 0);
 
-      setEditDetalleId(linea);
+      setCurrentLinea(linea);
       append({
         linea,
         codigoPrincipal: "",
@@ -151,8 +151,8 @@ function useDetallesForm() {
       .map(({ linea }, index) => selected.includes(linea) ? index : null)
       .filter(index => index !== null) as number[];
 
-    if (editDetalleId && selected.includes(editDetalleId)) {
-      setEditDetalleId(undefined);
+    if (currentLinea && selected.includes(currentLinea)) {
+      setCurrentLinea(undefined);
     }
     setSelected([]);
     remove(indexList);
@@ -160,18 +160,14 @@ function useDetallesForm() {
 
   const editRow = (index: number) => {
     const detalles = getValues("detalles");
-    setEditDetalleId(detalles[index].linea);
+    setCurrentLinea(detalles[index].linea);
   }
 
-  const getEditDetalle = () => {
-    const detalles = getValues("detalles");
-    return detalles?.find(({linea}) => linea === editDetalleId);
-  }
-
-  return { onKeyEnter, selected, setSelected,
-    editDetalleId, setEditDetalleId, updateImpuestos,
-    fields, appendRow, editRow, removeRow, handleSelected,
-    getEditDetalle
+  return {
+    selected, handleSelected,
+    currentLinea, updateImpuestos,
+    fields, appendRow, editRow, removeRow,
+    getCurrentRow, onKeyEnter,
   };
 }
 

@@ -67,14 +67,14 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
   const {
     onKeyEnter,
     selected,
-    editDetalleId,
+    handleSelected,
+    currentLinea,
     fields,
     appendRow,
     editRow,
     removeRow,
-    handleSelected,
     updateImpuestos,
-    getEditDetalle
+    getCurrentRow
   } = useDetallesForm();
   const formRef = useRef<HTMLFormElement>(null);
   const [isEditImpuesto, setEditImpuesto] = useState(false);
@@ -92,10 +92,6 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
               {...textFieldProps}
               {...register(name)}
           />;
-  }
-
-  const handleImpuestos = () => {
-    setEditImpuesto(true);
   }
 
   return (
@@ -137,7 +133,7 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
                 </TableHead>
                 <TableBody>
                   {fields.map((item, index) => {
-                    const isEditMode = editDetalleId === item.linea;
+                    const isEditMode = currentLinea === item.linea;
                     const isItemSelected = selected.indexOf(item.linea) !== -1;
                     const labelId = `detcell.${index}.descripcion`;
                     return (
@@ -226,7 +222,7 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
                                 disabled={!isEditMode}
                                 color="info"
                                 size="small"
-                                onClick={handleImpuestos}>
+                                onClick={() => setEditImpuesto(true)}>
                                 {item?.iva?.tarifa == 0 ? <NotInterestedIcon sx={{ fontSize: 12 }} /> : <InformationIcon sx={{ fontSize: 12 }} />}
                               </IconButton></span>
                             </Tooltip>
@@ -265,7 +261,7 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
       </Paper>
 
       <EditImpuestosModal
-        impuesto={getEditDetalle()?.iva}
+        impuesto={getCurrentRow()?.iva}
         onUpdate={updateImpuestos}
         isVisible={isEditImpuesto}
         setVisible={setEditImpuesto}
