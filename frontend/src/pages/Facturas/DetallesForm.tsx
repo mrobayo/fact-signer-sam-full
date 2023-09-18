@@ -108,9 +108,10 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
               <IconButton onClick={() => setClienteDialogOpen(true)}><SearchIcon fontSize={"large"} /></IconButton>
             </Tooltip>
           </GridItem>
-          <GridItem sm={2}>{buildTextField('tipoIdentificacionComprador', {disabled: true, inputProps: {readOnly: true}})}</GridItem>
-          <GridItem sm={3}>{buildTextField('identificacionComprador', {disabled: true, inputProps: {readOnly: true}})}</GridItem>
-          <GridItem sm={6}>{buildTextField('razonSocialComprador', {disabled: true, inputProps: {readOnly: true}})}</GridItem>
+          {/*// , {disabled: true, inputProps: {readOnly: true}}*/}
+          <GridItem sm={2}>{buildTextField('tipoIdentificacionComprador')}</GridItem>
+          <GridItem sm={3}>{buildTextField('identificacionComprador')}</GridItem>
+          <GridItem sm={6}>{buildTextField('razonSocialComprador')}</GridItem>
 
           <GridItem sm={12} data-test-id="factura-detalles">
             <DetalleToolbar error={errors?.detalles?.root?.message} numSelected={selected.length} appendNew={appendRow} removeSelected={removeRow} />
