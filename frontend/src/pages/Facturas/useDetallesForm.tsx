@@ -12,7 +12,6 @@ function useDetallesForm() {
     getValues,
     setError,
     setValue,
-    trigger,
   } = useFormContext<FacturaType>();
   const {
     fields,
@@ -93,7 +92,7 @@ function useDetallesForm() {
         if (isEmpty(detalles[rowLen-1].descripcion)) {
           remove(rowLen-1);
         }
-        appendRow();
+        appendNew();
       }
     }
     if (target.id.startsWith('detalles')) {
@@ -106,7 +105,7 @@ function useDetallesForm() {
     }
   };
 
-  const appendRow = () => {
+  const appendNew = () => {
     const detalles = getValues("detalles");
     //const inconsistentEditRow = detalles.length === 0 || detalles.length-1 < editRow;
     //if (inconsistentEditRow || editRow < 0 || computePrecioSinImpuestos()) {
@@ -146,7 +145,7 @@ function useDetallesForm() {
     setSelected(newSelected);
   }
 
-  const removeRow = () => {
+  const removeSelected = () => {
     const indexList = getValues('detalles')
       .map(({ linea }, index) => selected.includes(linea) ? index : null)
       .filter(index => index !== null) as number[];
@@ -166,7 +165,7 @@ function useDetallesForm() {
   return {
     selected, handleSelected,
     currentLinea, updateImpuestos,
-    fields, appendRow, editRow, removeRow,
+    fields, appendNew, editRow, removeSelected,
     getCurrentRow, onKeyEnter,
   };
 }

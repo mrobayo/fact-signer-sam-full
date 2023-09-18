@@ -70,9 +70,9 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
     handleSelected,
     currentLinea,
     fields,
-    appendRow,
+    appendNew,
     editRow,
-    removeRow,
+    removeSelected,
     updateImpuestos,
     getCurrentRow
   } = useDetallesForm();
@@ -120,7 +120,7 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
           <GridItem sm={6}>{buildTextField('razonSocialComprador')}</GridItem>
 
           <GridItem sm={12} data-test-id="factura-detalles">
-            <DetalleToolbar isReadMode={isReadMode} error={errors?.detalles?.root?.message} numSelected={selected.length} appendNew={appendRow} removeSelected={removeRow} />
+            <DetalleToolbar isReadMode={isReadMode} error={errors?.detalles?.root?.message} numSelected={selected.length} appendNew={appendNew} removeSelected={removeSelected} />
 
             <TableContainer sx={{ maxHeight: 440 }}>
               <DetailTable sx={{ minWidth: 650 }} stickyHeader aria-label="Factura Detalle">
