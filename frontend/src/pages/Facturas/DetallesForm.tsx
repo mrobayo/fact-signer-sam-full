@@ -34,6 +34,7 @@ import useDetallesForm from "./useDetallesForm.tsx";
 import InformationIcon from "../../components/icons/InformationIcon";
 import EditImpuestosModal from "../EditFacturaPage/EditImpuestosModal.tsx";
 import {TipoIdentidad} from "../tarifario.ts";
+import FormasDePago from "./FormasDePago.tsx";
 
 const ColDefinition: {
   label: string;
@@ -86,7 +87,7 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
               id={`id-${name}`}
               label={label}
               error={!isEmpty(errors[name])}
-              helperText={errors[name]?.message}
+              helperText={errors[name]?.message as string}
               disabled={isReadMode}
               inputProps={isReadMode ? {readOnly: true} : {}}
               InputLabelProps={{disableAnimation: true, shrink: true}}
@@ -259,6 +260,9 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
             </TableContainer>
 
           </GridItem>
+
+          <GridItem sm={10}><FormasDePago isReadMode={isReadMode} /></GridItem>
+          <GridItem sm={2}></GridItem>
 
           <GridItem sm={12}>{buildTextField('observacion', {multiline: true, rows: 4})}</GridItem>
 

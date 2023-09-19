@@ -1,18 +1,11 @@
 import {ImpuestoType as Impuesto2Type} from '../../services';
-
+import {PagoType as Pago2Type } from '../../services';
 export type DetAdicionalType = {
   nombre: string,
   valor: string
 };
 
 export type ImpuestoType = Impuesto2Type;
-// export type ImpuestoType = {
-//   codigo: number,
-//   codigoPorcentaje: number,
-//   tarifa: number,
-//   baseImponible: number,
-//   valor: number,
-// };
 
 export type DetalleFacturaType = {
   detalleId: number,
@@ -35,12 +28,7 @@ export type TotalImpuestoType = {
   valor: number
 };
 
-export type PagoType = {
-  formaPago: string,
-  total: number,
-  plazo: number,
-  unidadTiempo: string
-};
+export type PagoType = Pago2Type;
 
 export type InfoFacturaType = {
   fechaEmision: string,

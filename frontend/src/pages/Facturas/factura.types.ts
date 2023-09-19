@@ -47,6 +47,16 @@ export const facturaSchema = Yup.object().shape({
       // precioTotalSinImpuesto: Yup.number().required().min(0),
     })
   ),
+
+  pagos: Yup.array(
+    Yup.object({
+      formaPago: Yup.string().required('(obligatorio)'),
+      total: Yup.number().required("(obligatorio)").min(0, "(invalido)"),
+      plazo: Yup.number().required("(obligatorio)").min(0, "(invalido)"),
+      // unidadTiempo: Yup.string()
+    })
+  ),
+
   // array(object({ num: number().max(4) })),
   observacion: Yup.string().nullable(),
 }) as ObjectSchema<FacturaType>;

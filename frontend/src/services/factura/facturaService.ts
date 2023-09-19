@@ -8,6 +8,13 @@ export type ImpuestoType = {
   valor: number,
 };
 
+export type PagoType = {
+  formaPago: string,
+  total: number,
+  plazo: number,
+  unidadTiempo?: string
+};
+
 export type DetalleFacturaType = {
   linea: number;
   itemId?: string|null;
@@ -55,7 +62,8 @@ export type FacturaType = {
   razonSocialComprador?: string;
   identificacionComprador?: string;
   direccionComprador?: string;
-  detalles: DetalleFacturaType[],
+  detalles: DetalleFacturaType[];
+  pagos: PagoType[];
   observacion?: string;
 }
 
@@ -118,6 +126,12 @@ export function facturaEmpty(defaultValues: Partial<FacturaType>): FacturaType {
           valor: 0
         }
       }],
+    pagos: [{
+      formaPago: '01',
+      total: 0,
+      plazo: 0,
+      unidadTiempo: 'dias'
+    }]
   };
 }
 
