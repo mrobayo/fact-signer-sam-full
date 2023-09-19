@@ -35,6 +35,7 @@ import InformationIcon from "../../components/icons/InformationIcon";
 import EditImpuestosModal from "../EditFacturaPage/EditImpuestosModal.tsx";
 import {TipoIdentidad} from "../tarifario.ts";
 import FormasDePago from "./FormasDePago.tsx";
+import FacturaSummary from "./FacturaSummary.tsx";
 
 const ColDefinition: {
   label: string;
@@ -259,6 +260,10 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
               </DetailTable>
             </TableContainer>
 
+          </GridItem>
+
+          <GridItem sm={12}>
+            <FacturaSummary summary={[]} />
           </GridItem>
 
           <GridItem sm={10}><FormasDePago isReadMode={isReadMode} /></GridItem>

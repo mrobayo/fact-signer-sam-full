@@ -72,8 +72,6 @@ function useDetallesForm() {
       );
     }
 
-    console.log(`detalle: ${index}`, detalle);
-
     if (isRowValid) {
       clearErrors(`detalles.${index}.precioTotalSinImpuesto`);
     }
@@ -84,7 +82,8 @@ function useDetallesForm() {
     if (event.key !== "Enter") {
       return;
     }
-    event.preventDefault();
+
+    // event.preventDefault();
     const target= event.target as HTMLFormElement;
 
     if (target.id.endsWith('descuento')) {
