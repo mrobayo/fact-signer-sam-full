@@ -41,7 +41,7 @@ const ColDefinition: {
   align: "right" | "left" | "center" | "inherit" | "justify" | undefined;
   style: object }[] = [
   { label: '', align: 'right', style: {width: '10px'} },
-  { label: 'Descripcion', align: 'left', style: {minWidth: '300px', flexGrow: 1} },
+  { label: 'Descripción', align: 'left', style: {minWidth: '300px', flexGrow: 1, fontWeight: 700} },
   { label: 'Cantidad', align: 'right', style: {width: '120px'} },
   { label: 'Precio', align: 'right', style: {width: '180px'} },
   { label: 'Dscto.', align: 'right', style: {width: '200px'} },

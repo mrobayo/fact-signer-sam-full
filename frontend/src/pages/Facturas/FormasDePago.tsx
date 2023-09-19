@@ -56,7 +56,7 @@ const FormasDePago: React.FC<{
             <TableCell><b>Formas de Pago</b></TableCell>
             <TableCell align="right">Valor</TableCell>
             <TableCell align="right">Plazo</TableCell>
-            <TableCell align="right">Unidad</TableCell>
+            <TableCell align="center">Unidad</TableCell>
             <TableCell align="right">
               {!isReadMode && <Tooltip title="Añadir"><IconButton color="info" aria-label="Añadir" onClick={appendNew}><AddBoxIcon /></IconButton></Tooltip>}
             </TableCell>
@@ -81,7 +81,7 @@ const FormasDePago: React.FC<{
                 <TableCell align="right">
                   {isEditMode && buildTextField(index, 'plazo')}
                   {!isEditMode && item.plazo}</TableCell>
-                <TableCell>
+                <TableCell align="center">
                   {isEditMode && buildTextField(index, 'unidadTiempo')}
                   {!isEditMode && item.unidadTiempo}</TableCell>
                 <TableCell>{!isReadMode && (
