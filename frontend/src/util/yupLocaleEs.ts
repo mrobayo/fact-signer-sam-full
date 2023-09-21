@@ -1,4 +1,4 @@
-import { printValue } from 'yup';
+// import { printValue } from 'yup';
 
 const mixed = {
   default: "${path} no es válido.",
@@ -6,14 +6,16 @@ const mixed = {
   notNull: "${path} no puede ser null",
   oneOf: "${path} debe ser uno de los siguientes valores: ${values}",
   notOneOf: "${path} no debe ser uno de los siguientes valores: ${values}",
-  notType: ({ path, type, value, originalValue }: { path: string, type: string, value: any, originalValue: any }) => {
-    const isCast = originalValue != null && originalValue !== value
+  notType: ({ value }: { path: string, type: string, value: any, originalValue: any }) => {
+  ///notType: ({ path, type, value, originalValue }: { path: string, type: string, value: any, originalValue: any }) => {
+    //const isCast = originalValue != null && originalValue !== value
 
-    let msg = (
-      `${path} debe ser un tipo \`${type}\`, ` +
-      `pero el valor final fue: \`${printValue(value, true)}\`` +
-      (isCast ? ` (Reparto del valor \`${printValue(originalValue, true)}\`).` : ".")
-    )
+    // let msg = (
+    //   `${path} debe ser un tipo \`${type}\`, ` +
+    //   `pero el valor final fue: \`${printValue(value, true)}\`` +
+    //   (isCast ? ` (Reparto del valor \`${printValue(originalValue, true)}\`).` : ".")
+    // )
+    let msg = "no es valido";
 
     if (value === null) {
       msg += (

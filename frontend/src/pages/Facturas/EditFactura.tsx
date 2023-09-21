@@ -74,6 +74,8 @@ const EditFactura: React.FC = () => {
       const baseImponible = precioSinImpuestos - descuento;
       const hasIva = detalle.hasIva ?? false;
 
+      console.log(index, hasIva);
+
       const tarifa = hasIva ? empresa.tarifaIva : 0;
       const valor = tarifa * baseImponible / 100;
 
@@ -119,7 +121,7 @@ const EditFactura: React.FC = () => {
   const onFormSubmit = handleSubmit((data, event) => {
     event?.preventDefault();
     console.log('submit...', data);
-    //saveFactura(data);
+    saveFactura(data);
     //navigate('/facturas');
   });
 

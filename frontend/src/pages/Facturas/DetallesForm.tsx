@@ -16,8 +16,8 @@ import TableBody from "@mui/material/TableBody";
 import Checkbox from "@mui/material/Checkbox";
 import TextField, {TextFieldProps} from "@mui/material/TextField";
 import EditIcon from "@mui/icons-material/Edit";
-import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
-import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+// import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
+// import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import {useTheme} from "@mui/material";
@@ -167,7 +167,7 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
             <DetalleToolbar isReadMode={isReadMode} error={errors?.detalles?.root?.message} numSelected={selected.length} appendNew={appendNew} removeSelected={removeSelected} />
 
             <TableContainer sx={{ maxHeight: 440 }}>
-              <DetailTable sx={{ minWidth: 650 }} stickyHeader aria-label="Factura Detalle">
+              <DetailTable sx={{ minWidth: 650 }} stickyHeader size="small" aria-label="Factura Detalle">
 
                 <TableHead>
                   <TableRow>
@@ -204,15 +204,15 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
 
                         </DetailCell>
                         <DetailCell align="right">
-                            {buildDetalleField(index, 'cantidad', isEditMode,{type:"number"})}
+                            {buildDetalleField(index, 'cantidad', isEditMode,{type:"number", inputProps: {min: "0"}})}
 
                           </DetailCell>
                           <DetailCell align="right">
-                            {buildDetalleField(index, 'precioUnitario', isEditMode,{type:"number"})}
+                            {buildDetalleField(index, 'precioUnitario', isEditMode,{type:"number", inputProps: {min: "0"}})}
 
                           </DetailCell>
                           <DetailCell align="right">
-                            {buildDetalleField(index, 'descuento', isEditMode, {type:"number"})}
+                            {buildDetalleField(index, 'descuento', isEditMode, {type:"number", inputProps: {min: "0"}})}
 
                           </DetailCell>
                           <DetailCell align="right">
@@ -220,14 +220,14 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
 
                           </DetailCell>
                           <DetailCell align="center">
-                            <Checkbox
+                            <TextField
+                              variant={"standard"}
+                              type={"checkbox"}
                               color="secondary"
                               inputProps={{ 'aria-label': 'IVA' }}
-                              defaultChecked
-                              icon={<BookmarkBorderIcon />}
-                              checkedIcon={<BookmarkAddIcon />}
+                              //icon={<BookmarkBorderIcon />}
+                              //checkedIcon={<BookmarkAddIcon />}
                               disabled={isReadMode || !isEditMode}
-
                               {...register(`detalles.${index}.hasIva`)}
                             />
                           </DetailCell>
@@ -250,8 +250,7 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
             <FacturaSummary tarifaIva={empresa.tarifaIva} summary={summary} />
           </GridItem>
 
-          <GridItem sm={10}><FormasDePago isReadMode={isReadMode} /></GridItem>
-          <GridItem sm={2}></GridItem>
+          <GridItem sm={12}><FormasDePago isReadMode={isReadMode} /></GridItem>
 
           <GridItem sm={12}>{buildTextField('observacion', {multiline: true, rows: 4})}</GridItem>
 
