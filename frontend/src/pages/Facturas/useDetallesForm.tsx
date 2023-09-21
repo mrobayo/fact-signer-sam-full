@@ -171,10 +171,7 @@ function useDetallesForm() {
   }
 
   const editRow = (index: number) => {
-    const rowIndex = getCurrentRowIndex();
-    console.log('rowIndex', rowIndex);
-
-    unregisterRow(index);
+    unregisterRow(getCurrentRowIndex());
     const detalles = getValues("detalles");
     setCurrentLinea(detalles[index].linea);
   }
