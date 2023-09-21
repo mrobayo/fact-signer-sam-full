@@ -56,6 +56,7 @@ const EditFactura: React.FC = () => {
     const newSubTotal = [] as number[];
 
     let subTotal = 0;
+    let subTotalSinImpuestos = 0;
     let subTotalIVA = 0;
     let subTotalCero = 0;
 
@@ -85,19 +86,18 @@ const EditFactura: React.FC = () => {
         valor
       };
 
-      subTotalIVA += detalle.hasIva ? precioSinImpuestos : 0;
-      subTotalCero += detalle.hasIva ? 0 : precioSinImpuestos;
+      subTotalIVA += detalle.hasIva ? baseImponible : 0;
+      subTotalCero += detalle.hasIva ? 0 : baseImponible;
       valorIVA += valor;
       totalDescuento += descuento;
     });
 
-    subTotal = subTotalIVA + subTotalCero;
-    valorTOTAL = subTotal + valorIVA;
+    subTotalSinImpuestos = subTotalIVA + subTotalCero;
+    subTotal = subTotalSinImpuestos + totalDescuento;
+    valorTOTAL = subTotalSinImpuestos + valorIVA;
 
     setSubtotal(newSubTotal);
-    setSummary({ subTotal, subTotalIVA, subTotalCero, totalDescuento, valorIVA, valorTOTAL });
-
-    console.log('detalles', detalles);
+    setSummary({ subTotal, subTotalSinImpuestos, subTotalIVA, subTotalCero, totalDescuento: -1 * totalDescuento, valorIVA, valorTOTAL });
 
   }, [detalles, currentRow]);
 

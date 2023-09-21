@@ -31,7 +31,6 @@ import {DetalleFacturaType, FacturaType} from "../../services";
 import {getFacturaLabel} from "./factura.types";
 import useDetallesForm from "./useDetallesForm.tsx";
 
-//import EditImpuestosModal from "../EditFacturaPage/EditImpuestosModal.tsx";
 import {TipoIdentidad} from "../tarifario.ts";
 import FormasDePago from "./FormasDePago.tsx";
 import FacturaSummary, {SummaryType} from "./FacturaSummary.tsx";
