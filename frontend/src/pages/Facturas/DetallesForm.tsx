@@ -183,8 +183,7 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
                     const isEditMode = currentLinea === item.linea;
                     const isItemSelected = selected.indexOf(item.linea) !== -1;
                     const labelId = `detalle.${index}.descripcion`;
-                    // const detalle = detalles?.[index];
-                    // const error = errors?.detalles?.[index];
+
                     return (
                       <TableRow
                         hover
@@ -203,36 +202,23 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
                         </DetailCell>
                         <DetailCell align="left" id={labelId}>
                           {buildDetalleField(index, 'descripcion', isEditMode, { inputProps: {maxLength: 200} })}
-                          {/*{!isEditMode && <>*/}
-                          {/*  {detalle.descripcion}*/}
-                          {/*  <FormHelperText error>{error?.descripcion?.message}</FormHelperText>*/}
-                          {/*</>}*/}
+
                         </DetailCell>
                         <DetailCell align="right">
                             {buildDetalleField(index, 'cantidad', isEditMode,{type:"number"})}
-                            {/*{!isEditMode && <>*/}
-                            {/*  {formatAmount(detalle.cantidad)}*/}
-                            {/*  <FormHelperText error>{error?.cantidad?.message}</FormHelperText>*/}
-                            {/*</>}*/}
+
                           </DetailCell>
                           <DetailCell align="right">
                             {buildDetalleField(index, 'precioUnitario', isEditMode,{type:"number"})}
-                            {/*{!isEditMode && detalle.precioUnitario && <>*/}
-                            {/*  {formatCurrency(detalle.precioUnitario)}*/}
-                            {/*  <FormHelperText error>{error?.precioUnitario?.message}</FormHelperText>*/}
-                            {/*</>}*/}
+
                           </DetailCell>
                           <DetailCell align="right">
                             {buildDetalleField(index, 'descuento', isEditMode, {type:"number"})}
-                            {/*{!isEditMode && detalle.descuento && <>*/}
-                            {/*  {formatAmount(detalle.descuento)}*/}
-                            {/*  <FormHelperText error>{error?.descuento?.message}</FormHelperText>*/}
-                            {/*</>}*/}
+
                           </DetailCell>
                           <DetailCell align="right">
                             {formatCurrency(subtotal[index])}
-                            {/*{item.precioTotalSinImpuesto && formatCurrency(item.precioTotalSinImpuesto)}*/}
-                            {/*{<FormHelperText error>{error?.precioTotalSinImpuesto?.message}</FormHelperText>}*/}
+
                           </DetailCell>
                           <DetailCell align="center">
                             <Checkbox
@@ -242,9 +228,7 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
                               icon={<BookmarkBorderIcon />}
                               checkedIcon={<BookmarkAddIcon />}
                               disabled={isReadMode || !isEditMode}
-                              // onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                              //   addIVA(index, event.target.checked);
-                              // }}
+
                               {...register(`detalles.${index}.hasIva`)}
                             />
                           </DetailCell>
