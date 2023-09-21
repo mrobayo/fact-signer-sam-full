@@ -23,6 +23,8 @@ import DetallesForm from "./DetallesForm";
 
 const EditFactura: React.FC = () => {
   const auth = useAuth();
+  const {id: puntoVentaId, empresa} = auth.puntoVenta ?? {};
+
   const navigate = useNavigate();
   const { id } = useParams();
   const { isNew, query } = useRouterQuery();
@@ -43,13 +45,10 @@ const EditFactura: React.FC = () => {
   );
 
   useEffect(() => {
-    const puntoVentaId = auth.puntoVenta.id;
-    const moneda = auth.puntoVenta.empresa.moneda;
-    const {empresaId} = auth.puntoVenta ?? {};
     const newFactura = facturaEmpty({
-      empresaId,
+      empresaId: empresa.id,
       puntoVentaId,
-      moneda,
+      moneda: empresa.moneda,
       clienteId: cliente?.id,
       clienteName: cliente?.name,
       tipoIdentificacionComprador: cliente?.tipo,
@@ -58,9 +57,7 @@ const EditFactura: React.FC = () => {
       direccionComprador: cliente?.direccion
     });
     reset(isNew ? newFactura : {...factura});
-  }, [factura, cliente, reset]);
-
-  //const watchDetalle = watch("detalles");
+  }, [isNew, factura, cliente, reset]);
 
   const onFormSubmit = handleSubmit((data) => {
     console.log('submit...', data);
@@ -90,6 +87,7 @@ const EditFactura: React.FC = () => {
 
       <FormProvider {...methods}>
         <DetallesForm
+          empresa={empresa}
           isReadMode={isReadMode}
           setClienteDialogOpen={setClienteDialogOpen}
           onSubmit={onFormSubmit}

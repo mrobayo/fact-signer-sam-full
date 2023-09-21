@@ -12,6 +12,7 @@ function useDetallesForm() {
     getValues,
     setError,
     setValue,
+    unregister,
   } = useFormContext<FacturaType>();
   const {
     fields,
@@ -113,6 +114,7 @@ function useDetallesForm() {
       const linea = 1 + detalles.reduce(
       (acc, { linea }) => linea && linea > acc ? linea: acc, 0);
 
+      unregisterRow(getCurrentRowIndex());
       setCurrentLinea(linea);
       append({
         linea,
@@ -152,13 +154,27 @@ function useDetallesForm() {
       .filter(index => index !== null) as number[];
 
     if (currentLinea && selected.includes(currentLinea)) {
+      unregisterRow(getCurrentRowIndex());
       setCurrentLinea(undefined);
     }
     setSelected([]);
     remove(indexList);
   }
 
+  const unregisterRow = (index: number) => {
+    if (index >= 0) {
+      unregister(`detalles.${index}.descripcion`, { keepValue: true });
+      unregister(`detalles.${index}.cantidad`, { keepValue: true });
+      unregister(`detalles.${index}.precioUnitario`, { keepValue: true });
+      unregister(`detalles.${index}.descuento`, { keepValue: true });
+    }
+  }
+
   const editRow = (index: number) => {
+    const rowIndex = getCurrentRowIndex();
+    console.log('rowIndex', rowIndex);
+
+    unregisterRow(index);
     const detalles = getValues("detalles");
     setCurrentLinea(detalles[index].linea);
   }

@@ -20,7 +20,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import {useTheme} from "@mui/material";
-import NotInterestedIcon from "@mui/icons-material/NotInterested";
 
 import {DetailCell, DetailToolCell} from "../EditFacturaPage/EditFactura.style";
 import DetalleToolbar from "../EditFacturaPage/DetalleToolbar";
@@ -31,11 +30,11 @@ import {FacturaType} from "../../services";
 import {getFacturaLabel} from "./factura.types";
 import useDetallesForm from "./useDetallesForm.tsx";
 
-import InformationIcon from "../../components/icons/InformationIcon";
 import EditImpuestosModal from "../EditFacturaPage/EditImpuestosModal.tsx";
 import {TipoIdentidad} from "../tarifario.ts";
 import FormasDePago from "./FormasDePago.tsx";
 import FacturaSummary from "./FacturaSummary.tsx";
+import {EmpresaType} from "../../services/auth/types.ts";
 
 const ColDefinition: {
   label: string;
@@ -47,17 +46,19 @@ const ColDefinition: {
   { label: 'Precio', align: 'right', style: {width: '180px'} },
   { label: 'Dscto.', align: 'right', style: {width: '200px'} },
   { label: 'Subtotal', align: 'right', style: {width: '180px'} },
-  { label: '', align: 'left', style: {width: '1px'} },
+  { label: 'IVA', align: 'left', style: {width: '1px'} },
   { label: '', align: 'center', style: {width: '1px'} },
 ];
 
 interface DetallesFormProps {
+  empresa: EmpresaType,
   isReadMode: boolean;
   setClienteDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onSubmit: React.FormEventHandler<HTMLFormElement>;
 }
 
 const DetallesForm: React.FC<DetallesFormProps> = ({
+    empresa,
     isReadMode,
     setClienteDialogOpen,
     onSubmit,
@@ -67,6 +68,7 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
   const {
     register,
     formState: { errors },
+    watch,
   } = useFormContext<FacturaType>();
   const {
     onKeyEnter,
@@ -82,6 +84,8 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
   } = useDetallesForm();
   const formRef = useRef<HTMLFormElement>(null);
   const [isEditImpuesto, setEditImpuesto] = useState(false);
+  const detalles = watch('detalles');
+
   const buildTextField = (name: keyof FacturaType, textFieldProps?: TextFieldProps) => {
     const label = getFacturaLabel(name);
     return <TextField
@@ -195,6 +199,7 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
                             </>}
                           </DetailCell>
                           <DetailCell align="right">
+                            {detalles?.[index].precioUnitario}
                             {isEditMode &&
                               <TextField
                                 margin="normal"
@@ -236,15 +241,18 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
                           </DetailCell>
                           <DetailCell align="center">
                             <Tooltip
-                              title={isEditMode ? "Actualizar Tarifa del IVA" : `Impuestos IVA ${item?.iva?.tarifa}%`}
+                              title={isEditMode ? "Actualizar Tarifa del IVA" : `IVA ${item?.iva?.tarifa}%`}
                             >
-                              <span><IconButton
-                                disabled={!isEditMode}
-                                color="info"
-                                size="small"
-                                onClick={() => setEditImpuesto(true)}>
-                                {item?.iva?.tarifa == 0 ? <NotInterestedIcon sx={{ fontSize: 12 }} /> : <InformationIcon sx={{ fontSize: 12 }} />}
-                              </IconButton></span>
+                              <span>
+                              {/*<IconButton*/}
+                              {/*  disabled={!isEditMode}*/}
+                              {/*  color="info"*/}
+                              {/*  size="large"*/}
+                              {/*  onClick={() => setEditImpuesto(true)}>*/}
+                              {/*  {item?.iva?.tarifa == 0 ? <NotInterestedIcon sx={{ fontSize: 12 }} /> : <InformationIcon sx={{ fontSize: 12 }} />}*/}
+                              {/*</IconButton>*/}
+                                <Checkbox inputProps={{ 'aria-label': 'Checkbox' }} defaultChecked />
+                              </span>
                             </Tooltip>
                           </DetailCell>
                           <DetailToolCell align="right">
@@ -263,7 +271,7 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
           </GridItem>
 
           <GridItem sm={12}>
-            <FacturaSummary summary={[]} />
+            <FacturaSummary tarifaIva={empresa.tarifaIva} summary={[]} />
           </GridItem>
 
           <GridItem sm={10}><FormasDePago isReadMode={isReadMode} /></GridItem>

@@ -1,4 +1,4 @@
 
-export function formatAmount(value: number|string) {
-  return (+value).toFixed(2);
+export function formatAmount(value: number|string, decimals: number = 2) {
+  return (+value).toFixed(decimals);
 }
