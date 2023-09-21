@@ -76,7 +76,7 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
   const {
     register,
     formState: { errors },
-    // watch,
+    watch,
   } = useFormContext<FacturaType>();
   const {
     onKeyEnter,
@@ -89,11 +89,12 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
     removeSelected,
     // updateImpuestos,
     // getCurrentRow
-    addIVA,
+    // addIVA,
   } = useDetallesForm();
   const formRef = useRef<HTMLFormElement>(null);
-  // const [isEditImpuesto, setEditImpuesto] = useState(false);
-  // const detalles = watch('detalles');
+
+  const tipoIdentificacion = watch('tipoIdentificacionComprador');
+  const identificacionMaxLength = tipoIdentificacion === 'CED' ? 10 : tipoIdentificacion === 'RUC' ? 13 : 20;
 
   useEffect(() => {
     setCurrentRow( currentLinea ?? -1 );
@@ -160,7 +161,7 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
               <option key={option.value} value={option.value}>{option.label}</option>
             ))
           })}</GridItem>
-          <GridItem sm={3}>{buildTextField('identificacionComprador', { inputProps: {maxLength: 20} })}</GridItem>
+          <GridItem sm={3}>{buildTextField('identificacionComprador', { inputProps: {maxLength: identificacionMaxLength} })}</GridItem>
           <GridItem sm={6}>{buildTextField('razonSocialComprador', { inputProps: {maxLength: 100} })}</GridItem>
 
           <GridItem sm={12} data-test-id="factura-detalles">
@@ -240,9 +241,11 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
                               defaultChecked
                               icon={<BookmarkBorderIcon />}
                               checkedIcon={<BookmarkAddIcon />}
-                              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                addIVA(index, event.target.checked);
-                              }}
+                              disabled={isReadMode || !isEditMode}
+                              // onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                              //   addIVA(index, event.target.checked);
+                              // }}
+                              {...register(`detalles.${index}.hasIva`)}
                             />
                           </DetailCell>
                           <DetailToolCell align="right">

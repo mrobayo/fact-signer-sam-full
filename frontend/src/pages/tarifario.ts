@@ -6,6 +6,8 @@ export const CodigosImpuesto = {
   IRBPNR: 5,
 };
 
+
+
 // TABLA 17
 export const TarifasIVA = {
   '0%': 0,

@@ -118,8 +118,6 @@ function useDetallesForm() {
 
   const appendNew = () => {
     const detalles = getValues("detalles");
-    //const inconsistentEditRow = detalles.length === 0 || detalles.length-1 < editRow;
-    //if (inconsistentEditRow || editRow < 0 || computePrecioSinImpuestos()) {
       const linea = 1 + detalles.reduce(
       (acc, { linea }) => linea && linea > acc ? linea: acc, 0);
 
@@ -133,10 +131,10 @@ function useDetallesForm() {
         precioUnitario: 0,
         descuento: 0,
         precioTotalSinImpuesto: 0,
+        hasIva: true,
         iva: {} as ImpuestoType
       });
       setSelected([]);
-    //}
   }
 
   const handleSelected = (linea: number) => {
@@ -177,14 +175,7 @@ function useDetallesForm() {
   }
 
   const addIVA = (index: number, checked: boolean) => {
-    console.log(`iva= ${index} ${checked}`);
-    setValue(`detalles.${index}.iva`, checked ? {
-        codigo: 2,
-        codigoPorcentaje: 2,
-        tarifa: 12,
-        baseImponible: 1,
-        valor: 1,
-      } : undefined, {shouldDirty: true});
+    setValue(`detalles.${index}.hasIva`, checked, {shouldDirty: true});
   }
 
   return {

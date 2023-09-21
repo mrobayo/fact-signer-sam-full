@@ -26,6 +26,7 @@ export type DetalleFacturaType = {
   descuento: number;
   precioTotalSinImpuesto: number;
   detallesAdicionales?: Record<string, string>;
+  hasIva?: boolean;
   iva?: ImpuestoType
 };
 
@@ -119,6 +120,7 @@ export function facturaEmpty(defaultValues: Partial<FacturaType>): FacturaType {
         descuento: 0,
         precioTotalSinImpuesto: 0,
         detallesAdicionales: {},
+        hasIva: true,
         iva: {
           codigoPorcentaje: undefined,
           tarifa: undefined,

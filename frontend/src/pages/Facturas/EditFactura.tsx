@@ -57,18 +57,47 @@ const EditFactura: React.FC = () => {
 
     let subTotal = 0;
     let subTotalIVA = 0;
+    let subTotalCero = 0;
+
+    let valorIVA = 0;
+    //let subTotalNoObjeto = 0;
+    //let subTotalExento = 0;
+
     let valorTOTAL = 0;
+    let totalDescuento = 0;
+
     detalles.forEach((detalle, index) => {
-      newSubTotal[index] =
-        (+detalle.precioUnitario) * (+detalle.cantidad) - (+detalle.descuento);
-      subTotalIVA += detalle.iva ? newSubTotal[index] : 0;
-      subTotal += newSubTotal[index];
+      const precioSinImpuestos = (+detalle.precioUnitario) * (+detalle.cantidad);
+      const descuento = (+detalle.descuento);
+
+      const baseImponible = precioSinImpuestos - descuento;
+      const hasIva = detalle.hasIva ?? false;
+
+      const tarifa = hasIva ? empresa.tarifaIva : 0;
+      const valor = tarifa * baseImponible / 100;
+
+      newSubTotal[index] = precioSinImpuestos;
+      detalle.iva = {
+        codigo: 2,
+        codigoPorcentaje: hasIva ? 2 : 0,
+        tarifa,
+        baseImponible: baseImponible,
+        valor
+      };
+
+      subTotalIVA += detalle.hasIva ? precioSinImpuestos : 0;
+      subTotalCero += detalle.hasIva ? 0 : precioSinImpuestos;
+      valorIVA += valor;
+      totalDescuento += descuento;
     });
 
-    valorTOTAL = subTotal + 0;
+    subTotal = subTotalIVA + subTotalCero;
+    valorTOTAL = subTotal + valorIVA;
 
     setSubtotal(newSubTotal);
-    setSummary({ subTotal, subTotalIVA, valorTOTAL });
+    setSummary({ subTotal, subTotalIVA, subTotalCero, totalDescuento, valorIVA, valorTOTAL });
+
+    console.log('detalles', detalles);
 
   }, [detalles, currentRow]);
 
