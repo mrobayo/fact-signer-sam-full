@@ -26,7 +26,7 @@ import DetalleToolbar from "../EditFacturaPage/DetalleToolbar";
 import {DetailTable} from "./EditFactura.style";
 import {GridItem} from "../../components/ui";
 import {formatAmount, formatCurrency} from "../../util";
-import {FacturaType} from "../../services";
+import {DetalleFacturaType, FacturaType} from "../../services";
 import {getFacturaLabel} from "./factura.types";
 import useDetallesForm from "./useDetallesForm.tsx";
 
@@ -102,6 +102,23 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
           />;
   }
 
+  const buildDetalleField = (index: number, name: keyof DetalleFacturaType, textFieldProps?: TextFieldProps) => {
+    const error = errors?.detalles?.[index];
+    return <TextField
+            id={`detalles.${index}.${name}`}
+            label=""
+            margin="normal"
+            fullWidth
+            error={!isEmpty(error?.[name])}
+            helperText={error?.[name]?.message as string}
+            disabled={isReadMode}
+            inputProps={isReadMode ? {readOnly: true} : {}}
+            InputLabelProps={{disableAnimation: true, shrink: true}}
+            {...textFieldProps}
+            {...register(`detalles.${index}.${name}`)}
+          />;
+  }
+
   return (
     <Box
       ref={formRef}
@@ -122,7 +139,6 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
             </span></Tooltip>
           </GridItem>
 
-          {/*// , {disabled: true, inputProps: {readOnly: true}}*/}
           <GridItem sm={2}>{buildTextField('tipoIdentificacionComprador', {
             select: true, SelectProps: { native: true },
             children: TipoIdentidad.map((option) => (
@@ -148,7 +164,9 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
                   {fields.map((item, index) => {
                     const isEditMode = currentLinea === item.linea;
                     const isItemSelected = selected.indexOf(item.linea) !== -1;
-                    const labelId = `detcell.${index}.descripcion`;
+                    const labelId = `detalle.${index}.descripcion`;
+                    const detalle = detalles?.[index];
+                    const error = errors?.detalles?.[index];
                     return (
                       <TableRow
                         hover
@@ -164,96 +182,39 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
                             <Checkbox color="primary" checked={isItemSelected} inputProps={{'aria-labelledby': labelId}} />}
                         </DetailCell>
                         <DetailCell align="left" id={labelId}>
-                          {isEditMode &&
-                            <TextField
-                              margin="normal"
-                              fullWidth
-                              id={`detalles.${index}.descripcion`}
-                              label=""
-                              error={errors?.detalles?.[index]?.descripcion !== undefined}
-                              helperText={errors?.detalles?.[index]?.descripcion?.message}
-                              {...register(`detalles.${index}.descripcion`)}
-                            />
-                          }
+                          {isEditMode && buildDetalleField(index, 'descripcion')}
                           {!isEditMode && <>
-                            {item.descripcion}
-                            <FormHelperText error>{errors?.detalles?.[index]?.descripcion?.message}</FormHelperText>
+                            {detalle.descripcion}
+                            <FormHelperText error>{error?.descripcion?.message}</FormHelperText>
                           </>}
                         </DetailCell>
                         <DetailCell align="right">
-                            {isEditMode &&
-                              <TextField
-                                margin="normal"
-                                fullWidth
-                                id={`detalles.${index}.cantidad`}
-                                label=""
-                                type="number"
-                                error={errors?.detalles?.[index]?.cantidad !== undefined}
-                                helperText={errors?.detalles?.[index]?.cantidad?.message}
-                                {...register(`detalles.${index}.cantidad`)}
-                              />
-                            }
-                            {!isEditMode && item.cantidad && <>
-                              {formatAmount(item.cantidad)}
-                              <FormHelperText error>{errors?.detalles?.[index]?.cantidad?.message}</FormHelperText>
+                            {isEditMode && buildDetalleField(index, 'cantidad', {type:"number"})}
+                            {!isEditMode && <>
+                              {formatAmount(detalle.cantidad)}
+                              <FormHelperText error>{error?.cantidad?.message}</FormHelperText>
                             </>}
                           </DetailCell>
                           <DetailCell align="right">
-                            {detalles?.[index].precioUnitario}
-                            {isEditMode &&
-                              <TextField
-                                margin="normal"
-                                fullWidth
-                                id={`detalles.${index}.precioUnitario`}
-                                label=""
-                                type="number"
-                                error={errors?.detalles?.[index]?.precioUnitario !== undefined}
-                                helperText={errors?.detalles?.[index]?.precioUnitario?.message}
-                                {...register(`detalles.${index}.precioUnitario`)}
-                              />
-                            }
-                            {!isEditMode && item.precioUnitario && <>
-                              {formatCurrency(item.precioUnitario)}
-                              <FormHelperText error>{errors?.detalles?.[index]?.precioUnitario?.message}</FormHelperText>
+                            {isEditMode && buildDetalleField(index, 'precioUnitario', {type:"number"})}
+                            {!isEditMode && detalle.precioUnitario && <>
+                              {formatCurrency(detalle.precioUnitario)}
+                              <FormHelperText error>{error?.precioUnitario?.message}</FormHelperText>
                             </>}
                           </DetailCell>
                           <DetailCell align="right">
-                            {isEditMode &&
-                              <TextField
-                                margin="normal"
-                                fullWidth
-                                id={`detalles.${index}.descuento`}
-                                label=""
-                                type="number"
-                                error={errors?.detalles?.[index]?.descuento !== undefined}
-                                helperText={errors?.detalles?.[index]?.descuento?.message}
-                                {...register(`detalles.${index}.descuento`)}
-                              />
-                            }
-                            {!isEditMode && item.descuento && <>
-                              {formatAmount(item.descuento)}
-                              <FormHelperText error>{errors?.detalles?.[index]?.descuento?.message}</FormHelperText>
+                            {isEditMode && buildDetalleField(index, 'descuento', {type:"number"})}
+                            {!isEditMode && detalle.descuento && <>
+                              {formatAmount(detalle.descuento)}
+                              <FormHelperText error>{error?.descuento?.message}</FormHelperText>
                             </>}
                           </DetailCell>
                           <DetailCell align="right">
                             {item.precioTotalSinImpuesto && formatCurrency(item.precioTotalSinImpuesto)}
-                            {<FormHelperText error>{errors?.detalles?.[index]?.precioTotalSinImpuesto?.message}</FormHelperText>}
+                            {<FormHelperText error>{error?.precioTotalSinImpuesto?.message}</FormHelperText>}
                           </DetailCell>
                           <DetailCell align="center">
-                            <Tooltip
-                              title={isEditMode ? "Actualizar Tarifa del IVA" : `IVA ${item?.iva?.tarifa}%`}
-                            >
-                              <span>
-                              {/*<IconButton*/}
-                              {/*  disabled={!isEditMode}*/}
-                              {/*  color="info"*/}
-                              {/*  size="large"*/}
-                              {/*  onClick={() => setEditImpuesto(true)}>*/}
-                              {/*  {item?.iva?.tarifa == 0 ? <NotInterestedIcon sx={{ fontSize: 12 }} /> : <InformationIcon sx={{ fontSize: 12 }} />}*/}
-                              {/*</IconButton>*/}
-                                <Checkbox inputProps={{ 'aria-label': 'Checkbox' }} defaultChecked />
-                              </span>
-                            </Tooltip>
+                            <Checkbox inputProps={{ 'aria-label': 'IVA' }} defaultChecked />
                           </DetailCell>
                           <DetailToolCell align="right">
                             {!isReadMode &&

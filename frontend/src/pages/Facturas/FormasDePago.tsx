@@ -58,6 +58,7 @@ const FormasDePago: React.FC<{
               {...register(`pagos.${index}.${name}`)}
           />;
   }
+
   return (
       <Table size="small" aria-label="Formas de Pago" sx={{ backgroundColor: theme.palette.grey[100], '& td': { p: 1 } }}>
         <TableHead>
