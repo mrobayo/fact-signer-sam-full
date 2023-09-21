@@ -20,6 +20,7 @@ import TopToolbar from "../../components/ui/TopToolbar/TopToolbar";
 import {ToolbarTitle} from "../../components/ui/ToolbarTitle/ToolbarTitle";
 import SearchCliente from "../../components/SearchCliente/SearchCliente";
 import DetallesForm from "./DetallesForm";
+import {SummaryType} from "./FacturaSummary.tsx";
 
 const EditFactura: React.FC = () => {
   const auth = useAuth();
@@ -35,7 +36,9 @@ const EditFactura: React.FC = () => {
   const [isClienteDialogOpen, setClienteDialogOpen] = useState(false);
   const [isReadMode, setReadMode] = useState(!isNew);
 
-  const methods = useForm<FacturaType>({resolver: yupResolver(facturaSchema)});
+  const methods = useForm<FacturaType>(
+    {resolver: yupResolver(facturaSchema)}
+  );
   const { reset, setValue, handleSubmit } = methods;
 
   const { data: factura } = useGetFactura(id);
@@ -43,6 +46,31 @@ const EditFactura: React.FC = () => {
       mutationFn: (body: FacturaType) => facturaService.create(body),
     }
   );
+
+  const [currentRow, setCurrentRow] = useState(0);
+  const [subtotal, setSubtotal] = useState<number[]>([]);
+  const [summary, setSummary] = useState<SummaryType>({});
+  const detalles = methods.watch('detalles', []);
+
+  useEffect(() => {
+    const newSubTotal = [] as number[];
+
+    let subTotal = 0;
+    let subTotalIVA = 0;
+    let valorTOTAL = 0;
+    detalles.forEach((detalle, index) => {
+      newSubTotal[index] =
+        (+detalle.precioUnitario) * (+detalle.cantidad) - (+detalle.descuento);
+      subTotalIVA += detalle.iva ? newSubTotal[index] : 0;
+      subTotal += newSubTotal[index];
+    });
+
+    valorTOTAL = subTotal + 0;
+
+    setSubtotal(newSubTotal);
+    setSummary({ subTotal, subTotalIVA, valorTOTAL });
+
+  }, [detalles, currentRow]);
 
   useEffect(() => {
     const newFactura = facturaEmpty({
@@ -59,17 +87,18 @@ const EditFactura: React.FC = () => {
     reset(isNew ? newFactura : {...factura});
   }, [isNew, factura, cliente, reset]);
 
-  const onFormSubmit = handleSubmit((data) => {
+  const onFormSubmit = handleSubmit((data, event) => {
+    event?.preventDefault();
     console.log('submit...', data);
-    saveFactura(data);
-    navigate('/facturas');
+    //saveFactura(data);
+    //navigate('/facturas');
   });
 
   const handleSelectCliente = (cliente: ClienteType) => {
     setValue(`razonSocialComprador`, cliente.name);
     setValue(`tipoIdentificacionComprador`, cliente.tipo);
     setValue(`direccionComprador`, cliente.direccion);
-    setValue(`identificacionComprador`, cliente.identidad);//{shouldDirty: true, shouldTouch: true, shouldValidate: true}
+    setValue(`identificacionComprador`, cliente.identidad); //{shouldDirty: true, shouldTouch: true, shouldValidate: true}
   };
 
   return (
@@ -88,9 +117,12 @@ const EditFactura: React.FC = () => {
       <FormProvider {...methods}>
         <DetallesForm
           empresa={empresa}
+          subtotal={subtotal}
+          summary={summary}
           isReadMode={isReadMode}
           setClienteDialogOpen={setClienteDialogOpen}
           onSubmit={onFormSubmit}
+          setCurrentRow={setCurrentRow}
         />
       </FormProvider>
 

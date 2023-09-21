@@ -26,7 +26,7 @@ export type DetalleFacturaType = {
   descuento: number;
   precioTotalSinImpuesto: number;
   detallesAdicionales?: Record<string, string>;
-  iva: ImpuestoType
+  iva?: ImpuestoType
 };
 
 export type FacturaType = {

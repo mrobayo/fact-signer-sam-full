@@ -21,6 +21,8 @@ import RuleFolderTwoToneIcon from "@mui/icons-material/RuleFolderTwoTone";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemButton from "@mui/material/ListItemButton";
+import Avatar from "@mui/material/Avatar";
+import { grey, green } from '@mui/material/colors';
 
 const SideMenu: React.FC<{
     open: boolean;
@@ -65,8 +67,14 @@ const SideMenu: React.FC<{
               alignItems: 'center',
               justifyContent: 'flex-end',
               px: [1],
+              backgroundColor: grey[200],
             }}
           >
+            <div style={{fontFamily: 'Ubuntu Mono'}}>COMPROBANTES</div>
+
+            <Avatar sx={{ bgcolor: green[50] }} variant="square">
+            <img src="/barcode_1200.png" style={{ height: '32px', width: '32px'}}/>
+            </Avatar>
             <IconButton onClick={toggleDrawer}><ChevronLeftIcon /></IconButton>
           </Toolbar>
           <Divider />

@@ -31,5 +31,3 @@ export const DetailTable = styled(Table)({
        marginBottom: 0,
    }
 });
-
-//export const DetailCell = TableCell;

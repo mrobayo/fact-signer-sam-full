@@ -1,6 +1,7 @@
 import {styled} from "@mui/material/styles";
 import TableCell from "@mui/material/TableCell";
 import Table from "@mui/material/Table";
+import {css} from "@emotion/react";
 
 export const editFacturaCss = {
     marginTop: 2,
@@ -31,3 +32,7 @@ export const DetailTable = styled(Table)({
        marginBottom: 0,
    }
 });
+
+// export const notchedoutline = css({
+//   border: 'none'
+// })

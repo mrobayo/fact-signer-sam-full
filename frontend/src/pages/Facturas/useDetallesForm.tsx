@@ -7,12 +7,12 @@ function useDetallesForm() {
   const [selected, setSelected] = React.useState<readonly number[]>([]);
   const [currentLinea, setCurrentLinea] = useState<number>();
   const {
-    clearErrors,
+    //clearErrors,
     control,
     getValues,
-    setError,
+    //setError,
     setValue,
-    unregister,
+    // unregister,
   } = useFormContext<FacturaType>();
   const {
     fields,
@@ -28,10 +28,10 @@ function useDetallesForm() {
     return detalles?.findIndex(({linea}) => linea === currentLinea);
   }
 
-  const getCurrentRow = () => {
-    const detalles = getValues("detalles");
-    return detalles?.find(({linea}) => linea === currentLinea);
-  }
+  // const getCurrentRow = () => {
+  //   const detalles = getValues("detalles");
+  //   return detalles?.find(({linea}) => linea === currentLinea);
+  // }
 
   useEffect(() => {
     if (currentLinea) {
@@ -51,33 +51,33 @@ function useDetallesForm() {
     }
   };
 
-  const computePrecioSinImpuestos = (): boolean => {
-    const detalles = getValues("detalles");
-    const index = getCurrentRowIndex();
-    if (index === -1) {
-      return false;
-    }
-    const detalle = detalles[index];
-
-    const valor = (+detalle.precioUnitario) * (+detalle.cantidad) - (+detalle.descuento);
-    setValue(`detalles.${index}.precioTotalSinImpuesto`, +valor.toFixed(2),
-      //{shouldDirty: true, shouldTouch: true, shouldValidate: true}
-    );
-
-    let isRowValid = true;
-
-    if (valor < 0) { // VALIDATE ROW
-      isRowValid = false;
-      setError(`detalles.${index}.precioTotalSinImpuesto`,
-        {type: 'manual', message: 'Subtotal debe ser mayor a cero'}
-      );
-    }
-
-    if (isRowValid) {
-      clearErrors(`detalles.${index}.precioTotalSinImpuesto`);
-    }
-    return isRowValid;
-  };
+  // const computePrecioSinImpuestos = (): boolean => {
+  //   const detalles = getValues("detalles");
+  //   const index = getCurrentRowIndex();
+  //   if (index === -1) {
+  //     return false;
+  //   }
+  //   const detalle = detalles[index];
+  //
+  //   const valor = (+detalle.precioUnitario) * (+detalle.cantidad) - (+detalle.descuento);
+  //   setValue(`detalles.${index}.precioTotalSinImpuesto`, +valor.toFixed(2),
+  //     //{shouldDirty: true, shouldTouch: true, shouldValidate: true}
+  //   );
+  //
+  //   let isRowValid = true;
+  //
+  //   if (valor < 0) { // VALIDATE ROW
+  //     isRowValid = false;
+  //     setError(`detalles.${index}.precioTotalSinImpuesto`,
+  //       {type: 'manual', message: 'Subtotal debe ser mayor a cero'}
+  //     );
+  //   }
+  //
+  //   if (isRowValid) {
+  //     clearErrors(`detalles.${index}.precioTotalSinImpuesto`);
+  //   }
+  //   return isRowValid;
+  // }
 
   const onKeyEnter = (event: React.KeyboardEvent<HTMLFormElement>) => {
     if (event.key !== "Enter") {
@@ -88,14 +88,14 @@ function useDetallesForm() {
     const target= event.target as HTMLFormElement;
 
     if (target.id.endsWith('descuento')) {
-      if (computePrecioSinImpuestos()) {
+      //if (computePrecioSinImpuestos()) {
         const detalles = getValues("detalles");
         const rowLen = detalles.length;
         if (isEmpty(detalles[rowLen-1].descripcion)) {
           remove(rowLen-1);
         }
         appendNew();
-      }
+      //}
     }
     if (target.id.startsWith('detalles')) {
       const form = target.form;
@@ -106,6 +106,15 @@ function useDetallesForm() {
       }
     }
   };
+
+  const unregisterRow = (index: number) => {
+    if (index >= 0) {
+      // unregister(`detalles.${index}.descripcion`, { keepValue: true });
+      // unregister(`detalles.${index}.cantidad`, { keepValue: true });
+      // unregister(`detalles.${index}.precioUnitario`, { keepValue: true });
+      // unregister(`detalles.${index}.descuento`, { keepValue: true });
+    }
+  }
 
   const appendNew = () => {
     const detalles = getValues("detalles");
@@ -161,26 +170,29 @@ function useDetallesForm() {
     remove(indexList);
   }
 
-  const unregisterRow = (index: number) => {
-    if (index >= 0) {
-      unregister(`detalles.${index}.descripcion`, { keepValue: true });
-      unregister(`detalles.${index}.cantidad`, { keepValue: true });
-      unregister(`detalles.${index}.precioUnitario`, { keepValue: true });
-      unregister(`detalles.${index}.descuento`, { keepValue: true });
-    }
-  }
-
   const editRow = (index: number) => {
     unregisterRow(getCurrentRowIndex());
     const detalles = getValues("detalles");
     setCurrentLinea(detalles[index].linea);
   }
 
+  const addIVA = (index: number, checked: boolean) => {
+    console.log(`iva= ${index} ${checked}`);
+    setValue(`detalles.${index}.iva`, checked ? {
+        codigo: 2,
+        codigoPorcentaje: 2,
+        tarifa: 12,
+        baseImponible: 1,
+        valor: 1,
+      } : undefined, {shouldDirty: true});
+  }
+
   return {
     selected, handleSelected,
     currentLinea, updateImpuestos,
-    fields, appendNew, editRow, removeSelected,
-    getCurrentRow, onKeyEnter,
+    fields,
+    appendNew, editRow, removeSelected,
+    onKeyEnter, addIVA
   };
 }
 

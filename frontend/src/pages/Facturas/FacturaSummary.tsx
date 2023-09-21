@@ -5,32 +5,54 @@ import {formatAmount} from "../../util";
 import {DetailTable} from "../EditFacturaPage/EditFactura.style.tsx";
 import TableHead from "@mui/material/TableHead";
 
-type SummaryEntry = { label: string, order: number };
+export type SummaryType = {
+  subTotal?: number|null,
+  subTotalIVA?: number|null,
+  subTotalCero?: number|null,
+  subTotalNoObjeto?: number|null,
+  subTotalExento?: number|null,
+  totalDescuento?: number|null,
+  valorICE?: number|null,
+  valorIVA?: number|null,
+  tarifaEspecial?: number|null,
+  valorIRBPNR?: number|null,
+  propina?: number|null,
+  valorTOTAL?: number|null
+}
+
+//export type SummaryType = typeof Summary;
+export type SummaryKey = keyof SummaryType;
+
+type SummaryEntry = { code: SummaryKey, label: string, order: number };
 
 const SummaryLabels = [
-  { label: 'Subtotal sin impuestos', order: 1},
-  { label: 'Subtotal {IVA}%', order: 1},
-  { label: 'Subtotal 0%', order: 1},
-  { label: 'Subtotal No objeto de IVA', order: 1},
-  { label: 'Subtotal Exento de IVA', order: 1},
-  { label: 'Total Descuento', order: 1},
-  { label: 'Valor ICE', order: 2},
-  { label: 'IVA {IVA}%', order: 2},
-  { label: 'IVA Tarifa Especial', order: 2},
-  { label: 'Valor IRBPNR', order: 2},
-  { label: 'Propina 10%', order: 2},
-  { label: 'VALOR TOTAL', order: 2},
+  { code: "subTotal", label: 'Subtotal sin impuestos', order: 1},
+  { code: "subTotalIVA", label: 'Subtotal {IVA}%', order: 1},
+  { code: "subTotalCero", label: 'Subtotal 0%', order: 1},
+  { code: "subTotalNoObjeto", label: 'Subtotal No objeto de IVA', order: 1},
+  { code: "subTotalExento", label: 'Subtotal Exento de IVA', order: 1},
+  { code: "totalDescuento", label: 'Total Descuento', order: 1},
+  { code: "valorICE", label: 'Valor ICE', order: 2},
+  { code: "valorIVA", label: 'IVA {IVA}%', order: 2},
+  { code: "tarifaEspecial", label: 'IVA Tarifa Especial', order: 2},
+  { code: "valorIRBPNR", label: 'Valor IRBPNR', order: 2},
+  { code: "propina", label: 'Propina 10%', order: 2},
+  { code: "valorTOTAL", label: 'VALOR TOTAL', order: 2},
 ] as SummaryEntry[];
 
 interface FacturaSummaryProps {
   tarifaIva: number,
-  summary: { 'label': string, amount: number }[]
+  summary: SummaryType
 }
 function FacturaSummary({tarifaIva, summary}: FacturaSummaryProps) {
-  const getAmount = (label: string) => {
-    const sum = summary.find(item => item.label === label);
-    return formatAmount(sum?.amount ?? 0);
+  const getAmount = (entry: SummaryEntry) => {
+    if (summary && entry?.code && entry.code in summary) {
+      return formatAmount(summary[entry?.code] ?? 0);
+    }
+    return <span>&mdash;</span>;
+
   }
+
   const formatLabel = (entry: SummaryEntry) => {
     return entry.label.replace('{IVA}', formatAmount(tarifaIva, 0));
   }
@@ -52,9 +74,9 @@ function FacturaSummary({tarifaIva, summary}: FacturaSummaryProps) {
             <TableRow key={entry.label}>
               <TableCell style={{ minWidth: '200px', flexGrow: 1}}></TableCell>
               <TableCell style={{ width: '300px'}}align="right">{formatLabel(entry)}</TableCell>
-              <TableCell align="right" style={{ width: '200px'}}>{getAmount(entry.label)}</TableCell>
+              <TableCell align="right" style={{ width: '200px'}}>{getAmount(entry)}</TableCell>
               <TableCell style={{ width: '300px'}} align="right">{formatLabel(groupRight?.[index])}</TableCell>
-              <TableCell align="right" style={{ width: '200px'}}>{getAmount(groupRight?.[index]?.label)}</TableCell>
+              <TableCell align="right" style={{ width: '200px'}}>{getAmount(groupRight?.[index])}</TableCell>
             </TableRow>
           )
         })}

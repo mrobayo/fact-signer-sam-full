@@ -28,7 +28,7 @@ public class DetalleFactura {
     @Column(name = "codigo_auxiliar", length = 20)
     private String codigoAuxiliar;
 
-    @Column(length = 300, nullable = false)
+    @Column(length = 200, nullable = false)
     private String descripcion;
 
     @Column(precision = 18, scale = 6, nullable = false)
