@@ -23,7 +23,7 @@ export const facturaSchema = Yup.object().shape({
   autorizacion: Yup.string().nullable(),
   mensajeSri: Yup.string().nullable(),
   emailEnviado: Yup.boolean().nullable(),
-  sujetoEmail: Yup.string().nullable(),
+  // sujetoEmail: Yup.string().nullable(),
   tipoFactura: Yup.string().nullable(),
   totalDescuento: Yup.number().nullable(),
   propina: Yup.number().nullable(),
@@ -33,6 +33,7 @@ export const facturaSchema = Yup.object().shape({
   valorRetRenta: Yup.number().nullable(),
   guiaRemision: Yup.string().nullable(),
   clienteId: Yup.string().nullable(),
+  sujetoEmail: Yup.string().required().email(),
 
   tipoIdentificacionComprador: Yup.string().trim().required(),
   identificacionComprador: Yup.string().trim().required("(obligatorio)"),
@@ -68,7 +69,8 @@ export const getFacturaLabel = (field: string): string => {
     tipoIdentificacionComprador: 'Tipo',
     razonSocialComprador: 'Razon Social',
     identificacionComprador: 'Identificación',
-    direccionComprador: 'Dirección'
+    direccionComprador: 'Dirección',
+    sujetoEmail: 'Email'
   } as Record<string, string>;
   if (field in labels) {
     return labels[field];

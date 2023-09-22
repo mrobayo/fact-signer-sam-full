@@ -3,6 +3,7 @@ package com.marvic.factsigner.model.comprobantes;
 import com.marvic.factsigner.model.comprobantes.types.*;
 import com.marvic.factsigner.model.sistema.Cliente;
 import com.marvic.factsigner.util.HashMapConverter;
+import com.marvic.factsigner.util.PagosListConverter;
 import com.marvic.factsigner.util.PagosMapConverter;
 import ec.gob.sri.types.SriEnumIdentidad;
 import lombok.Data;
@@ -37,17 +38,17 @@ public class FacturaComp extends Comprobante {
     @Column(nullable = false)
     private boolean obligadoContabilidad;
 
-    @Column(name="tipo_comprador", length = 20)
+    @Column(name="tipo_cliente", length = 20, nullable = false)
     @Enumerated(EnumType.STRING)
     private SriEnumIdentidad tipoIdentificacionComprador;
 
-    @Column(name="razon_social_comprador", length = 100)
+    @Column(name="razon_social_cliente", length = 100, nullable = false)
     private String razonSocialComprador;
 
-    @Column(name="identidad_comprador", length = 20)
+    @Column(name="identidad_cliente", length = 20, nullable = false)
     private String identificacionComprador;
 
-    @Column(name="direccion_comprador", length = 100)
+    @Column(name="direccion_cliente", length = 100)
     private String direccionComprador;
 
     @Column(name = "guia_remision", length = 60)
@@ -80,7 +81,7 @@ public class FacturaComp extends Comprobante {
     private BigDecimal valorRetRenta;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="cliente_id", nullable = false)
+    @JoinColumn(name="cliente_id")
     private Cliente cliente;
 
     @ElementCollection(fetch = FetchType.LAZY)
@@ -112,9 +113,10 @@ public class FacturaComp extends Comprobante {
     @Column(name="info_adicional", length = 4000)
     private Map<String, String> infoAdicional;
 
-    @Convert(converter = PagosMapConverter.class)
+    @Convert(converter = PagosListConverter.class)
     @Column(name="pagos", length = 4000)
-    private Map<String, Pago> pagos;
+    //private Map<String, Pago> pagos;
+    private List<Pago> pagos;
 
 //    @Column(name = "total_descuento", nullable = false, precision = 10, scale = 2)
 //    private BigDecimal totalDescuento;

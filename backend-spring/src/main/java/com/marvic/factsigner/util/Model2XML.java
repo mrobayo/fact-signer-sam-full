@@ -52,22 +52,29 @@ public class Model2XML {
         }
         f.setDirEstablecimiento(empresa.getDireccion());
         f.setObligadoContabilidad(empresa.isObligado()?"SI":"NO");
-        Cliente cliente = entity.getCliente();
-        f.setRazonSocialComprador(removeAccents(cliente.getName()));
-        f.setTipoIdentificacionComprador(cliente.getTipo().value());
-        f.setIdentificacionComprador(cliente.getIdentidad());
-        f.setDireccionComprador(removeAccents(cliente.getDireccion()));
+
+        // Cliente cliente = entity.getCliente();
+        //f.setRazonSocialComprador(removeAccents(cliente.getName()));
+        //f.setTipoIdentificacionComprador(cliente.getTipo().value());
+        //f.setIdentificacionComprador(cliente.getIdentidad());
+        //f.setDireccionComprador(removeAccents(cliente.getDireccion()));
+
+        f.setRazonSocialComprador(removeAccents(entity.getRazonSocialComprador()));
+        f.setTipoIdentificacionComprador(entity.getTipoIdentificacionComprador().value());
+        f.setIdentificacionComprador(entity.getIdentificacionComprador());
+        f.setDireccionComprador(removeAccents(entity.getDireccionComprador()));
+
         f.setMoneda(empresa.getMoneda());
 
         if (entity.getPagos() != null) {
             f.setPagos(new Factura.InfoFactura.Pago());
-            entity.getPagos().forEach((form, value) -> {
+            entity.getPagos().forEach((formaPago) -> {
                 Factura.InfoFactura.Pago.DetallePago pago = new Factura.InfoFactura.Pago.DetallePago();
                 f.getPagos().getPagos().add(pago);
 
-                pago.setFormaPago(value.getFormaPago());
-                pago.setPlazo(""+value.getPlazo());
-                pago.setTotal(value.getTotal());
+                pago.setFormaPago(formaPago.getFormaPago());
+                pago.setPlazo(""+formaPago.getPlazo());
+                pago.setTotal(formaPago.getTotal());
                 pago.setUnidadTiempo("dias");
             });
         }

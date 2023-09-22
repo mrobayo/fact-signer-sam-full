@@ -113,7 +113,8 @@ const EditFactura: React.FC = () => {
       tipoIdentificacionComprador: cliente?.tipo,
       razonSocialComprador: cliente?.name,
       identificacionComprador: cliente?.identidad,
-      direccionComprador: cliente?.direccion
+      direccionComprador: cliente?.direccion,
+      sujetoEmail: cliente?.email,
     });
     reset(isNew ? newFactura : {...factura});
   }, [isNew, factura, cliente, reset]);

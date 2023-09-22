@@ -78,7 +78,8 @@ export function facturaEmpty(defaultValues: Partial<FacturaType>): FacturaType {
     tipoIdentificacionComprador,
     razonSocialComprador,
     identificacionComprador,
-    direccionComprador
+    direccionComprador,
+    sujetoEmail
   } = defaultValues;
 
   return {
@@ -94,8 +95,8 @@ export function facturaEmpty(defaultValues: Partial<FacturaType>): FacturaType {
     //autorizacion: string;
     //mensajeSri?: string;
     emailEnviado: false,
-    //sujetoEmail?: string;
-    //tipoFactura?: string;
+    sujetoEmail,
+    tipoFactura: "VENTA_LOCAL",
     totalDescuento: 0,
     propina: 0,
     totalSinImpuestos: 0,

@@ -160,8 +160,13 @@ const DetallesForm: React.FC<DetallesFormProps> = ({
               <option key={option.value} value={option.value}>{option.label}</option>
             ))
           })}</GridItem>
+
           <GridItem sm={3}>{buildTextField('identificacionComprador', { inputProps: {maxLength: identificacionMaxLength} })}</GridItem>
           <GridItem sm={6}>{buildTextField('razonSocialComprador', { inputProps: {maxLength: 100} })}</GridItem>
+
+          <GridItem sm={1}></GridItem>
+          <GridItem sm={5}>{buildTextField('direccionComprador', { inputProps: {maxLength: 100} })}</GridItem>
+          <GridItem sm={6}>{buildTextField('sujetoEmail', { inputProps: {maxLength: 100} })}</GridItem>
 
           <GridItem sm={12} data-test-id="factura-detalles">
             <DetalleToolbar isReadMode={isReadMode} error={errors?.detalles?.root?.message} numSelected={selected.length} appendNew={appendNew} removeSelected={removeSelected} />
