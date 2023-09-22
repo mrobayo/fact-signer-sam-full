@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 
 import {useParams, useNavigate} from "react-router-dom";
 import {FormProvider, useForm} from "react-hook-form";
-import { useMutation } from '@tanstack/react-query';
+import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {yupResolver} from "@hookform/resolvers/yup";
 import IconButton from "@mui/material/IconButton";
 import RequestQuoteOutlinedIcon from '@mui/icons-material/RequestQuoteOutlined';
@@ -21,6 +21,11 @@ import {ToolbarTitle} from "../../components/ui/ToolbarTitle/ToolbarTitle";
 import SearchCliente from "../../components/SearchCliente/SearchCliente";
 import DetallesForm from "./DetallesForm";
 import {SummaryType} from "./FacturaSummary.tsx";
+import Button from "@mui/material/Button";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import {useNotify} from "../../notification";
+import {AxiosError} from "axios";
+// import ApproveIcon from "@mui/icons-material/CheckCircleOutline";
 
 const EditFactura: React.FC = () => {
   const auth = useAuth();
@@ -41,11 +46,29 @@ const EditFactura: React.FC = () => {
   );
   const { reset, setValue, handleSubmit } = methods;
 
+  //const addNotification = useAddNotificationContext();
+  const notify = useNotify();
+
+  const queryClient = useQueryClient();
   const { data: factura } = useGetFactura(id);
-  const { mutate: saveFactura } = useMutation({
+  const { mutate: saveFactura, status } = useMutation({
       mutationFn: (body: FacturaType) => facturaService.create(body),
+      onSuccess: (data) => { // Invalidate and refetch
+        queryClient.invalidateQueries({ queryKey: ['facturas'] })
+        navigate(`/facturas/${data.id}`);
+      },
+      onError: (err: AxiosError<{message: string}>) => {
+        const message = err?.response?.data?.message ?? String(err);
+        notify(message ?? String(err), { type: "error"})
+      }
     }
   );
+  const { mutate: approveFactura } = useMutation({
+      mutationFn: (id: string) => facturaService.approve(id),
+    }
+  );
+
+  console.log('status', status);
 
   const [currentRow, setCurrentRow] = useState(0);
   const [subtotal, setSubtotal] = useState<number[]>([]);
@@ -59,23 +82,15 @@ const EditFactura: React.FC = () => {
     let subTotalSinImpuestos = 0;
     let subTotalIVA = 0;
     let subTotalCero = 0;
-
     let valorIVA = 0;
-    //let subTotalNoObjeto = 0;
-    //let subTotalExento = 0;
-
     let valorTOTAL = 0;
     let totalDescuento = 0;
 
     detalles.forEach((detalle, index) => {
       const precioSinImpuestos = (+detalle.precioUnitario) * (+detalle.cantidad);
       const descuento = (+detalle.descuento);
-
       const baseImponible = precioSinImpuestos - descuento;
       const hasIva = detalle.hasIva ?? false;
-
-      console.log(index, hasIva);
-
       const tarifa = hasIva ? empresa.tarifaIva : 0;
       const valor = tarifa * baseImponible / 100;
 
@@ -123,7 +138,6 @@ const EditFactura: React.FC = () => {
     event?.preventDefault();
     console.log('submit...', data);
     saveFactura(data);
-    //navigate('/facturas');
   });
 
   const handleSelectCliente = (cliente: ClienteType) => {
@@ -133,12 +147,22 @@ const EditFactura: React.FC = () => {
     setValue(`identificacionComprador`, cliente.identidad); //{shouldDirty: true, shouldTouch: true, shouldValidate: true}
   };
 
+  const aprobarFactura = () => {
+    approveFactura("?");
+    console.log('aprobar factura...');
+  };
+
   return (
     <div>
       <TopToolbar>
         <ToolbarTitle Icon={RequestQuoteOutlinedIcon}>
           Factura <b>{isNew ? 'Nueva' : factura?.name}</b>
         </ToolbarTitle>
+
+        <Button
+          onClick={aprobarFactura}
+          startIcon={<CheckCircleIcon />}>Aprobar</Button>
+
         {!isNew &&
           <IconButton onClick={() => setReadMode(!isReadMode)}>
             {isReadMode ? <LockIcon /> : <LockOpenIcon />}

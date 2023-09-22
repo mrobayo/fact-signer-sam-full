@@ -5,6 +5,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import GlobalStyles from "@mui/material/GlobalStyles";
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
+import Alert from "@mui/material/Alert";
+import Snackbar from '@mui/material/Snackbar';
 
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
@@ -16,6 +18,7 @@ import MainBar from "../../components/ui/MainBar/MainBar.tsx";
 import SideMenu from "../../components/ui/SideMenu/SideMenu.tsx";
 import {useAuth} from "../../services/auth/useAuth.ts";
 import {useEffect} from "react";
+import {useNotificationContext} from "../../notification";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme({
@@ -34,6 +37,7 @@ const defaultTheme = createTheme({
 
 const Dashboard: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const auth = useAuth();
+  const { notifications, takeNotification } = useNotificationContext();
   const [open, setOpen] = React.useState(false);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -101,6 +105,22 @@ const Dashboard: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
           </Container>
         </Box>
       </Box>
+      {notifications.map((notification, index) => (
+        <Snackbar
+          open={true}
+          autoHideDuration={6000}
+          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+          onClose={() => {takeNotification()}}
+        >
+          <Alert
+            onClose={() => {takeNotification()}}
+            key={`notification-${index}`}
+            severity={notification.type}
+            color={notification.type}>
+            {notification.message}
+          </Alert>
+        </Snackbar>
+      ))}
     </ThemeProvider>
   );
 }

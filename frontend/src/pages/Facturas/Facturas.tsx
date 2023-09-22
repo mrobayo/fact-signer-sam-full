@@ -9,9 +9,9 @@ import {
   GridToolbarContainer,
   GridToolbarExport
 } from "@mui/x-data-grid";
+import {useQuery} from "@tanstack/react-query";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/AddBoxRounded";
-import {useQuery} from "@tanstack/react-query";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import Box from "@mui/material/Box";
@@ -23,22 +23,12 @@ import {Title} from "../../components/ui";
 import {PageSize} from "../../constants.ts";
 import {PageType} from "../../util";
 import {useAuth} from "../../services/auth/useAuth.ts";
-
 function FacturaToolbar() {
   const navigate = useNavigate();
   return (
     <GridToolbarContainer sx={{ justifyContent: 'flex-end' }}>
       <GridToolbarExport />
-      <IconButton
-        color="info"
-        onClick={() => navigate('/facturas/new')}>
-        <AddIcon />
-      </IconButton>
-      {/*<IconButton*/}
-      {/*  color="info"*/}
-      {/*  onClick={() => navigate('/facturas/new-v1')}>*/}
-      {/*  <AddIcon />*/}
-      {/*</IconButton>*/}
+      <IconButton color="info" onClick={() => navigate('/facturas/new')}><AddIcon /></IconButton>
     </GridToolbarContainer>
   );
 }

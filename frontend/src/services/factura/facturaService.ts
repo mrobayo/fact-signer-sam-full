@@ -161,7 +161,12 @@ class FacturaService {
   }
 
   async create(body: FacturaType): Promise<FacturaType> {
-    return await this.service.post('/', body);
+    const { data } = await this.service.post('/', body);
+    return data;
+  }
+
+  async approve(id: string|undefined): Promise<String> {
+    return await this.service.get(`/approve/${id}`);
   }
 
   // async get1(url: string, config?: AxiosRequestConfig<any> | undefined) {
