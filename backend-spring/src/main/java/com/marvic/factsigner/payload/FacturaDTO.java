@@ -48,7 +48,7 @@ public class FacturaDTO extends ComprobanteDTO {
     // @NotBlank @Size(max=40)
     private String clienteId;
 
-    private String clienteName;
+    // private String clienteName;
 
     private String tipoIdentificacionComprador;
 

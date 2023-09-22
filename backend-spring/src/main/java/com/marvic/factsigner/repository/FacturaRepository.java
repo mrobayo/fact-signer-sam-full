@@ -15,7 +15,7 @@ public interface FacturaRepository extends JpaRepository<FacturaComp, UUID> {
     Optional<FacturaComp> findByNameAndEmpresaId(String name, String empresaId);
 
     @Query(
-            value="SELECT f FROM FacturaComp f LEFT JOIN FETCH f.cliente c WHERE f.empresa.id = ?1",
+            value="SELECT f FROM FacturaComp f WHERE f.empresa.id = ?1", // LEFT JOIN FETCH f.cliente c
             countQuery="SELECT count(f.id) FROM FacturaComp f WHERE f.empresa.id = ?1")
     Page<FacturaComp> findAllByEmpresaId(String empresaId, Pageable paging);
 
