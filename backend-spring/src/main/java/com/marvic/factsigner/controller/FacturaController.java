@@ -1,5 +1,6 @@
 package com.marvic.factsigner.controller;
 
+import com.marvic.factsigner.exception.InvalidKeyException;
 import com.marvic.factsigner.payload.FacturaDTO;
 import com.marvic.factsigner.payload.PageResponse;
 import com.marvic.factsigner.security.CustomUser;
@@ -61,6 +62,9 @@ public class FacturaController {
     @PostMapping
     public ResponseEntity<FacturaDTO> save(@RequestBody @Valid FacturaDTO dto) {
         FacturaDTO saved = facturaService.create(dto);
+//        if (dto.getImporteTotal() == null || dto.getImporteTotal().signum() == 0) {
+//            throw new InvalidKeyException("importe total");
+//        }
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 

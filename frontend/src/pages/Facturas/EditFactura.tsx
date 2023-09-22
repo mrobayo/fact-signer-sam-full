@@ -55,7 +55,7 @@ const EditFactura: React.FC = () => {
       mutationFn: (body: FacturaType) => facturaService.create(body),
       onSuccess: (data) => { // Invalidate and refetch
         queryClient.invalidateQueries({ queryKey: ['facturas'] })
-        navigate(`/facturas/${data.id}`);
+        navigate(`/facturas/edit/${data.id}`);
       },
       onError: (err: AxiosError<{message: string}>) => {
         const message = err?.response?.data?.message ?? String(err);
@@ -69,6 +69,7 @@ const EditFactura: React.FC = () => {
   );
 
   console.log('status', status);
+  console.log(`factura ${id}`, factura);
 
   const [currentRow, setCurrentRow] = useState(0);
   const [subtotal, setSubtotal] = useState<number[]>([]);
@@ -156,7 +157,7 @@ const EditFactura: React.FC = () => {
     <div>
       <TopToolbar>
         <ToolbarTitle Icon={RequestQuoteOutlinedIcon}>
-          Factura <b>{isNew ? 'Nueva' : factura?.name}</b>
+          Factura <b>{isNew ? 'Nueva' : (factura?.name ?? `[${factura?.estadoDoc}]`)}</b>
         </ToolbarTitle>
 
         <Button
