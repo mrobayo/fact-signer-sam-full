@@ -34,11 +34,11 @@ function FacturaToolbar() {
         onClick={() => navigate('/facturas/new')}>
         <AddIcon />
       </IconButton>
-      <IconButton
-        color="info"
-        onClick={() => navigate('/facturas/new-v1')}>
-        <AddIcon />
-      </IconButton>
+      {/*<IconButton*/}
+      {/*  color="info"*/}
+      {/*  onClick={() => navigate('/facturas/new-v1')}>*/}
+      {/*  <AddIcon />*/}
+      {/*</IconButton>*/}
     </GridToolbarContainer>
   );
 }
@@ -80,8 +80,8 @@ const Facturas: React.FC = () => {
           width: 110,
         },
         {
-          field: 'clienteName',
-          headerName: 'Cliente',
+          field: 'razonSocialComprador',
+          headerName: 'Razon Social',
           flex: 1,
           minWidth: 200,
         },

@@ -58,7 +58,7 @@ export type FacturaType = {
   valorRetRenta?: number;
   guiaRemision?: string;
   clienteId?: string;
-  clienteName?: string;
+  // clienteName?: string;
   tipoIdentificacionComprador?: string;
   razonSocialComprador?: string;
   identificacionComprador?: string;
@@ -74,7 +74,7 @@ export function facturaEmpty(defaultValues: Partial<FacturaType>): FacturaType {
     puntoVentaId,
     moneda,
     clienteId,
-    clienteName,
+    // clienteName,
     tipoIdentificacionComprador,
     razonSocialComprador,
     identificacionComprador,
@@ -105,7 +105,7 @@ export function facturaEmpty(defaultValues: Partial<FacturaType>): FacturaType {
     //valorRetRenta?: number;
     //guiaRemision?: string;
     clienteId,
-    clienteName,
+    // clienteName,
     tipoIdentificacionComprador,
     razonSocialComprador,
     identificacionComprador,

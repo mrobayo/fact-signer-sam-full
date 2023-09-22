@@ -109,7 +109,7 @@ const EditFactura: React.FC = () => {
       puntoVentaId,
       moneda: empresa.moneda,
       clienteId: cliente?.id,
-      clienteName: cliente?.name,
+      // clienteName: cliente?.name,
       tipoIdentificacionComprador: cliente?.tipo,
       razonSocialComprador: cliente?.name,
       identificacionComprador: cliente?.identidad,
