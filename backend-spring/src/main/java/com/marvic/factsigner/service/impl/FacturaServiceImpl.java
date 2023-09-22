@@ -32,6 +32,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
@@ -200,13 +201,20 @@ public class FacturaServiceImpl implements FacturaService {
         BeanUtils.copyProperties(entity, dto, "detalles");
     }
 
+    private Cliente getCliente(String clienteId) {
+        UUID uuId = Utils.toUUID(clienteId);
+        if (uuId != null) {
+            return clienteRepository.findById(uuId).get();
+        }
+        return null;
+    }
+
     @Override
     public FacturaDTO create(FacturaDTO dto) {
 
         PuntoVenta puntoVenta = puntoVentaRepository.findById(dto.getPuntoVentaId()).get();
         Empresa empresa = puntoVenta.getEmpresa();
-        UUID clienteId = Utils.toUUID(dto.getClienteId());
-        Cliente cliente = clienteRepository.findById(clienteId).get();
+        Cliente cliente = getCliente(dto.getClienteId());
 
         // Check UK by name + empresa
         if (dto.getName() != null) {

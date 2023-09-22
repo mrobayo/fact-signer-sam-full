@@ -83,7 +83,7 @@ public class Comprobante {
     @Column(name = "email_enviado", nullable = false)
     private boolean emailEnviado;
 
-    @Column(name="sujeto_email", length = 100)
+    @Column(name="cliente_email", length = 100, nullable = false)
     private String sujetoEmail;
 
 //    @Embedded

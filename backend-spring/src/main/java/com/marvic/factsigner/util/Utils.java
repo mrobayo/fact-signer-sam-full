@@ -23,6 +23,9 @@ public class Utils {
     }
 
     public static UUID toUUID(String id) {
+        if (id == null) {
+            return null;
+        }
         try {
             UUID uuid = UUID.fromString(id);
             return uuid;
