@@ -88,12 +88,23 @@ const EditFactura: React.FC = () => {
     let totalDescuento = 0;
 
     detalles.forEach((detalle, index) => {
-      const precioSinImpuestos = (+detalle.precioUnitario) * (+detalle.cantidad);
+      const cantidad = (+detalle.cantidad);
+      const precioUnitario = (+detalle.precioUnitario);
       const descuento = (+detalle.descuento);
-      const baseImponible = precioSinImpuestos - descuento;
+
       const hasIva = detalle.hasIva ?? false;
       const tarifa = hasIva ? empresa.tarifaIva : 0;
-      const valor = tarifa * baseImponible / 100;
+
+      let baseImponible = 0;
+      let precioSinImpuestos = 0;
+
+      if (precioUnitario > 0 && cantidad > 0) {
+        precioSinImpuestos = precioUnitario * cantidad;
+        baseImponible = precioSinImpuestos - descuento;
+      }
+      console.log('****');
+
+      const valor = tarifa * baseImponible / 100; // Valor IVA
 
       newSubTotal[index] = precioSinImpuestos;
       detalle.iva = {
@@ -160,9 +171,9 @@ const EditFactura: React.FC = () => {
           Factura <b>{isNew ? 'Nueva' : (factura?.name ?? `[${factura?.estadoDoc}]`)}</b>
         </ToolbarTitle>
 
-        <Button
-          onClick={aprobarFactura}
-          startIcon={<CheckCircleIcon />}>Aprobar</Button>
+        {!isNew &&
+          <Button onClick={aprobarFactura} startIcon={<CheckCircleIcon />}>Aprobar</Button>
+        }
 
         {!isNew &&
           <IconButton onClick={() => setReadMode(!isReadMode)}>

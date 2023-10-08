@@ -11,11 +11,28 @@ export type PageType<T> = {
 }
 
 export function createAxiosService(apiPath: string): AxiosInstance {
-  const token = localStorage.getItem("token");
+
   const service = axios.create({
     baseURL: `${ApiEndpoint}${apiPath}`,
-    headers: token ? { Authorization: `Bearer ${token}` } : {},
+    // headers: token ? { Authorization: `Bearer ${token}` } : {},
   });
+
+  service.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (config.headers) {
+    config.headers["Authorization"] = `Bearer ${token}`;
+  } else {
+    // let headers: AxiosRequestHeaders = {
+    //   'Content-Type': 'application/json',
+    //   crossDomain: true,
+    //   Authorization: `Bearer ${token}`,
+    // };
+    // config.headers = headers;
+    console.log('here header error');
+  }
+
+  return config;
+});
 
   const handleSuccess = (response: any) => {
     return response;
@@ -23,14 +40,19 @@ export function createAxiosService(apiPath: string): AxiosInstance {
 
   const handleError = (error: any) => {
     if (isDevelopment) {
-      // console.log('axios-error', error);
+      console.log('axios-error', error);
     }
     switch (error?.response?.status) {
       case 401: // Token expired
         console.log('401');
         delete service.defaults.headers["Authorization"];
-        window.localStorage.removeItem("token");
+
+        localStorage.removeItem('login');
+        localStorage.removeItem('punto');
+        localStorage.removeItem("token");
+
         //this.redirectTo("/login");
+        window.location.pathname =  '/login';
         break;
       case 404: // Not found
         console.log('404');
